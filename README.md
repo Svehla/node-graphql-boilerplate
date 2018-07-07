@@ -1,32 +1,61 @@
-### Requirments
-Nodejs at least 8.9.3, yarn and mysql.
+# node-graphql-boilerplate
 
-When you haven't mysql db on local machine, you can use docker and docker-compose with nodejs and mongo db container.
-TODO: add docker
-
-### Installation
-1. install on your OS: `node`, `yarn`, `docker`
-2. run `yarn` to install dependecies
-3. run `docker-compose up` to start app and database
-
-### Developing
-- run `yarn lint` for lint :)
-- run `yarn lint:fix` for fix lint error
-- run `yarn lint:watch` for watching
-
-#### how debug node app via chrome devtools
-[more info:](https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27)
-- start app
-- open `chrome://inspect/#devices`
+This repository contains best practises and necessary configuration for smap/medium/larger nodejs backend
+application based on graphQl backend
 
 
-### Production build
+All source codes are written in typescript and test coverage is higher than 90%
+
+## Requirments
+- install on your OS: `node`, `yarn`, `docker`
+- Nodejs at least 8.9.3, yarn and mysql.
+
+If you haven't mysql db on local machine, you can use docker and docker-compose with nodejs and mysql db container.
+
+## Configuration
+copy .env.example file to .env a config your local varibales
+
+if you want change port of app and you use docker -> you have to reconfigure `docker-compose.yml`
+
+## Installation
+1. run `yarn` or `npm install` to install dependecies
+2. run `docker-compose up` to start app and database
+
+## Developing (local vs docker)
+for developing you can use docker or install your own server
+
+In package json is every script available via docker with `docker-` prefix
+
+fox example:
+- `start` script VS `docker-start` script
+- `test` script VS `docker-test` script
+- `test:watch` script VS `docker-test:watch` script
+
+if you want to init db schema use `npm start db-init` (or `npm start docker-db-init` for docker instance)
+
+
+## Tests
+this package contains 2 types of tests:
+- integration: GraphQL HTTP endpoins
+- models: check if graphQl contains all necessary properties
+
+
+### run tests
+- `test` (or `docker-npm start docker-db-init` for docker instance)
+
+### run tests with watch mode
+- `test:watch` script VS `docker-test:watch` script
+
+
+## Production build
+### !!!THIS IS NOT IMPLEMENTED YET!!!
 1. run `yarn build` to build static js files
-2. run `yarn start` to start node server
+
 
 ## Authorization
 How to get token from logged user
-```
+
+```graphql
 mutation UserLoginMutation {
   UserLoginMutation(input: {
     email: "john0@example.com",
@@ -41,18 +70,17 @@ mutation UserLoginMutation {
 }
 ```
 
-```
+this mutation return jwt -> you can put this jwt to `Authorization` 
+
+```json
 {
   "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpbCI6ImpvaG4uZG9lQGV4YW1wbGUuY29tIiwiaWF0IjoxNTMwOTQ3MTI4fQ.0roGF3qFgXaIk5hgTNGd0kY2Kc927CoO1xcDWpBy_SY"
 }
 ```
 
 
-
 TODO:
-- create special user for prod db (cant remove db )
-- dont remove prod db with clean script 
+- require .env for testing without docker
+- dont remove prod db with clean script (cant remove db without warning)
 - deploy on server
-- solve docker config ports
-- write readme
 - build typescript
