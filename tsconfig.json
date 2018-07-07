@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es6",
+      "es2018.promise"
+    ],
+    "types" : [ "node", "core-js"], 
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "noImplicitAny": false,
+    "target": "es6"
+  },
+  "types": "./index.d.ts",
+  "include": ["**/*"],
+  "ignore": ["node_modules", ".npm"]
+}

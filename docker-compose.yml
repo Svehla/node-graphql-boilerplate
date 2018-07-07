@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+  app:
+    build: ./docker
+    command: npm start
+    ports:
+      - 127.0.0.1:3020:3020
+    volumes:
+      - .:/app
+
+    env_file: .env
+    
+    environment:
+      - DB_HOST=db
+
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5
+    restart: always
+    ports:
+      - 3307:3306
+      
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+ 
