@@ -1,9 +1,7 @@
 {
   "extends": "tslint:recommended",
   "rules": {
-    "max-line-length": {
-      "options": [100]
-    },
+    "max-line-length": [true, {"limit": 100, "ignore-pattern": "//"}],
     "ordered-imports": false,
     "semicolon": [true, "never"],
     "quotemark": [true, "single"],
