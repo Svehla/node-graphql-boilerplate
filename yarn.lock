@@ -1424,6 +1424,10 @@ graphql-cursor-sql-helper@^0.1.0:
     graphql "^0.13.2"
     graphql-relay "^0.5.5"
 
+graphql-custom-types@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/graphql-custom-types/-/graphql-custom-types-1.4.0.tgz#21dd5d3bf84cc57a938e7466dadc55e025b3cfe3"
+
 graphql-import@^0.4.0:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/graphql-import/-/graphql-import-0.4.5.tgz#e2f18c28d335733f46df8e0733d8deb1c6e2a645"

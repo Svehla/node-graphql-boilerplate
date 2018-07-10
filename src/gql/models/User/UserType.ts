@@ -11,8 +11,8 @@ import {
 } from 'graphql-relay'
 import { toGlobalId } from 'graphql-relay'
 import { connectionToSqlQuery } from 'graphql-cursor-sql-helper'
+import { GraphQLEmail } from 'graphql-custom-types'
 import { nodeInterface } from '../Node/nodeDefinitions'
-import { GraphQLEmailType } from '../../types'
 import models from '../../../database/core'
 import PostType from '../Post/PostType'
 
@@ -37,7 +37,7 @@ const userType = new GraphQLObjectType({
       resolve: _ => _.id,
     },
     email: {
-      type: GraphQLEmailType,
+      type: GraphQLEmail,
       description: `email of user`,
     },
     name: {

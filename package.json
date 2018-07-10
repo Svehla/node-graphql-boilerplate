@@ -27,10 +27,18 @@
   "nyc": {
     "check-coverage": true,
     "all": true,
-    "extension": [".ts"],
-    "include": ["src/**/*.ts"],
-    "exclude": ["src/main.ts"],
-    "reporter": ["text"]
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "src/main.ts"
+    ],
+    "reporter": [
+      "text"
+    ]
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -41,6 +49,7 @@
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
     "graphql-cursor-sql-helper": "^0.1.0",
+    "graphql-custom-types": "^1.4.0",
     "graphql-playground-middleware-express": "^1.7.1",
     "graphql-relay": "^0.5.5",
     "helmet": "^3.12.1",

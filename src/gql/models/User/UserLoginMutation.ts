@@ -1,10 +1,7 @@
 import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { GraphQLEnumType } from 'graphql'
-import {
-  GraphQLEmailType,
-  GraphQLPasswordType
-} from '../../types/index'
+import { GraphQLEmail, GraphQLPassword } from 'graphql-custom-types'
 import { userLogin } from '../../../services/auth'
 import { INVALID_CREDENTIALS } from '../../../constants'
 
@@ -23,10 +20,10 @@ const UserLoginMutation = mutationWithClientMutationId({
   name: 'UserLoginMutation',
   inputFields: {
     email: {
-      type: new GraphQLNonNull(GraphQLEmailType),
+      type: new GraphQLNonNull(GraphQLEmail),
     },
     password: {
-      type: new GraphQLNonNull(GraphQLPasswordType),
+      type: new GraphQLNonNull(new GraphQLPassword(3, 20)),
     },
   },
   outputFields: {
