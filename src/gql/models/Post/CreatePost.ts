@@ -31,17 +31,14 @@ const CreatePostMutation = mutationWithClientMutationId({
       type: PossibleErrors,
     },
   },
-  mutateAndGetPayload: async ({ userId, text }, { req }) => {
-    console.log('hiii')
+  mutateAndGetPayload: async ({ text }, { req }) => {
     const user = req.user
     if (user) {
       const newPost = {
         text,
         user_id: user.id,
       }
-
       const createdPost = await models.Post.create(newPost)
-
       return {
         createdPost,
       }

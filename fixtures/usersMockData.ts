@@ -4,7 +4,7 @@ import { UserRole } from '../src/constants'
 
 const userMockData: IUserAttributes[] = [
   {
-    id: 1,
+    // id: 1,
     email: 'john.doe@example.com',
     name: 'John Doe',
     role: UserRole.Admin,
@@ -13,7 +13,7 @@ const userMockData: IUserAttributes[] = [
     created_at: 1542970619716,
   },
   {
-    id: 2,
+    // id: 2,
     email: 'john.smith@example.com',
     name: 'John Smith',
     role: UserRole.Contributor,
