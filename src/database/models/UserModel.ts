@@ -1,10 +1,13 @@
 import * as Sequelize from 'sequelize'
+import { UserRole } from '../../constants'
 
 export interface IUserAttributes {
   id: number
-  name: string
   email: string
+  name: string
+  role: UserRole
   password: string
+  created_at: number
 }
 
 export type UserInstance = Sequelize.Instance<IUserAttributes> & IUserAttributes
@@ -23,7 +26,8 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
       type: DataTypes.STRING,
     },
     role: {
-      type: DataTypes.STRING,
+      type: Sequelize.ENUM,
+      values: ['Admin', 'Editor', 'Author', 'Contributor', 'Subscriber']
     },
     password: {
       type: DataTypes.STRING,

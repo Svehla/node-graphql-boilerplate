@@ -18,7 +18,7 @@ const createDb = async () => {
     `DROP DATABASE IF EXISTS ${databaseName};`,
   )
   await client.query(
-    `CREATE DATABASE IF NOT EXISTS ${databaseName};`,
+    `CREATE DATABASE ${databaseName};`,
   )
   console.timeEnd('create/renew-database')
   process.exit()

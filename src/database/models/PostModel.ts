@@ -4,6 +4,7 @@ export interface IPostAttributes {
   id?: number
   user_id?: number
   text?: string
+  created_at?: number
 }
 
 export type PostInstance = Sequelize.Instance<IPostAttributes> & IPostAttributes

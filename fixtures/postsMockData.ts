@@ -1,4 +1,8 @@
-export default [
+
+
+import { IPostAttributes } from '../src/database/models/PostModel'
+
+const userMockData: IPostAttributes[] = [
   {
     id: 1,
     user_id: 1,
@@ -25,3 +29,4 @@ export default [
   },
 ]
 
+export default userMockData

@@ -1,6 +1,8 @@
+
+import { IUserAttributes } from '../src/database/models/UserModel'
 import { UserRole } from '../src/constants'
 
-export default [
+const userMockData: IUserAttributes[] = [
   {
     id: 1,
     email: 'john.doe@example.com',
@@ -20,3 +22,5 @@ export default [
     created_at: 1541370619716,
   },
 ]
+
+export default userMockData

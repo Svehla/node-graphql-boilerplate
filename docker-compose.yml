@@ -26,5 +26,5 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=ExampleDb
+      - POSTGRES_DB=example_db
  

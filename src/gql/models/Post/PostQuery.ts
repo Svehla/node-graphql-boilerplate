@@ -26,7 +26,7 @@ export default {
       ...connectionArgs,
       orderBy: {
         type: orderByParam(
-          `orderBySchools`,
+          `orderByPost`,
           [OrderByPostKey.CreatedAt, OrderByPostKey.Text]
         )
       },

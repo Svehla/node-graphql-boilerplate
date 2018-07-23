@@ -32,6 +32,7 @@ const CreatePostMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: async ({ userId, text }, { req }) => {
+    console.log('hiii')
     const user = req.user
     if (user) {
       const newPost = {
