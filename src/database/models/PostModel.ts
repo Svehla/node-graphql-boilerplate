@@ -5,6 +5,7 @@ export interface IPostAttributes {
   user_id?: number
   text?: string
   created_at?: number
+  updated_at?: number
 }
 
 export type PostInstance = Sequelize.Instance<IPostAttributes> & IPostAttributes
@@ -24,7 +25,14 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
     },
     created_at: {
       type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+      allowNull: false
     },
+    updated_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+      allowNull: false
+    }
   })
   return Post
 }
