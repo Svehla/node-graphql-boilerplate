@@ -8,3 +8,11 @@ export enum OrderByPostKey {
   CreatedAt = 'CreatedAt',
   Text = 'Text',
 }
+
+export enum UserRole {
+  Admin = 'Admin',
+  Editor = 'Editor',
+  Author = 'Author',
+  Contributor = 'Contributor',
+  Subscriber = 'Subscriber',
+}

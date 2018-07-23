@@ -12,16 +12,14 @@ import {
 import { toGlobalId } from 'graphql-relay'
 import { connectionToSqlQuery } from 'graphql-cursor-sql-helper'
 import { GraphQLEmail } from 'graphql-custom-types'
+import GraphQLUserRole from './types/GraphQLUserRole'
 import { nodeInterface } from '../Node/nodeDefinitions'
 import models from '../../../database/core'
 import PostType from '../Post/PostType'
 
 const userType = new GraphQLObjectType({
   name: 'User',
-  // TODO: Add nodeInterface
   interfaces: [nodeInterface],
-  // TODO: add isTypeOf -> problem with ts types
-  // isTypeOf: obj => obj instanceof models.User,
   // @ts-ignore
   isTypeOf: obj => obj instanceof models.User,
   description: `User entity`,
@@ -39,6 +37,10 @@ const userType = new GraphQLObjectType({
     email: {
       type: GraphQLEmail,
       description: `email of user`,
+    },
+    role: {
+      type: GraphQLUserRole,
+      description: `role of user`,
     },
     name: {
       type: GraphQLString,

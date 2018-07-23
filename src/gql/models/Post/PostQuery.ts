@@ -37,7 +37,7 @@ export default {
       const orderBySqlParam = orderBy
         ? orderBy.map(({ order, key }) => [Case.snake(key), order])
         : [['createdAt', 'ASC']]
-      console.log(orderBySqlParam)
+
       return connectionToSqlQuery(
         totalCount,
         paginationArgs,
