@@ -45,7 +45,7 @@ describe('Posts integration', () => {
             node: {
               id: 'UG9zdDox',
               originalId: '1',
-              text: 'Hallo, this is my first status11',
+              text: 'Hallo, this is my first status',
               author: {
                 originalId: '1',
                 email: 'john.doe@example.com',
@@ -58,17 +58,17 @@ describe('Posts integration', () => {
           },
           {
             node: {
-              id: 'UG9zdDoy',
-              originalId: '2',
-              text: 'Wow this is awesome app',
+              id: 'UG9zdDoz',
+              originalId: '3',
+              text: '12 Hallo, this is my second status',
               author: {
-                originalId: '2',
-                email: 'john.smith@example.com',
-                name: 'John Smith',
+                originalId: '1',
+                name: 'John Doe',
+                email: 'john.doe@example.com',
                 posts: {
-                  totalCount: 2,
-                },
-              },
+                  totalCount: 2
+                }
+              }
             },
           },
         ],
@@ -98,7 +98,7 @@ describe('Posts integration', () => {
     const expected = {
       somePost: {
         id: postId,
-        text: 'Hallo, this is my second status',
+        text: '12 Hallo, this is my second status',
         originalId: postOriginalId
       },
     }

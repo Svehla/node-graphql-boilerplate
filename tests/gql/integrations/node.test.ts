@@ -3,10 +3,7 @@ import * as chai from 'chai'
 import { toGlobalId } from 'graphql-relay'
 import { doQuery } from '../doQuery'
 import '../../globalBeforeAfter'
-import { getJwtToken } from '../../utils'
 const expect = chai.expect
-
-const JOHN_DOE_JWT = getJwtToken('1', 'john.doe@example.com')
 
 describe('Posts integration', () => {
   /*--------------------------------------------*/

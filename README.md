@@ -19,7 +19,8 @@ if you want change port of app and you use docker -> you have to reconfigure `do
 
 ## Installation
 1. run `yarn` or `npm install` to install dependecies
-2. run `docker-compose up` to start app and database
+1. run `yarn run docker-db-hard-init` to install dependecies
+3. run `yarn run docker-start` to start app and database
 
 ## Developing (local vs docker)
 for developing you can use docker or install your own server
