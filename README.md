@@ -8,9 +8,9 @@ All source codes are written in typescript and test coverage is higher than 90%
 
 ## Requirments
 - install on your OS: `node`, `yarn`, `docker`
-- Nodejs at least 8.9.3, yarn and mysql.
+- Nodejs at least 8.9.3, yarn and postgres.
 
-If you haven't mysql db on local machine, you can use docker and docker-compose with nodejs and mysql db container.
+If you haven't postgres db on local machine, you can use docker and docker-compose with nodejs and postgres db container.
 
 ## Configuration
 copy .env.example file to .env a config your local varibales

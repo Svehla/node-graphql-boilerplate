@@ -8,7 +8,7 @@ LABEL maintainer="Jakub Svehla <svehl.jakub@gmail.com>"
 
 # RUN apt-get update && apt-get install yarn
 
-# wait for mysql to start
+# wait for db to start
 RUN apk update
 RUN apk add dumb-init
 

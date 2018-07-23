@@ -41,6 +41,7 @@
     ]
   },
   "dependencies": {
+    "@types/pg": "^7.4.10",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "case": "^1.5.5",
@@ -55,10 +56,10 @@
     "graphql-relay": "^0.5.5",
     "helmet": "^3.12.1",
     "jsonwebtoken": "^8.3.0",
-    "mysql2": "^1.5.3",
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
+    "pg": "^7.4.3",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.9.0",
     "sequelize": "^4.38.0",
@@ -78,7 +79,6 @@
     "@types/helmet": "^0.0.38",
     "@types/jsonwebtoken": "^7.2.7",
     "@types/mocha": "^5.2.4",
-    "@types/mysql2": "types/mysql2",
     "@types/node": "^10.5.1",
     "@types/passport": "^0.4.5",
     "@types/passport-http-bearer": "^1.0.33",
