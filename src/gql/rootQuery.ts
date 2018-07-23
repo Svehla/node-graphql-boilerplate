@@ -9,6 +9,7 @@ const rootFields = {
   ...PostQuery,
 }
 
+// @ts-ignore
 const rootQuery = new GraphQLObjectType({
   name: 'Query',
   fields: () => rootFields,
