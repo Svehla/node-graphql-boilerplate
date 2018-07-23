@@ -5,6 +5,7 @@ export default [
     name: 'John Doe',
     // pwd 1111 hash
     password: '$2y$10$Bqp4wY5CVVUCmQQpBX8WQO/NjUSrgQVTg6ZbsaTILdONEZv290Mk2',
+    created_at: 1542970619716,
   },
   {
     id: 2,
@@ -12,5 +13,6 @@ export default [
     name: 'John Smith',
     // pwd 2222 hash
     password: '$2y$10$086dxg98L.gFlmEy.oyCfudmFFwX3..nXH/hL2RMVKsqtncvg2Xqi',
+    created_at: 1541370619716,
   },
 ]

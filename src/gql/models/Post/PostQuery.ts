@@ -7,9 +7,11 @@ import {
   connectionArgs,
 } from 'graphql-relay'
 import { connectionToSqlQuery } from 'graphql-cursor-sql-helper'
-
+import * as Case from 'case'
+import orderByParam from '../../types/orderByEnumType'
 import PostType from './PostType'
 import models from '../../../database/core'
+import { OrderByPostKey } from '../../../constants'
 
 export default {
   posts: {
@@ -22,11 +24,20 @@ export default {
     }).connectionType,
     args: {
       ...connectionArgs,
-      // custom filteres
+      orderBy: {
+        type: orderByParam(
+          `orderBySchools`,
+          [OrderByPostKey.CreatedAt, OrderByPostKey.Text]
+        )
+      },
     },
     description: `Get all available posts`,
-    resolve: async (parent, { messageFromDate, ...paginationArgs }) => {
+    resolve: async (parent, { messageFromDate, orderBy, ...paginationArgs }, ) => {
       const totalCount = await models.Post.count()
+      const orderBySqlParam = orderBy
+        ? orderBy.map(({ order, key }) => [Case.snake(key), order])
+        : [['createdAt', 'ASC']]
+      console.log(orderBySqlParam)
       return connectionToSqlQuery(
         totalCount,
         paginationArgs,
@@ -34,8 +45,7 @@ export default {
           models.Post.findAll({
             offset,
             limit,
-            // TODO: replace it with created at
-            // order: [['id', 'DESC']],
+            order: orderBySqlParam,
           })
         ),
       )

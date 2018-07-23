@@ -12,10 +12,7 @@ import UserType from '../User/UserType'
 const Post = new GraphQLObjectType({
   name: 'Post',
   description: 'Post type definition',
-  // TODO: Add nodeInterface
   interfaces: [nodeInterface],
-  // TODO: add isTypeOf -> problem with ts types
-  // isTypeOf: obj => obj instanceof models.Post,
   // @ts-ignore
   isTypeOf: obj => obj instanceof models.Post,
   fields: () => ({
@@ -39,6 +36,10 @@ const Post = new GraphQLObjectType({
       resolve: async (parent) => {
         return models.User.findById(parent.user_id)
       },
+    },
+    createdAt: {
+      type: GraphQLString,
+      resolve: post => post.created_at
     },
   }),
 })

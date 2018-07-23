@@ -21,6 +21,9 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
     text: {
       type: DataTypes.STRING,
     },
+    created_at: {
+      type: DataTypes.DATE,
+    },
   })
   return Post
 }
