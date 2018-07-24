@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize'
 import { IPostAttributes, PostInstance } from './models/PostModel'
 import { IUserAttributes, UserInstance } from './models/UserModel'
+import { ICommentAttributes, CommentInstance } from './models/CommentModel'
 
 const sequelize = new Sequelize(
   process.env.ENVIROMENT === 'test'
@@ -43,6 +44,7 @@ sequelize
 const models = {
   Post: sequelize.import<PostInstance, IPostAttributes>('./models/PostModel'),
   User: sequelize.import<UserInstance, IUserAttributes>('./models/UserModel'),
+  Comment: sequelize.import<CommentInstance, ICommentAttributes>('./models/commentModel'),
   sequelize,
 }
 
@@ -54,6 +56,18 @@ Object.keys(models).forEach(key => {
 
 models.User.hasMany(models.Post, {
   foreignKey: 'user_id',
+  sourceKey: 'id',
+  constraints: false,
+})
+
+models.User.hasMany(models.Comment, {
+  foreignKey: 'user_id',
+  sourceKey: 'id',
+  constraints: false,
+})
+
+models.Post.hasMany(models.Comment, {
+  foreignKey: 'post_id',
   sourceKey: 'id',
   constraints: false,
 })

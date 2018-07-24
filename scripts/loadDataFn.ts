@@ -1,5 +1,5 @@
 import models from '../src/database/core'
-import { usersMockData, postsMockData } from '../fixtures'
+import { usersMockData, postsMockData, commentsMockData } from '../fixtures'
 
 export const loadDataToDb = async () => {
   await Promise.all<any>([
@@ -11,6 +11,11 @@ export const loadDataToDb = async () => {
     ...postsMockData.map(postData => {
       models.Post
         .build(postData)
+        .save()
+      }),
+    ...commentsMockData.map(commentData => {
+      models.Comment
+        .build(commentData)
         .save()
       }),
   ])
