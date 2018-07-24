@@ -58,13 +58,13 @@ describe('Posts integration', () => {
           },
           {
             node: {
-              id: 'UG9zdDoz',
-              originalId: '3',
-              text: '12 Hallo, this is my second status',
+              id: 'UG9zdDoy',
+              originalId: '2',
+              text: 'Hallo, this is my first status',
               author: {
-                originalId: '1',
-                name: 'John Doe',
-                email: 'john.doe@example.com',
+                originalId: '2',
+                name: 'John Smith',
+                email: 'john.smith@example.com',
                 posts: {
                   totalCount: 2
                 }
@@ -78,7 +78,6 @@ describe('Posts integration', () => {
     expect(response.status).to.equal(200)
     expect(response.data.data).to.have.deep.equals(expected)
   })
-
 
   it('Should return post by id', async () => {
     const postOriginalId = '3'
@@ -139,11 +138,9 @@ describe('Posts integration', () => {
     expect(createPostResponse.data.data).to.have.deep.equals(expectedResultPostMutation)
   })
 
-
   /*--------------------------------------------*/
   /*---------------- mutations -----------------*/
   /*--------------------------------------------*/
-
   it('Should Create post', async () => {
     const newPost = {
       text: 'hi',
@@ -202,5 +199,4 @@ describe('Posts integration', () => {
     // reset mutation of data
     await loadData()
   })
-
 })
