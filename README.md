@@ -85,3 +85,18 @@ TODO:
 - dont remove prod db with clean script (cant remove db without warning)
 - deploy on server
 - build typescript
+
+## production startup
+```
+
+// pm2 docker shutdown
+// http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#enabling-graceful-shutdown
+process.on('SIGINT', () => {
+  db.stop((err) => {
+    process.exit(err ? 1 : 0);
+  });
+});
+
+```
+not implemented yet (db does not lost connection)
+http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#starting-a-configuration-file

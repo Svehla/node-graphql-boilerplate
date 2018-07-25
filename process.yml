@@ -1,0 +1,5 @@
+apps:
+  - script   : 'build/main.js'
+    name     : 'node-gql-backend'
+    exec_mode: 'cluster'
+    instances: 2
