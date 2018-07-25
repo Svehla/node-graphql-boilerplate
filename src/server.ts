@@ -31,6 +31,8 @@ const startServer = async () => {
 
   if (process.env.ENVIROMENT !== 'production') {
     app.get('/playground', graphqlPlayground({ endpoint: '/graphql' }))
+  } else {
+    app.get('/plgrnd-lol', graphqlPlayground({ endpoint: '/graphql' }))
   }
   app.use(
     '/graphql',
@@ -52,7 +54,7 @@ const startServer = async () => {
 Current env: ${process.env.ENVIROMENT}
 Current version: ${packageJson.version}
 Server URL: http://localhost:${process.env.PORT}/graphql
----------------------------------------
+-------------- or never ---------------
 
 `)
     }

@@ -1,3 +1,5 @@
+# this dockerfile is for dev instance
+
 FROM node:9.11-alpine
 
 LABEL maintainer="Jakub Svehla <svehl.jakub@gmail.com>"

@@ -1,0 +1,17 @@
+# libs
+node_modules
+
+# builded server
+build
+
+# mock data
+fixtures
+
+# tests for app
+tests
+
+# test coverae
+.nyc_output
+
+# load db data
+scripts

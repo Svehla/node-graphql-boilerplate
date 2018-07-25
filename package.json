@@ -6,7 +6,7 @@
   "author": "Jakub Švehla",
   "main": "src/main.ts",
   "scripts": {
-    "build": "echo 'not implemented yet'",
+    "build": "tsc -p ./",
     "lint": "tslint -p ./tsconfig.json",
     "lint:fix": "tslint --fix -p ./tsconfig.json",
     "db-init-schema": "ts-node ./scripts/createDb && ts-node ./scripts/addTablesToDb",
@@ -21,7 +21,7 @@
     "docker-test-coverage": "docker-compose run app npm run test-coverage",
     "docker-db-hard-init": "docker-compose run app npm run db-hard-init",
     "docker-start": "docker-compose up",
-    "start": "nodemon src/main --exec 'ts-node' src/main.ts --ignore tests/ scripts/",
+    "start": "nodemon src/main.ts --legacy-watch",
     "mocha": "mocha"
   },
   "nyc": {

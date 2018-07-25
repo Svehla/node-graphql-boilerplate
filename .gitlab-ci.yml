@@ -1,0 +1,24 @@
+build site:
+  image: node:9
+  stage: build
+  script:
+    - yarn install --progress=false
+    - yarn run build
+
+deploy:
+  stage: deploy
+  script:
+    - apt-get update -qq && apt-get install -y -qq sshpass
+    - sshpass -V
+    - export SSHPASS=$USER_PASS 
+    - sshpass -e scp -o stricthostkeychecking=no -r . $SSH_HOST:/var/build/nntb-backend-$CI_COMMIT_SHA/
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker build -t node_prod_image -f /var/build/nntb-backend-$CI_COMMIT_SHA/docker/Dockerfile.prod /var/build/nntb-backend-$CI_COMMIT_SHA/"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "rm -rf /var/build/nntb-backend-$CI_COMMIT_SHA/"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker stop node_server_backend || true"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker rm node_server_backend || true"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker run --env-file /var/www/env-conf/.env-prod-node-backend --network node_backends --restart always --name node_server_backend --detach node_prod_image"

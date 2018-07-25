@@ -85,3 +85,54 @@ TODO:
 - dont remove prod db with clean script (cant remove db without warning)
 - deploy on server
 - build typescript
+
+## production startup
+```
+
+// pm2 docker shutdown
+// http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#enabling-graceful-shutdown
+process.on('SIGINT', () => {
+  db.stop((err) => {
+    process.exit(err ? 1 : 0);
+  });
+});
+
+```
+not implemented yet (db does not lost connection)
+http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#starting-a-configuration-file
+
+
+## docker deploy
+
+### node app
+
+#### create docker image
+`docker build -t node_prod_image -f docker/Dockerfile.prod .`
+
+#### run build docker image
+```bash
+docker run \
+ --env PORT=3020 \
+ --env ENVIROMENT=dev \
+ --env JWT_SECRET=yeeey \
+ --env DB_HOST=host.docker.internal \
+ --env DB_USER=root \
+ --env DB_DATABASE_NAME=example_db \
+ --env DB_PORT=5432 \
+ --env DB_PASSWORD=root \
+-p 3020:3020 -it node_prod_image
+```
+
+
+### db
+`docker-compose up db`
+
+### link containers
+
+`docker network create --driver bridge node_backends`
+
+`docker network connect node_backends postgres`
+
+`docker network connect node_backends nginx`
+
+`docker run --env-file /var/www/env-conf/.env-prod-node-backend --network node_backends --restart always --name node_server_backend --detach node_prod_image`

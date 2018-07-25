@@ -44,7 +44,7 @@ sequelize
 const models = {
   Post: sequelize.import<PostInstance, IPostAttributes>('./models/PostModel'),
   User: sequelize.import<UserInstance, IUserAttributes>('./models/UserModel'),
-  Comment: sequelize.import<CommentInstance, ICommentAttributes>('./models/commentModel'),
+  Comment: sequelize.import<CommentInstance, ICommentAttributes>('./models/CommentModel'),
   sequelize,
 }
 
