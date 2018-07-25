@@ -100,3 +100,24 @@ process.on('SIGINT', () => {
 ```
 not implemented yet (db does not lost connection)
 http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#starting-a-configuration-file
+
+
+## docker deploy
+### node app
+(without new lines)
+
+
+docker run
+ --env host.docker.internal
+ --env PORT=3020
+ --env ENVIROMENT=dev
+ --env JWT_SECRET=yeeey
+ --env DB_HOST=host.docker.internal
+ --env DB_USER=root
+ --env DB_DATABASE_NAME=example_db
+ --env DB_PORT=5432
+ --env DB_PASSWORD=root
+-p 3020:3020 -it node_prod_image
+
+### db
+docker-composeup db
