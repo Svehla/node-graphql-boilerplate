@@ -7,13 +7,12 @@ build site:
   artifacts:
     expire_in: 1 week
     paths:
-      - dist
+      - build
 
 deploy:
-  image: alpine
+  image: docker
   stage: deploy
   script:
-    - apk add --no-cache rsync openssh
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_dsa
     - chmod 600 ~/.ssh/id_dsa
