@@ -6,7 +6,7 @@
   "author": "Jakub Švehla",
   "main": "src/main.ts",
   "scripts": {
-    "build": "echo 'not implemented yet'",
+    "build": "tsc -p ./",
     "lint": "tslint -p ./tsconfig.json",
     "lint:fix": "tslint --fix -p ./tsconfig.json",
     "db-init-schema": "ts-node ./scripts/createDb && ts-node ./scripts/addTablesToDb",

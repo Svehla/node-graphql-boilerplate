@@ -2,11 +2,14 @@
   "compilerOptions": {
     "lib": [
       "es6",
-      "es2018.promise"
+      "es2018.promise",
+      "dom",
+      "esnext.asynciterable"
     ],
     "types" : [ "node", "core-js"], 
     "moduleResolution": "node",
     "sourceMap": true,
+    "outDir": "dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": false,
@@ -15,5 +18,8 @@
   },
   "types": "./index.d.ts",
   "include": ["**/*"],
-  "ignore": ["node_modules", ".npm"]
+  "ignore": ["node_modules", ".npm"],
+  "exclude": [
+    "node_modules"
+  ]
 }
