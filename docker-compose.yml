@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    build: ./docker
+    build: ./docker/Dockerfile.dev
     command: npm start
     ports:
       - 127.0.0.1:3020:3020
