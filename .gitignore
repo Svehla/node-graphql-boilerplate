@@ -17,8 +17,6 @@ yarn-error.log*
 /jspm_packages
 /bower_components
 
-# deploy
-.gitlab-ci.yml
 
 # Yarn Integrity file
 .yarn-integrity
