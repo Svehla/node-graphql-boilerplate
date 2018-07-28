@@ -1,11 +1,13 @@
 import { GraphQLObjectType } from 'graphql'
 import UserLoginMutation from './models/User/UserLoginMutation'
-import CreatePostMutation from './models/Post/CreatePost'
+import PostMutations from './models/Post/PostMutations'
+
+console.log(PostMutations)
 
 const rootMutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    CreatePostMutation,
+    ...PostMutations,
     UserLoginMutation,
   }),
 })

@@ -1,8 +1,8 @@
 import { GraphQLNonNull, GraphQLString, GraphQLEnumType } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
-import PostType from './PostType'
-import models from '../../../database/core'
-import { USER_IS_NOT_LOGGED } from '../../../constants'
+import PostType from '../PostType'
+import models from '../../../../database/core'
+import { USER_IS_NOT_LOGGED } from '../../../../constants/index'
 
 const PossibleErrors = new GraphQLEnumType({
   name: 'CreatePostErrors',

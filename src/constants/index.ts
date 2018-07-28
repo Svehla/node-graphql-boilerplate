@@ -3,6 +3,8 @@
 // ---------------------------------
 export const INVALID_CREDENTIALS = `INVALID_CREDENTIALS`
 export const USER_IS_NOT_LOGGED = `USER_IS_NOT_LOGGED`
+export const USER_NOT_FOUND = `USER_NOT_FOUND`
+export const POST_NOT_FOUND = `POST_NOT_FOUND`
 
 export enum OrderByPostKey {
   CreatedAt = 'CreatedAt',
