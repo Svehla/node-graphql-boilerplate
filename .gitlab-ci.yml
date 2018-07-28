@@ -2,8 +2,8 @@ build site:
   image: node:9
   stage: build
   script:
-    - npm install --progress=false
-    - npm run build
+    - yarn install --progress=false
+    - yarn run build
   artifacts:
     expire_in: 1 week
     paths:
