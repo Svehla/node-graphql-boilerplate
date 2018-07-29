@@ -12,6 +12,3 @@ tests
 
 # test coverae
 .nyc_output
-
-# load db data
-scripts
