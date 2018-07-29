@@ -10,6 +10,9 @@ const PossibleErrors = new GraphQLEnumType({
     USER_IS_NOT_LOGGED: {
       value: USER_IS_NOT_LOGGED,
     },
+    POST_NOT_FOUND: {
+      value: POST_NOT_FOUND
+    }
   },
 })
 
@@ -18,7 +21,7 @@ const UpdatePostMutation = mutationWithClientMutationId({
   description: `this mutation updates a post`,
   inputFields: {
     id: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLID),
       description: `id of post`
     },
     text: {
@@ -54,6 +57,10 @@ const UpdatePostMutation = mutationWithClientMutationId({
         })
         return {
           updatedPost
+        }
+      } else {
+        return {
+          error: POST_NOT_FOUND
         }
       }
     } else {

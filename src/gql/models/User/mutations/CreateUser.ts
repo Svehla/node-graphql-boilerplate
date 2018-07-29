@@ -4,27 +4,32 @@ import {
   GraphQLEnumType
 } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
-import PostType from '../PostType'
+import UserType from '../UserType'
 import models from '../../../../database/core'
-import { USER_IS_NOT_LOGGED } from '../../../../constants/index'
+import { GraphQLEmail } from '../../../../../node_modules/graphql-custom-types';
+import { UserRole } from '../../../../constants';
 
 const PossibleErrors = new GraphQLEnumType({
   name: 'CreatePostErrors',
-  values: {
-    USER_IS_NOT_LOGGED: {
-      value: USER_IS_NOT_LOGGED,
-    },
-  },
+  values: {},
 })
 
-const CreatePostMutation = mutationWithClientMutationId({
-  name: 'CreatePostMutation',
-  description: `this mutation create post`,
+const CreateUserMutation = mutationWithClientMutationId({
+  name: 'CreateUserMutation',
+  description: `this mutation creates a user`,
   inputFields: {
-    text: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: `text of post`,
+    email: {
+      type: new GraphQLNonNull(GraphQLEmail),
+      description: 'email of the user'
     },
+    name: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'name of the user'
+    },
+    role: {
+      type: new GraphQLNonNull(UserRole),
+      description: ''
+    }
   },
   outputFields: {
     createdPost: {

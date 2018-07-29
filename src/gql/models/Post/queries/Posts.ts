@@ -15,7 +15,7 @@ import { OrderByPostKey } from '../../../../constants'
 
 const Posts = {
   type: connectionDefinitions({
-    name: 'PostTypes',
+    name: 'PostsTypes',
     nodeType: PostType,
     connectionFields: {
       totalCount: { type: new GraphQLNonNull(GraphQLInt) },

@@ -1,36 +1,32 @@
 import {
   GraphQLNonNull,
-  GraphQLInt,
   GraphQLString
 } from 'graphql'
 import {
-  connectionDefinitions,
-  connectionArgs,
+  fromGlobalId
 } from 'graphql-relay'
-import { USER_NOT_FOUND } from '../../../../constants'
+import { isNilOrEmpty } from 'ramda-adjunct'
 import PostType from '../PostType'
 import models from '../../../../database/core'
 
 const Post = {
   type: PostType,
   args: {
-    text: {
-      type: GraphQLString,
-      description: 'Text that post has to have'
+    id: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Id of post'
     }
   },
   description: `Get post based on params`,
-  resolve: async (parent, { text }) => {
-    const satisfiyingUser = models.Post.findOne({
+  resolve: async (parent, { id }) => {
+    const { id: convertedId } = fromGlobalId(id)
+    const post = await models.Post.findOne({
       where: {
-        text
+        id: convertedId
       }
     })
-    return satisfiyingUser ? {
-      satisfiyingUser
-    } : {
-      error: USER_NOT_FOUND
-    }
+
+    return isNilOrEmpty(post) ? null : post
   },
 }
 

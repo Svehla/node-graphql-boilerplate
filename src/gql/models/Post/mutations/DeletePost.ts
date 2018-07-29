@@ -1,7 +1,18 @@
-import { GraphQLNonNull, GraphQLEnumType, GraphQLString } from 'graphql'
-import { mutationWithClientMutationId, fromGlobalId } from 'graphql-relay'
+import {
+  GraphQLNonNull,
+  GraphQLEnumType,
+  GraphQLString,
+  GraphQLID
+} from 'graphql'
+import {
+  mutationWithClientMutationId,
+  fromGlobalId
+} from 'graphql-relay'
 import models from '../../../../database/core'
-import { USER_IS_NOT_LOGGED, POST_NOT_FOUND } from '../../../../constants/index'
+import {
+  USER_IS_NOT_LOGGED,
+  POST_NOT_FOUND
+} from '../../../../constants/index'
 
 const PossibleErrors = new GraphQLEnumType({
   name: 'DeletePostErrors',
@@ -20,13 +31,13 @@ const DeletePostMutation = mutationWithClientMutationId({
   description: `this mutation deletes post`,
   inputFields: {
     id: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLID),
       description: `id of post`,
     },
   },
   outputFields: {
     id: {
-      type: new GraphQLNonNull(GraphQLString),
+      type: GraphQLID,
       description: `returns deleted post id`,
     },
     error: {
@@ -35,13 +46,15 @@ const DeletePostMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: async ({ id }, { req }) => {
     const user = req.user
-    const { id: convertedToId } = fromGlobalId(id)
+    const { id: convertedId } = fromGlobalId(id)
+
     if (user) {
       const deletedRows = await models.Post.destroy({
         where: {
-          id: convertedToId
+          id: convertedId
         }
       })
+
       return deletedRows === 1 ? {
         id
       } : {

@@ -2,8 +2,8 @@ import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { GraphQLEnumType } from 'graphql'
 import { GraphQLEmail, GraphQLPassword } from 'graphql-custom-types'
-import { userLogin } from '../../../services/auth'
-import { INVALID_CREDENTIALS } from '../../../constants'
+import { userLogin } from '../../../../services/auth'
+import { INVALID_CREDENTIALS } from '../../../../constants'
 
 
 const PossibleErrors = new GraphQLEnumType({
