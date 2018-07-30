@@ -23,11 +23,8 @@ deploy-stage:
     - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
       "docker rm node_server_backend_stage || true"
     - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
-<<<<<<< HEAD
-      "docker run --env-file /var/www/env-conf/.env-stage-node-backend --network node_backends --restart always --name node_server_backend_stage --detach node_stage_image:latest"
-=======
       "docker run --tty --env-file /var/www/env-conf/.env-stage-node-backend --network node_backends --restart always --name node_server_backend_stage --detach node_stage_image"
->>>>>>> 9062c9270c1aaf248ed3a3491d6ba5bed1e899c2
+
 
 
 deploy-prod:
@@ -48,8 +45,4 @@ deploy-prod:
     - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
       "docker rm node_server_backend_prod || true"
     - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
-<<<<<<< HEAD
-      "docker run --env-file /var/www/env-conf/.env-prod-node-backend --network node_backends --restart always --name node_server_backend_prod --detach node_prod_image:latest"
-=======
       "docker run --tty --env-file /var/www/env-conf/.env-prod-node-backend --network node_backends --restart always --name node_server_backend_prod --detach node_prod_image"
->>>>>>> 9062c9270c1aaf248ed3a3491d6ba5bed1e899c2
