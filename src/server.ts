@@ -50,11 +50,11 @@ const startServer = async () => {
     if (process.env.ENVIROMENT !== 'test') {
       console.log(`
 
---------- server is ready now ---------
+--------- server is ready now ----------
 Current env: ${process.env.ENVIROMENT}
 Current version: ${packageJson.version}
 Server URL: http://localhost:${process.env.PORT}/graphql
--------------- or never ---------------
+-------------- or never! ---------------
 
 `)
     }
