@@ -9,6 +9,13 @@ export const POST_NOT_FOUND = `POST_NOT_FOUND`
 export enum OrderByPostKey {
   CreatedAt = 'CreatedAt',
   Text = 'Text',
+} 
+
+export enum OrderByUserKey {
+  CreatedAt = 'CreatedAt',
+  Name = 'Name',
+  Role = 'Role',
+  Email = 'Email'
 }
 
 export enum UserRole {

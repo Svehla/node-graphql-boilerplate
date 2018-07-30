@@ -16,7 +16,7 @@ const PossibleErrors = new GraphQLEnumType({
 })
 
 
-const UserLoginMutation = mutationWithClientMutationId({
+const LoginUserMutation = mutationWithClientMutationId({
   name: 'UserLoginMutation',
   inputFields: {
     email: {
@@ -47,4 +47,4 @@ const UserLoginMutation = mutationWithClientMutationId({
   },
 })
 
-export default UserLoginMutation
+export default LoginUserMutation

@@ -34,6 +34,10 @@ const userType = new GraphQLObjectType({
       description: `The User's real DB ID`,
       resolve: _ => _.id,
     },
+    createdAt: {
+      type: GraphQLString,
+      resolve: _ => _.created_at
+    },
     email: {
       type: GraphQLEmail,
       description: `email of user`,

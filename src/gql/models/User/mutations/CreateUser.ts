@@ -3,15 +3,25 @@ import {
   GraphQLString,
   GraphQLEnumType
 } from 'graphql'
+import {
+  GraphQLEmail,
+  GraphQLPassword
+} from 'graphql-custom-types'
+import * as moment from 'moment'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import UserType from '../UserType'
 import models from '../../../../database/core'
-import { GraphQLEmail } from '../../../../../node_modules/graphql-custom-types';
-import { UserRole } from '../../../../constants';
+import GraphQLUserRole from '../types/GraphQLUserRole'
+
+const NOT_CREATED = 'NOT_CREATED'
 
 const PossibleErrors = new GraphQLEnumType({
-  name: 'CreatePostErrors',
-  values: {},
+  name: 'CreateUserErrors',
+  values: {
+    NOT_CREATED: {
+      value: NOT_CREATED
+    }
+  },
 })
 
 const CreateUserMutation = mutationWithClientMutationId({
@@ -20,43 +30,50 @@ const CreateUserMutation = mutationWithClientMutationId({
   inputFields: {
     email: {
       type: new GraphQLNonNull(GraphQLEmail),
-      description: 'email of the user'
+      description: 'user email'
     },
     name: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'name of the user'
+      description: 'user name'
     },
     role: {
-      type: new GraphQLNonNull(UserRole),
-      description: ''
+      type: new GraphQLNonNull(GraphQLUserRole),
+      description: 'user role'
+    },
+    password: {
+      type: new GraphQLNonNull(new GraphQLPassword(3, 20)),
+      description: 'user password'
     }
   },
   outputFields: {
-    createdPost: {
-      type: PostType,
-      description: `return new created post`,
+    createdUser: {
+      type: UserType,
+      description: `return new created user`,
     },
     error: {
       type: PossibleErrors,
     },
   },
-  mutateAndGetPayload: async ({ text }, { req }) => {
-    const user = req.user
-    if (user) {
-      const newPost = {
-        text,
-        user_id: user.id,
-      }
-      const createdPost = await models.Post.create(newPost)
+  mutateAndGetPayload: async ({ email, name, role, password }) => {
+    const created_at = moment().valueOf()
+    const newUser = {
+      email,
+      name,
+      role,
+      password,
+      created_at
+    }
+    try {
+      const createdUser = await models.User.create(newUser)
       return {
-        createdPost,
+        createdUser
       }
-    } else {
+    } catch (e) {
       return {
-        error: USER_IS_NOT_LOGGED,
+        error: NOT_CREATED
       }
     }
   },
 })
 
-export default CreatePostMutation
+export default CreateUserMutation
