@@ -12,6 +12,7 @@ import orderByParam from '../../types/orderByEnumType'
 import PostType from './PostType'
 import models from '../../../database/core'
 import { OrderByPostKey } from '../../../constants'
+import GraphQLPagePagination from '../../types/GraphQLPagePagination'
 
 export default {
   posts: {
@@ -24,6 +25,7 @@ export default {
     }).connectionType,
     args: {
       ...connectionArgs,
+      ...GraphQLPagePagination,
       orderBy: {
         type: orderByParam(
           `orderByPost`,
@@ -32,21 +34,31 @@ export default {
       },
     },
     description: `Get all available posts`,
-    resolve: async (parent, { messageFromDate, orderBy, ...paginationArgs }, ) => {
+    resolve: async (
+      parent,
+      { messageFromDate, orderBy, page, rowsPerPage, ...paginationArgs }
+    ) => {
       const totalCount = await models.Post.count()
       const orderBySqlParam = orderBy
         ? orderBy.map(({ order, key }) => [Case.snake(key), order])
         : [['created_at', 'ASC']]
-
+        
       return connectionToSqlQuery(
         totalCount,
         paginationArgs,
-        ({ offset, limit }) => (
+        () => (
+          models.Post.findAll({
+            offset: page * rowsPerPage,
+            limit: rowsPerPage,
+            order: orderBySqlParam,
+          })
+          /*
           models.Post.findAll({
             offset,
             limit,
             order: orderBySqlParam,
           })
+          */
         ),
       )
     },
