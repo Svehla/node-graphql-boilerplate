@@ -112,7 +112,6 @@ http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#starting-a-configuration-
 #### run build docker image
 ```bash
 docker run \
- --env host.docker.internal \
  --env PORT=3020 \
  --env ENVIROMENT=dev \
  --env JWT_SECRET=yeeey \
@@ -126,4 +125,15 @@ docker run \
 
 
 ### db
+
 `docker-compose up db`
+
+### link containers
+
+`docker network create --driver bridge node_backends`
+
+`docker network connect node_backends postgres`
+
+`docker network connect node_backends nginx`
+
+`docker run --env-file /var/www/env-conf/.env-prod-node-backend --network node_backends --restart always --name node_server_backend --detach node_prod_image`

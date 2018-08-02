@@ -4,19 +4,46 @@ build site:
   script:
     - yarn install --progress=false
     - yarn run build
-  artifacts:
-    expire_in: 1 week
-    paths:
-      - build
 
-deploy:
-  image: docker
+
+deploy-stage:
   stage: deploy
+  only:
+    - develop
   script:
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_dsa
-    - chmod 600 ~/.ssh/id_dsa
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - docker build -t node_prod_image -f docker/Dockerfile.prod .
-    - docker save node_prod_image | ssh $SSH_HOST "docker load"
+    - apt-get update -qq && apt-get install -y -qq sshpass
+    - sshpass -V
+    - export SSHPASS=$USER_PASS 
+    - sshpass -e scp -o stricthostkeychecking=no -r . $SSH_HOST:/var/build/kami-stage-backend-$CI_COMMIT_SHA/
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker build -t node_stage_image -f /var/build/kami-stage-backend-$CI_COMMIT_SHA/docker/Dockerfile.prod /var/build/kami-stage-backend-$CI_COMMIT_SHA/"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "rm -rf /var/build/kami-stage-backend-$CI_COMMIT_SHA/"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker stop node_server_backend_stage || true"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker rm node_server_backend_stage || true"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker run --tty --env-file /var/www/env-conf/.env-stage-node-backend --network node_backends --restart always --name node_server_backend_stage --detach node_stage_image"
 
+
+
+deploy-prod:
+  stage: deploy
+  only:
+    - master
+  script:
+    - apt-get update -qq && apt-get install -y -qq sshpass
+    - sshpass -V
+    - export SSHPASS=$USER_PASS 
+    - sshpass -e scp -o stricthostkeychecking=no -r . $SSH_HOST:/var/build/kami-prod-backend-$CI_COMMIT_SHA/
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker build -t node_prod_image -f /var/build/kami-prod-backend-$CI_COMMIT_SHA/docker/Dockerfile.prod /var/build/kami-prod-backend-$CI_COMMIT_SHA/"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "rm -rf /var/build/kami-prod-backend-$CI_COMMIT_SHA/"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker stop node_server_backend_prod || true"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker rm node_server_backend_prod || true"
+    - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
+      "docker run --tty --env-file /var/www/env-conf/.env-prod-node-backend --network node_backends --restart always --name node_server_backend_prod --detach node_prod_image"
