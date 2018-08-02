@@ -1,5 +1,6 @@
 import {
   GraphQLInt,
+  GraphQLNonNull,
 } from 'graphql'
 
 export default {
