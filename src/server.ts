@@ -5,6 +5,7 @@ import graphqlPlayground from 'graphql-playground-middleware-express'
 import * as graphqlHTTP from 'express-graphql'
 import * as helmet from 'helmet'
 import * as passport from 'passport'
+import { formatError } from 'apollo-errors'
 import { setupPassport, customBearerAuth } from './services/auth'
 import schema from './gql'
 
@@ -38,6 +39,7 @@ const startServer = async () => {
     '/graphql',
     customBearerAuth,
     graphqlHTTP(req => ({
+      formatError,
       schema,
       context: {
         req,

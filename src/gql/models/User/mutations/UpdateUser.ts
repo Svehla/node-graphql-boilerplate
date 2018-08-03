@@ -1,7 +1,6 @@
 import {
   GraphQLNonNull,
   GraphQLString,
-  GraphQLEnumType,
   GraphQLID
 } from 'graphql'
 import {
@@ -11,23 +10,9 @@ import {
 import { GraphQLEmail } from 'graphql-custom-types'
 import PostType from '../UserType'
 import models from '../../../../database/core'
-import {
-  USER_IS_NOT_LOGGED,
-  USER_NOT_FOUND
-} from '../../../../constants/index'
+import { INVALID_CREDENTIALS } from '../../../../errors'
+import { USER_NOT_FOUND } from '../errors'
 import GraphQLUserRole from '../types/GraphQLUserRole'
-
-const PossibleErrors = new GraphQLEnumType({
-  name: 'UpdateUserErrors',
-  values: {
-    USER_IS_NOT_LOGGED: {
-      value: USER_IS_NOT_LOGGED,
-    },
-    USER_NOT_FOUND: {
-      value: USER_NOT_FOUND
-    }
-  },
-})
 
 const UpdateUserMutation = mutationWithClientMutationId({
   name: 'UpdateUserMutation',
@@ -54,10 +39,7 @@ const UpdateUserMutation = mutationWithClientMutationId({
     updatedUser: {
       type: PostType,
       description: `return new updated post`,
-    },
-    error: {
-      type: PossibleErrors,
-    },
+    }
   },
   mutateAndGetPayload: async ({ id, ...params }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
@@ -69,7 +51,7 @@ const UpdateUserMutation = mutationWithClientMutationId({
           }
         }
       )
-      if (usersUpdated) {
+      try {
         const updatedUser = await models.User.findOne({
           where: {
             id: convertedId
@@ -78,15 +60,11 @@ const UpdateUserMutation = mutationWithClientMutationId({
         return {
           updatedUser
         }
-      } else {
-        return {
-          error: USER_NOT_FOUND
-        }
+      } catch (error) {
+        throw new USER_NOT_FOUND({ error })
       }
     } else {
-      return {
-        error: USER_IS_NOT_LOGGED,
-      }
+      throw new INVALID_CREDENTIALS
     }
   },
 })

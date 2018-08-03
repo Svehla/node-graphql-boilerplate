@@ -1,20 +1,17 @@
-import { GraphQLNonNull, GraphQLString, GraphQLEnumType, GraphQLID } from 'graphql'
-import { mutationWithClientMutationId, fromGlobalId } from 'graphql-relay'
+import {
+  GraphQLNonNull,
+  GraphQLString,
+  GraphQLID
+} from 'graphql'
+import {
+  mutationWithClientMutationId,
+  fromGlobalId
+} from 'graphql-relay'
 import PostType from '../PostType'
 import models from '../../../../database/core'
-import { USER_IS_NOT_LOGGED, POST_NOT_FOUND } from '../../../../constants/index'
+import { INVALID_CREDENTIALS } from '../../../../errors'
+import { POST_NOT_FOUND } from '../errors';
 
-const PossibleErrors = new GraphQLEnumType({
-  name: 'UpdatePostErrors',
-  values: {
-    USER_IS_NOT_LOGGED: {
-      value: USER_IS_NOT_LOGGED,
-    },
-    POST_NOT_FOUND: {
-      value: POST_NOT_FOUND
-    }
-  },
-})
 
 const UpdatePostMutation = mutationWithClientMutationId({
   name: 'UpdatePostMutation',
@@ -34,9 +31,6 @@ const UpdatePostMutation = mutationWithClientMutationId({
       type: PostType,
       description: `return new updated post`,
     },
-    error: {
-      type: PossibleErrors,
-    },
   },
   mutateAndGetPayload: async ({ text, id }, { req }) => {
     const user = req.user
@@ -49,7 +43,7 @@ const UpdatePostMutation = mutationWithClientMutationId({
           }
         }
       )
-      if (postsUpdated) {
+      try {
         const updatedPost = await models.Post.findOne({
           where: {
             id: convertedId
@@ -58,15 +52,11 @@ const UpdatePostMutation = mutationWithClientMutationId({
         return {
           updatedPost
         }
-      } else {
-        return {
-          error: POST_NOT_FOUND
-        }
+      } catch (error) {
+        throw new POST_NOT_FOUND({ error })
       }
     } else {
-      return {
-        error: USER_IS_NOT_LOGGED,
-      }
+      throw new INVALID_CREDENTIALS
     }
   },
 })

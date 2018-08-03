@@ -1,21 +1,11 @@
 import {
   GraphQLNonNull,
-  GraphQLString,
-  GraphQLEnumType
+  GraphQLString
 } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
+import { INVALID_CREDENTIALS } from '../../../../errors'
 import PostType from '../PostType'
 import models from '../../../../database/core'
-import { USER_IS_NOT_LOGGED } from '../../../../constants/index'
-
-const PossibleErrors = new GraphQLEnumType({
-  name: 'CreatePostErrors',
-  values: {
-    USER_IS_NOT_LOGGED: {
-      value: USER_IS_NOT_LOGGED,
-    },
-  },
-})
 
 const CreatePostMutation = mutationWithClientMutationId({
   name: 'CreatePostMutation',
@@ -30,10 +20,7 @@ const CreatePostMutation = mutationWithClientMutationId({
     createdPost: {
       type: PostType,
       description: `return new created post`,
-    },
-    error: {
-      type: PossibleErrors,
-    },
+    }
   },
   mutateAndGetPayload: async ({ text }, { req }) => {
     const user = req.user
@@ -47,9 +34,7 @@ const CreatePostMutation = mutationWithClientMutationId({
         createdPost,
       }
     } else {
-      return {
-        error: USER_IS_NOT_LOGGED,
-      }
+      throw new INVALID_CREDENTIALS
     }
   },
 })

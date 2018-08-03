@@ -1,7 +1,5 @@
 import {
   GraphQLNonNull,
-  GraphQLEnumType,
-  GraphQLString,
   GraphQLID
 } from 'graphql'
 import {
@@ -9,22 +7,8 @@ import {
   fromGlobalId
 } from 'graphql-relay'
 import models from '../../../../database/core'
-import {
-  USER_IS_NOT_LOGGED,
-  USER_NOT_FOUND
-} from '../../../../constants/index'
-
-const PossibleErrors = new GraphQLEnumType({
-  name: 'DeleteUserErrors',
-  values: {
-    USER_IS_NOT_LOGGED: {
-      value: USER_IS_NOT_LOGGED,
-    },
-    USER_NOT_FOUND: {
-      value: USER_NOT_FOUND
-    }
-  },
-})
+import { INVALID_CREDENTIALS } from '../../../../errors'
+import { USER_NOT_FOUND } from '../errors'
 
 const DeleteUserMutation = mutationWithClientMutationId({
   name: 'DeleteUserMutation',
@@ -40,9 +24,6 @@ const DeleteUserMutation = mutationWithClientMutationId({
       type: GraphQLID,
       description: `returns deleted user id`,
     },
-    error: {
-      type: PossibleErrors,
-    },
   },
   mutateAndGetPayload: async ({ id }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
@@ -53,15 +34,15 @@ const DeleteUserMutation = mutationWithClientMutationId({
         }
       })
 
-      return deletedRows === 1 ? {
-        id
-      } : {
-        error: USER_NOT_FOUND
+      if (deletedRows === 1) {
+        return {
+          id
+        }
+      } else {
+        throw new USER_NOT_FOUND
       }
     } else {
-      return {
-        error: USER_IS_NOT_LOGGED,
-      }
+      throw new INVALID_CREDENTIALS
     }
   },
 })

@@ -8,22 +8,7 @@ import {
   fromGlobalId
 } from 'graphql-relay'
 import models from '../../../../database/core'
-import {
-  USER_IS_NOT_LOGGED,
-  POST_NOT_FOUND
-} from '../../../../constants/index'
-
-const PossibleErrors = new GraphQLEnumType({
-  name: 'DeletePostErrors',
-  values: {
-    USER_IS_NOT_LOGGED: {
-      value: USER_IS_NOT_LOGGED,
-    },
-    POST_NOT_FOUND: {
-      value: POST_NOT_FOUND
-    }
-  },
-})
+import { INVALID_CREDENTIALS } from '../../../../errors'
 
 const DeletePostMutation = mutationWithClientMutationId({
   name: 'DeletePostMutation',
@@ -38,10 +23,7 @@ const DeletePostMutation = mutationWithClientMutationId({
     id: {
       type: GraphQLID,
       description: `returns deleted post id`,
-    },
-    error: {
-      type: PossibleErrors,
-    },
+    }
   },
   mutateAndGetPayload: async ({ id }, { req }) => {
     const user = req.user
@@ -54,15 +36,11 @@ const DeletePostMutation = mutationWithClientMutationId({
         }
       })
 
-      return deletedRows === 1 ? {
-        id
-      } : {
-        error: POST_NOT_FOUND
+      return  {
+        id: deletedRows === 1 ? id : null
       }
     } else {
-      return {
-        error: USER_IS_NOT_LOGGED,
-      }
+      throw new INVALID_CREDENTIALS
     }
   },
 })
