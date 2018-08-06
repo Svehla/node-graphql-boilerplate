@@ -2,7 +2,7 @@ import { GraphQLNonNull, GraphQLString } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { GraphQLEmail, GraphQLPassword } from 'graphql-custom-types'
 import { userLogin } from '../../../../services/auth'
-import { INVALID_CREDENTIALS } from '../../../../errors'
+import { INVALID_CREDENTIALS } from '../../../errors'
 
 
 const LoginUserMutation = mutationWithClientMutationId({

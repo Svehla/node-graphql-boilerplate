@@ -10,7 +10,7 @@ import {
 import { GraphQLEmail } from 'graphql-custom-types'
 import PostType from '../UserType'
 import models from '../../../../database/core'
-import { INVALID_CREDENTIALS } from '../../../../errors'
+import { NOT_LOGGED } from '../../../errors'
 import { USER_NOT_FOUND } from '../errors'
 import GraphQLUserRole from '../types/GraphQLUserRole'
 
@@ -43,28 +43,26 @@ const UpdateUserMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: async ({ id, ...params }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
-    if (user) {
-      const usersUpdated = await models.User.update({ ...params },
-        {
-          where: {
-            id: convertedId
-          }
-        }
-      )
-      if (usersUpdated) {
-        const updatedUser = await models.User.findOne({
-          where: {
-            id: convertedId
-          }
-        })
-        return {
-          updatedUser
-        }
-      } else {
-        throw new USER_NOT_FOUND()
+    if (!user) {
+      throw new NOT_LOGGED()
+    }
+
+    const updatedUser = await models.User.update(
+      params,
+      {
+        where: {
+          id: convertedId
+        },
+        returning: true
       }
-    } else {
-      throw new INVALID_CREDENTIALS()
+    )
+
+    if (!updatedUser) {
+      throw new USER_NOT_FOUND()
+    }
+
+    return {
+      updatedUser: updatedUser[1][0]
     }
   },
 })

@@ -9,7 +9,7 @@ import {
 } from 'graphql-relay'
 import PostType from '../PostType'
 import models from '../../../../database/core'
-import { INVALID_CREDENTIALS } from '../../../../errors'
+import { NOT_LOGGED } from '../../../errors'
 import { POST_NOT_FOUND } from '../errors'
 
 const UpdatePostMutation = mutationWithClientMutationId({
@@ -33,28 +33,24 @@ const UpdatePostMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: async ({ text, id }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
-    if (user) {
-      const postsUpdated = await models.Post.update({ text },
-        {
-          where: {
-            id: convertedId
-          }
-        }
-      )
-      if (postsUpdated) {
-        const updatedPost = await models.Post.findOne({
-          where: {
-            id: convertedId
-          }
-        })
-        return {
-          updatedPost
-        }
-      } else {
-        throw new POST_NOT_FOUND()
+    if (!user) {
+      throw new NOT_LOGGED()
+    }
+
+    const updatedPost = await models.Post.update({ text },
+      {
+        where: {
+          id: convertedId
+        },
+        returning: true
       }
-    } else {
-      throw new INVALID_CREDENTIALS()
+    )
+
+    if (!updatedPost) {
+      throw new POST_NOT_FOUND()
+    }
+    return {
+      updatedPost: updatedPost[1][0]
     }
   },
 })

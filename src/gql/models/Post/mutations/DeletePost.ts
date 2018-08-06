@@ -7,7 +7,7 @@ import {
   fromGlobalId
 } from 'graphql-relay'
 import models from '../../../../database/core'
-import { INVALID_CREDENTIALS } from '../../../../errors'
+import { NOT_LOGGED } from '../../../errors'
 import { POST_NOT_FOUND } from '../errors'
 
 const DeletePostMutation = mutationWithClientMutationId({
@@ -28,22 +28,22 @@ const DeletePostMutation = mutationWithClientMutationId({
   mutateAndGetPayload: async ({ id }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
 
-    if (user) {
-      const deletedRows = await models.Post.destroy({
-        where: {
-          id: convertedId
-        }
-      })
+    if (!user) {
+      throw new NOT_LOGGED()
+    }
 
-      if (deletedRows === 1) {
-        return {
-          id
-        }
-      } else {
-        throw new POST_NOT_FOUND()
+    const deletedRows = await models.Post.destroy({
+      where: {
+        id: convertedId
+      }
+    })
+
+    if (deletedRows === 1) {
+      return {
+        id
       }
     } else {
-      throw new INVALID_CREDENTIALS()
+      throw new POST_NOT_FOUND()
     }
   },
 })
