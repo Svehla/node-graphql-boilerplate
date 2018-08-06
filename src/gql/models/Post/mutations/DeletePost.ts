@@ -1,6 +1,5 @@
 import {
   GraphQLNonNull,
-  GraphQLEnumType,
   GraphQLID
 } from 'graphql'
 import {
@@ -41,10 +40,10 @@ const DeletePostMutation = mutationWithClientMutationId({
           id
         }
       } else {
-        throw new POST_NOT_FOUND
+        throw new POST_NOT_FOUND()
       }
     } else {
-      throw new INVALID_CREDENTIALS
+      throw new INVALID_CREDENTIALS()
     }
   },
 })

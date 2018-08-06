@@ -1,7 +1,6 @@
 import {
   GraphQLNonNull,
-  GraphQLID,
-  GraphQLString
+  GraphQLID
 } from 'graphql'
 import { fromGlobalId } from 'graphql-relay'
 import { isNilOrEmpty } from 'ramda-adjunct'

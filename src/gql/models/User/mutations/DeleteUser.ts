@@ -39,10 +39,10 @@ const DeleteUserMutation = mutationWithClientMutationId({
           id
         }
       } else {
-        throw new USER_NOT_FOUND
+        throw new USER_NOT_FOUND()
       }
     } else {
-      throw new INVALID_CREDENTIALS
+      throw new INVALID_CREDENTIALS()
     }
   },
 })

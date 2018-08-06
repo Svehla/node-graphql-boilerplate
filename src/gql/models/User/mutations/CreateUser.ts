@@ -42,14 +42,14 @@ const CreateUserMutation = mutationWithClientMutationId({
     },
   },
   mutateAndGetPayload: async ({ email, name, role, password }, { req: { user } }) => {
-    const created_at = moment().valueOf()
+    const createdAt = moment().valueOf()
     if (user) {
       const newUser = {
         email,
         name,
         role,
         password,
-        created_at
+        created_at: createdAt
       }
       try {
         const createdUser = await models.User.create(newUser)
@@ -60,7 +60,7 @@ const CreateUserMutation = mutationWithClientMutationId({
         throw new USER_NOT_CREATED({ error })
       }
     } else {
-      throw new INVALID_CREDENTIALS
+      throw new INVALID_CREDENTIALS()
     }
   },
 })

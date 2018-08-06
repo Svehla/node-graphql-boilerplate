@@ -10,7 +10,7 @@ import {
 import PostType from '../PostType'
 import models from '../../../../database/core'
 import { INVALID_CREDENTIALS } from '../../../../errors'
-import { POST_NOT_FOUND } from '../errors';
+import { POST_NOT_FOUND } from '../errors'
 
 const UpdatePostMutation = mutationWithClientMutationId({
   name: 'UpdatePostMutation',
@@ -41,7 +41,7 @@ const UpdatePostMutation = mutationWithClientMutationId({
           }
         }
       )
-      try {
+      if (postsUpdated) {
         const updatedPost = await models.Post.findOne({
           where: {
             id: convertedId
@@ -50,11 +50,11 @@ const UpdatePostMutation = mutationWithClientMutationId({
         return {
           updatedPost
         }
-      } catch (error) {
-        throw new POST_NOT_FOUND({ error })
+      } else {
+        throw new POST_NOT_FOUND()
       }
     } else {
-      throw new INVALID_CREDENTIALS
+      throw new INVALID_CREDENTIALS()
     }
   },
 })

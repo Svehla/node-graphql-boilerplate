@@ -51,7 +51,7 @@ const UpdateUserMutation = mutationWithClientMutationId({
           }
         }
       )
-      try {
+      if (usersUpdated) {
         const updatedUser = await models.User.findOne({
           where: {
             id: convertedId
@@ -60,11 +60,11 @@ const UpdateUserMutation = mutationWithClientMutationId({
         return {
           updatedUser
         }
-      } catch (error) {
-        throw new USER_NOT_FOUND({ error })
+      } else {
+        throw new USER_NOT_FOUND()
       }
     } else {
-      throw new INVALID_CREDENTIALS
+      throw new INVALID_CREDENTIALS()
     }
   },
 })

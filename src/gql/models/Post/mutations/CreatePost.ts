@@ -38,7 +38,7 @@ const CreatePostMutation = mutationWithClientMutationId({
         throw new POST_NOT_CREATED({ error })
       }
     } else {
-      throw new INVALID_CREDENTIALS
+      throw new INVALID_CREDENTIALS()
     }
   },
 })

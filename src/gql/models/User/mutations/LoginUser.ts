@@ -26,7 +26,7 @@ const LoginUserMutation = mutationWithClientMutationId({
       const userLoginData = await userLogin({ email, password, req })
       return userLoginData
     } catch (e) {
-      throw new INVALID_CREDENTIALS
+      throw new INVALID_CREDENTIALS()
     }
   },
 })
