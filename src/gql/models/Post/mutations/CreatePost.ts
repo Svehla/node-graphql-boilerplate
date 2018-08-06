@@ -4,6 +4,7 @@ import {
 } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import { INVALID_CREDENTIALS } from '../../../../errors'
+import { POST_NOT_CREATED } from '../errors'
 import PostType from '../PostType'
 import models from '../../../../database/core'
 
@@ -22,16 +23,19 @@ const CreatePostMutation = mutationWithClientMutationId({
       description: `return new created post`,
     }
   },
-  mutateAndGetPayload: async ({ text }, { req }) => {
-    const user = req.user
+  mutateAndGetPayload: async ({ text }, { req: { user } }) => {
     if (user) {
       const newPost = {
         text,
         user_id: user.id,
       }
-      const createdPost = await models.Post.create(newPost)
-      return {
-        createdPost,
+      try {
+        const createdPost = await models.Post.create(newPost)
+        return {
+          createdPost,
+        }
+      } catch (error) {
+        throw new POST_NOT_CREATED({ error })
       }
     } else {
       throw new INVALID_CREDENTIALS

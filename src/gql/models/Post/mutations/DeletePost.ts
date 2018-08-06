@@ -9,6 +9,7 @@ import {
 } from 'graphql-relay'
 import models from '../../../../database/core'
 import { INVALID_CREDENTIALS } from '../../../../errors'
+import { POST_NOT_FOUND } from '../errors'
 
 const DeletePostMutation = mutationWithClientMutationId({
   name: 'DeletePostMutation',
@@ -25,8 +26,7 @@ const DeletePostMutation = mutationWithClientMutationId({
       description: `returns deleted post id`,
     }
   },
-  mutateAndGetPayload: async ({ id }, { req }) => {
-    const user = req.user
+  mutateAndGetPayload: async ({ id }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
 
     if (user) {
@@ -36,8 +36,12 @@ const DeletePostMutation = mutationWithClientMutationId({
         }
       })
 
-      return  {
-        id: deletedRows === 1 ? id : null
+      if (deletedRows === 1) {
+        return {
+          id
+        }
+      } else {
+        throw new POST_NOT_FOUND
       }
     } else {
       throw new INVALID_CREDENTIALS

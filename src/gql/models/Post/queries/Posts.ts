@@ -11,8 +11,7 @@ import * as Case from 'case'
 import orderByParam from '../../../types/orderByEnumType'
 import PostType from '../PostType'
 import models from '../../../../database/core'
-import { OrderByPostKey } from '../../../../constants'
-
+import { OrderByPostKey } from '../../../../constants/index'
 const Posts = {
   type: connectionDefinitions({
     name: 'PostsTypes',

@@ -12,7 +12,6 @@ import models from '../../../../database/core'
 import { INVALID_CREDENTIALS } from '../../../../errors'
 import { POST_NOT_FOUND } from '../errors';
 
-
 const UpdatePostMutation = mutationWithClientMutationId({
   name: 'UpdatePostMutation',
   description: `this mutation updates a post`,
@@ -32,8 +31,7 @@ const UpdatePostMutation = mutationWithClientMutationId({
       description: `return new updated post`,
     },
   },
-  mutateAndGetPayload: async ({ text, id }, { req }) => {
-    const user = req.user
+  mutateAndGetPayload: async ({ text, id }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
     if (user) {
       const postsUpdated = await models.Post.update({ text },
