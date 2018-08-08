@@ -7,10 +7,11 @@ import {
   mutationWithClientMutationId,
   fromGlobalId
 } from 'graphql-relay'
+import { isNilOrEmpty } from 'ramda-adjunct'
 import PostType from '../PostType'
 import models from '../../../../database/core'
-import { NOT_LOGGED } from '../../../errors'
-import { POST_NOT_FOUND } from '../errors'
+import { NotLoggedError } from '../../../rootErrors'
+import { PostNotFoundError } from '../PostErrors'
 
 const UpdatePostMutation = mutationWithClientMutationId({
   name: 'UpdatePostMutation',
@@ -33,8 +34,8 @@ const UpdatePostMutation = mutationWithClientMutationId({
   },
   mutateAndGetPayload: async ({ text, id }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
-    if (!user) {
-      throw new NOT_LOGGED()
+    if (isNilOrEmpty(user)) {
+      throw new NotLoggedError()
     }
 
     const updatedPost = await models.Post.update({ text },
@@ -47,7 +48,7 @@ const UpdatePostMutation = mutationWithClientMutationId({
     )
 
     if (!updatedPost) {
-      throw new POST_NOT_FOUND()
+      throw new PostNotFoundError()
     }
     return {
       updatedPost: updatedPost[1][0]

@@ -3,8 +3,9 @@ import {
   GraphQLString
 } from 'graphql'
 import { mutationWithClientMutationId } from 'graphql-relay'
-import { NOT_LOGGED } from '../../../errors'
-import { POST_NOT_CREATED } from '../errors'
+import { isNilOrEmpty } from 'ramda-adjunct'
+import { NotLoggedError } from '../../../rootErrors'
+import { PostNotCreatedError } from '../PostErrors'
 import PostType from '../PostType'
 import models from '../../../../database/core'
 
@@ -24,9 +25,10 @@ const CreatePostMutation = mutationWithClientMutationId({
     }
   },
   mutateAndGetPayload: async ({ text }, { req: { user } }) => {
-    if (!user) {
-      throw new NOT_LOGGED()
+    if (isNilOrEmpty(user)) {
+      throw new NotLoggedError()
     }
+
     const newPost = {
       text,
       user_id: user.id,
@@ -37,7 +39,7 @@ const CreatePostMutation = mutationWithClientMutationId({
         createdPost,
       }
     } catch (error) {
-      throw new POST_NOT_CREATED({ error })
+      throw new PostNotCreatedError({ error })
     }
   },
 })

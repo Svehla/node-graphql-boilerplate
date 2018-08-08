@@ -6,9 +6,10 @@ import {
   mutationWithClientMutationId,
   fromGlobalId
 } from 'graphql-relay'
+import { isNilOrEmpty } from 'ramda-adjunct'
 import models from '../../../../database/core'
-import { NOT_LOGGED } from '../../../errors'
-import { POST_NOT_FOUND } from '../errors'
+import { NotLoggedError } from '../../../rootErrors'
+import { PostNotFoundError } from '../PostErrors'
 
 const DeletePostMutation = mutationWithClientMutationId({
   name: 'DeletePostMutation',
@@ -28,8 +29,8 @@ const DeletePostMutation = mutationWithClientMutationId({
   mutateAndGetPayload: async ({ id }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
 
-    if (!user) {
-      throw new NOT_LOGGED()
+    if (isNilOrEmpty(user)) {
+      throw new NotLoggedError()
     }
 
     const deletedRows = await models.Post.destroy({
@@ -43,7 +44,7 @@ const DeletePostMutation = mutationWithClientMutationId({
         id
       }
     } else {
-      throw new POST_NOT_FOUND()
+      throw new PostNotFoundError()
     }
   },
 })

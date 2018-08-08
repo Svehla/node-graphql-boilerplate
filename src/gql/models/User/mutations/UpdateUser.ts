@@ -7,11 +7,12 @@ import {
   mutationWithClientMutationId,
   fromGlobalId
 } from 'graphql-relay'
+import { isNilOrEmpty } from 'ramda-adjunct'
 import { GraphQLEmail } from 'graphql-custom-types'
-import PostType from '../UserType'
+import UserType from '../UserType'
 import models from '../../../../database/core'
-import { NOT_LOGGED } from '../../../errors'
-import { USER_NOT_FOUND } from '../errors'
+import { NotLoggedError } from '../../../rootErrors'
+import { UserNotFoundError } from '../UserErrors'
 import GraphQLUserRole from '../types/GraphQLUserRole'
 
 const UpdateUserMutation = mutationWithClientMutationId({
@@ -37,14 +38,14 @@ const UpdateUserMutation = mutationWithClientMutationId({
   },
   outputFields: {
     updatedUser: {
-      type: PostType,
+      type: UserType,
       description: `return new updated post`,
     }
   },
   mutateAndGetPayload: async ({ id, ...params }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
-    if (!user) {
-      throw new NOT_LOGGED()
+    if (isNilOrEmpty(user)) {
+      throw new NotLoggedError()
     }
 
     const updatedUser = await models.User.update(
@@ -58,7 +59,7 @@ const UpdateUserMutation = mutationWithClientMutationId({
     )
 
     if (!updatedUser) {
-      throw new USER_NOT_FOUND()
+      throw new UserNotFoundError()
     }
 
     return {
