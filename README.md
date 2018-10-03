@@ -112,6 +112,7 @@ http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#starting-a-configuration-
 #### run build docker image
 ```bash
 docker run \
+ --env host.docker.internal \
  --env PORT=3020 \
  --env ENVIROMENT=dev \
  --env JWT_SECRET=yeeey \

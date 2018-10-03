@@ -1,16 +1,8 @@
-import UserType from './UserType'
-import { isNilOrEmpty } from 'ramda-adjunct'
-
+import viewer from './queries/Viewer'
+import users from './queries/Users'
+import user from './queries/User'
 export default {
-  viewer: {
-    type: UserType,
-    description: 'current logged user -> viewer',
-    resolve: (parentValues, args, { req: { user } }) => {
-      if (isNilOrEmpty(user)) {
-        return null
-      } else {
-        return user
-      }
-    },
-  },
+  viewer,
+  users,
+  user
 }

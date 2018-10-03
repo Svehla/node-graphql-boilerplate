@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@types/pg": "^7.4.10",
+    "apollo-errors": "^1.9.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "case": "^1.5.5",
@@ -57,6 +58,7 @@
     "graphql-relay": "^0.5.5",
     "helmet": "^3.12.1",
     "jsonwebtoken": "^8.3.0",
+    "moment": "^2.22.2",
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",

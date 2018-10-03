@@ -5,7 +5,7 @@ import { UserRole } from '../src/constants'
 const userMockData: IUserAttributes[] = [
   {
     // id: 1,
-    email: 'john.doe@example.com',
+    email: 'john.doe@example.com',  
     name: 'John Doe',
     role: UserRole.Admin,
     // pwd 1111 hash

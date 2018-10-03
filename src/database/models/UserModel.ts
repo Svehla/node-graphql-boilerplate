@@ -7,7 +7,7 @@ export interface IUserAttributes {
   name: string
   role: UserRole
   password: string
-  created_at: number
+  created_at?: number
 }
 
 
@@ -35,6 +35,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
     },
     created_at: {
       type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     },
   })
   return User
