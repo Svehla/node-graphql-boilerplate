@@ -1,6 +1,6 @@
 # this dockerfile is for prod instance
 FROM keymetrics/pm2:latest-alpine
-EXPOSE 3020
+EXPOSE 2020
 
 RUN mkdir -p /app
 WORKDIR /app

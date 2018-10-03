@@ -1,6 +1,6 @@
 # this dockerfile is for dev instance
 FROM node:9.11-alpine
-EXPOSE 3020
+EXPOSE 2020
 
 RUN mkdir -p /app
 WORKDIR /app

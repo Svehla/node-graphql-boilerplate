@@ -16,7 +16,8 @@ export const CommentGlobalIdType = getGlobalIdType(typeName)
 
 const CommentType = new GraphQLObjectType({
   name: typeName,
-  interfaces: [nodeInterface],
+  // TODO: WTF INTERFACE does not work? but PostType is ok?
+  // interfaces: [nodeInterface],
   isTypeOf: obj => obj.__typeOfGqlNode
     ? obj.__typeOfGqlNode === typeName
     // @ts-ignore

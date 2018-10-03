@@ -13,7 +13,8 @@ import GraphQLUserRoleType from './types/GraphQLUserRoleType'
 export const typeName = 'User'
 const userType = new GraphQLObjectType({
   name: typeName,
-  interfaces: [nodeInterface],
+  // TODO: WTF INTERFACE does not work? but PostType is ok?
+  // interfaces: [nodeInterface],
   isTypeOf: obj => obj.__typeOfGqlNode
     ? obj.__typeOfGqlNode === typeName
     // @ts-ignore
@@ -32,13 +33,8 @@ const userType = new GraphQLObjectType({
     email: {
       type: GraphQLEmail,
     },
-    firstName: {
+    name: {
       type: GraphQLString,
-      resolve: teacher => teacher.first_name
-    },
-    secondName: {
-      type: GraphQLString,
-      resolve: teacher => teacher.second_name
     },
     role: {
       type: GraphQLUserRoleType,

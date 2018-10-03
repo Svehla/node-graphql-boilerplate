@@ -1,10 +1,9 @@
 import * as Case from 'case'
 import {
   GraphQLInt,
-  GraphQLNonNull,
-  GraphQLString
+  GraphQLNonNull
 } from 'graphql'
-import { connectionArgs, connectionDefinitions } from 'graphql-relay'
+import { connectionDefinitions } from 'graphql-relay'
 import models from '../../../database/core'
 import orderByParam from '../../gqlUtils/orderByEnumType'
 import { connectionPageParams, pageConnectionToSqlQuery } from '../../gqlUtils/pagination'

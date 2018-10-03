@@ -14,7 +14,6 @@ export const typeName = 'Post'
 export const PostGlobalIdType = getGlobalIdType(typeName)
 const PostType = new GraphQLObjectType({
   name: typeName,
-  description: ' type definition',
   interfaces: [nodeInterface],
   // @ts-ignore
   isTypeOf: obj => obj.__typeOfGqlNode

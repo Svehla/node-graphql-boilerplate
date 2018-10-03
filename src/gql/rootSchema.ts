@@ -25,11 +25,9 @@ const rootSchema = new GraphQLSchema({
     fields: () => ({
       // auth stuffs
       UserLogin,
-      // Posts
       CreatePost,
       DeletePost,
       UpdatePost,
-      // comments
       CreateComment,
     }),
   }),
