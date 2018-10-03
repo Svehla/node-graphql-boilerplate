@@ -1,28 +1,19 @@
 import {
   GraphQLNonNull,
   GraphQLString,
-  GraphQLEnumType
 } from 'graphql'
 import {
   GraphQLEmail,
   GraphQLPassword
 } from 'graphql-custom-types'
+import { isNilOrEmpty } from 'ramda-adjunct'
 import * as moment from 'moment'
 import { mutationWithClientMutationId } from 'graphql-relay'
 import UserType from '../UserType'
 import models from '../../../../database/core'
+import { UserNotCreatedError } from '../UserErrors'
 import GraphQLUserRole from '../types/GraphQLUserRole'
-
-const NOT_CREATED = 'NOT_CREATED'
-
-const PossibleErrors = new GraphQLEnumType({
-  name: 'CreateUserErrors',
-  values: {
-    NOT_CREATED: {
-      value: NOT_CREATED
-    }
-  },
-})
+import { NotLoggedError } from '../../../rootErrors'
 
 const CreateUserMutation = mutationWithClientMutationId({
   name: 'CreateUserMutation',
@@ -50,28 +41,26 @@ const CreateUserMutation = mutationWithClientMutationId({
       type: UserType,
       description: `return new created user`,
     },
-    error: {
-      type: PossibleErrors,
-    },
   },
-  mutateAndGetPayload: async ({ email, name, role, password }) => {
-    const created_at = moment().valueOf()
+  mutateAndGetPayload: async ({ email, name, role, password }, { req: { user } }) => {
+    if (isNilOrEmpty(user)) {
+      throw new NotLoggedError()
+    }
+
     const newUser = {
       email,
       name,
       role,
-      password,
-      created_at
+      password
     }
+
     try {
       const createdUser = await models.User.create(newUser)
       return {
         createdUser
       }
-    } catch (e) {
-      return {
-        error: NOT_CREATED
-      }
+    } catch (error) {
+      throw new UserNotCreatedError({ error })
     }
   },
 })

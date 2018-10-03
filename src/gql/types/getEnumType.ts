@@ -4,7 +4,7 @@ export default (
   typeName: string,
   possibleValues: string[]
 ) => (
-   new GraphQLEnumType({
+  new GraphQLEnumType({
     name: typeName,
     values: possibleValues.reduce((pre, name) => {
       pre[name] = {

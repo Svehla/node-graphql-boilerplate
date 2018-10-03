@@ -1,33 +1,19 @@
 import {
   GraphQLNonNull,
   GraphQLString,
-  GraphQLEnumType,
   GraphQLID
 } from 'graphql'
 import {
   mutationWithClientMutationId,
   fromGlobalId
 } from 'graphql-relay'
+import { isNilOrEmpty } from 'ramda-adjunct'
 import { GraphQLEmail } from 'graphql-custom-types'
-import PostType from '../UserType'
+import UserType from '../UserType'
 import models from '../../../../database/core'
-import {
-  USER_IS_NOT_LOGGED,
-  USER_NOT_FOUND
-} from '../../../../constants/index'
+import { NotLoggedError } from '../../../rootErrors'
+import { UserNotFoundError } from '../UserErrors'
 import GraphQLUserRole from '../types/GraphQLUserRole'
-
-const PossibleErrors = new GraphQLEnumType({
-  name: 'UpdateUserErrors',
-  values: {
-    USER_IS_NOT_LOGGED: {
-      value: USER_IS_NOT_LOGGED,
-    },
-    USER_NOT_FOUND: {
-      value: USER_NOT_FOUND
-    }
-  },
-})
 
 const UpdateUserMutation = mutationWithClientMutationId({
   name: 'UpdateUserMutation',
@@ -52,41 +38,32 @@ const UpdateUserMutation = mutationWithClientMutationId({
   },
   outputFields: {
     updatedUser: {
-      type: PostType,
+      type: UserType,
       description: `return new updated post`,
-    },
-    error: {
-      type: PossibleErrors,
-    },
+    }
   },
   mutateAndGetPayload: async ({ id, ...params }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
-    if (user) {
-      const usersUpdated = await models.User.update({ ...params },
-        {
-          where: {
-            id: convertedId
-          }
-        }
-      )
-      if (usersUpdated) {
-        const updatedUser = await models.User.findOne({
-          where: {
-            id: convertedId
-          }
-        })
-        return {
-          updatedUser
-        }
-      } else {
-        return {
-          error: USER_NOT_FOUND
-        }
+    if (isNilOrEmpty(user)) {
+      throw new NotLoggedError()
+    }
+
+    const updatedUser = await models.User.update(
+      params,
+      {
+        where: {
+          id: convertedId
+        },
+        returning: true
       }
-    } else {
-      return {
-        error: USER_IS_NOT_LOGGED,
-      }
+    )
+
+    if (!updatedUser) {
+      throw new UserNotFoundError()
+    }
+
+    return {
+      updatedUser: updatedUser[1][0]
     }
   },
 })

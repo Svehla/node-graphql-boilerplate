@@ -1,30 +1,15 @@
 import {
   GraphQLNonNull,
-  GraphQLEnumType,
-  GraphQLString,
   GraphQLID
 } from 'graphql'
 import {
   mutationWithClientMutationId,
   fromGlobalId
 } from 'graphql-relay'
+import { isNilOrEmpty } from 'ramda-adjunct'
 import models from '../../../../database/core'
-import {
-  USER_IS_NOT_LOGGED,
-  USER_NOT_FOUND
-} from '../../../../constants/index'
-
-const PossibleErrors = new GraphQLEnumType({
-  name: 'DeleteUserErrors',
-  values: {
-    USER_IS_NOT_LOGGED: {
-      value: USER_IS_NOT_LOGGED,
-    },
-    USER_NOT_FOUND: {
-      value: USER_NOT_FOUND
-    }
-  },
-})
+import { NotLoggedError } from '../../../rootErrors'
+import { UserNotFoundError } from '../UserErrors'
 
 const DeleteUserMutation = mutationWithClientMutationId({
   name: 'DeleteUserMutation',
@@ -40,28 +25,25 @@ const DeleteUserMutation = mutationWithClientMutationId({
       type: GraphQLID,
       description: `returns deleted user id`,
     },
-    error: {
-      type: PossibleErrors,
-    },
   },
   mutateAndGetPayload: async ({ id }, { req: { user } }) => {
     const { id: convertedId } = fromGlobalId(id)
-    if (user) {
-      const deletedRows = await models.User.destroy({
-        where: {
-          id: convertedId
-        }
-      })
+    if (isNilOrEmpty(user)) {
+      throw new NotLoggedError()
+    }
 
-      return deletedRows === 1 ? {
-        id
-      } : {
-        error: USER_NOT_FOUND
+    const deletedRows = await models.User.destroy({
+      where: {
+        id: convertedId
       }
-    } else {
-      return {
-        error: USER_IS_NOT_LOGGED,
-      }
+    })
+
+    if (deletedRows !== 1) {
+      throw new UserNotFoundError()
+    }
+
+    return {
+      id
     }
   },
 })
