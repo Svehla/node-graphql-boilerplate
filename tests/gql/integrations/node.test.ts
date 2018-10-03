@@ -1,8 +1,8 @@
-import 'mocha'
 import * as chai from 'chai'
 import { toGlobalId } from 'graphql-relay'
-import { doQuery } from '../doQuery'
+import 'mocha'
 import '../../globalBeforeAfter'
+import { doQuery } from '../doQuery'
 const expect = chai.expect
 
 describe('Posts integration', () => {

@@ -1,18 +1,18 @@
-import * as express from 'express'
-import * as cors from 'cors'
-import * as bodyParser from 'body-parser'
-import graphqlPlayground from 'graphql-playground-middleware-express'
-import * as graphqlHTTP from 'express-graphql'
-import * as helmet from 'helmet'
-import * as passport from 'passport'
 import { formatError } from 'apollo-errors'
-import { setupPassport, customBearerAuth } from './services/auth'
-import schema from './gql'
+import * as bodyParser from 'body-parser'
+import * as cors from 'cors'
+import * as express from 'express'
+import * as graphqlHTTP from 'express-graphql'
+import { execute, subscribe } from 'graphql'
+import graphqlPlayground from 'graphql-playground-middleware-express'
+import * as helmet from 'helmet'
+import { createServer } from 'http'
+import * as passport from 'passport'
+import { SubscriptionServer } from 'subscriptions-transport-ws'
+import { customBearerAuth, onConnectWssAuth, setupPassport } from './auth/jwtPassportAuth'
+import schema from './gql/rootSchema'
 
 setupPassport()
-// tslint:disable-next-line
-const packageJson = require('../package.json')
-
 process.on('uncaughtException', err => {
   console.error(err)
 })
@@ -21,6 +21,7 @@ process.on('unhandledRejection', err => {
 })
 
 const startServer = async () => {
+  const port = process.env.PORT
   const app = express()
 
   app.use(cors())
@@ -30,11 +31,15 @@ const startServer = async () => {
   app.use(passport.initialize())
   app.use(passport.session())
 
-  if (process.env.ENVIROMENT !== 'production') {
-    app.get('/playground', graphqlPlayground({ endpoint: '/graphql' }))
-  } else {
-    app.get('/plgrnd-lol', graphqlPlayground({ endpoint: '/graphql' }))
-  }
+  const playroundUrl = process.env.ENVIROMENT !== 'production'
+    ? '/playground'
+    : '/super-secret-playground'
+
+  app.get(playroundUrl, graphqlPlayground({
+    endpoint: '/graphql',
+    subscriptionEndpoint: '/subscriptions'
+  }))
+
   app.use(
     '/graphql',
     customBearerAuth,
@@ -46,25 +51,35 @@ const startServer = async () => {
       },
     })),
   )
-  const port = process.env.PORT
 
-  return app.listen(port, () => {
+  const ws = createServer(app)
+  return ws.listen(port, () => {
+    // Set up the WebSocket for handling GraphQL subscriptions
+    // tslint:disable-next-line
+    new SubscriptionServer({
+      execute,
+      subscribe,
+      schema,
+      onConnect: onConnectWssAuth
+    }, {
+      server: ws,
+      path: '/subscriptions',
+    })
     if (process.env.ENVIROMENT !== 'test') {
       console.log(`
 
---------- server is ready now ----------
+--------- server is ready now ---------
 Current env: ${process.env.ENVIROMENT}
-Current version: ${packageJson.version}
 Server URL: http://localhost:${process.env.PORT}/graphql
--------------- or never! ---------------
-
-`)
+---------------------------------------
+      `)
     }
   })
 }
 
-const stopServer = async (app) => {
-  app.close()
+const stopServer = async (server) => {
+  // TODO: TypeError: Cannot read property 'close' of undefined
+  server.close()
   if (process.env.ENVIROMENT !== 'test') {
     console.log('----------- server stopped ------------')
   }
