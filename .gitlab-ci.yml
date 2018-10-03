@@ -25,8 +25,6 @@ deploy-stage:
     - sshpass -e ssh -o stricthostkeychecking=no $SSH_HOST \
       "docker run --tty --env-file /var/www/env-conf/.env-stage-node-backend --network node_backends --restart always --name node_server_backend_stage --detach node_stage_image"
 
-
-
 deploy-prod:
   stage: deploy
   only:
