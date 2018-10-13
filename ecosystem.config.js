@@ -1,3 +1,5 @@
+// config for prod pm2
+// http://pm2.keymetrics.io/docs/usage/application-declaration/
 module.exports = {
   apps : [
     {
