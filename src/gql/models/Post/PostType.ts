@@ -9,8 +9,9 @@ import models from '../../../database/core'
 import { getGlobalIdType } from '../../gqlUtils/getGlobalIdType'
 import { nodeInterface } from '../Node/nodeDefinitions'
 import UserType from '../User/UserType'
+import NodeGqlImplement from '../NodeGqlImplement'
 
-export const typeName = 'Post'
+const typeName = NodeGqlImplement.Post
 export const PostGlobalIdType = getGlobalIdType(typeName)
 const PostType = new GraphQLObjectType({
   name: typeName,
