@@ -1,11 +1,10 @@
 
-import { IUserAttributes } from '../src/database/models/UserModel'
-import { UserRole } from '../src/constants'
+import { IUserAttributes, UserRole } from '../src/database/models/UserModel'
 
 const userMockData: IUserAttributes[] = [
   {
     // id: 1,
-    email: 'john.doe@example.com',  
+    email: 'john.doe@example.com',
     name: 'John Doe',
     role: UserRole.Admin,
     // pwd 1111 hash
@@ -16,7 +15,7 @@ const userMockData: IUserAttributes[] = [
     // id: 2,
     email: 'john.smith@example.com',
     name: 'John Smith',
-    role: UserRole.Contributor,
+    role: UserRole.Pleb,
     // pwd 2222 hash
     password: '$2y$10$086dxg98L.gFlmEy.oyCfudmFFwX3..nXH/hL2RMVKsqtncvg2Xqi',
     created_at: 1541370619716,

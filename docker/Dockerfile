@@ -1,22 +1,20 @@
 # this dockerfile is for dev instance
-
 FROM node:9.11-alpine
+EXPOSE 2020
 
-LABEL maintainer="Jakub Svehla <svehl.jakub@gmail.com>"
-
-# RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64
-
-# RUN chmod +x /usr/local/bin/dumb-init
-
-# RUN apt-get update && apt-get install yarn
-
-# wait for db to start
-RUN apk update
-RUN apk add dumb-init
-
+RUN mkdir -p /app
 WORKDIR /app
 
-EXPOSE 3020
+RUN apk update
+
+RUN apk add dumb-init
+
+# first copy only dependency files for caching yarn install
+COPY package.json /app/package.json
+COPY yarn.lock /app/yarn.lock
+
+RUN cd /app
+# install nodejs packages
+RUN yarn install
 
 ENTRYPOINT ["dumb-init"]
-

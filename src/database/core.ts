@@ -1,9 +1,10 @@
 import * as Sequelize from 'sequelize'
+import { CommentInstance, ICommentAttributes } from './models/CommentModel'
 import { IPostAttributes, PostInstance } from './models/PostModel'
 import { IUserAttributes, UserInstance } from './models/UserModel'
-import { ICommentAttributes, CommentInstance } from './models/CommentModel'
 
-const sequelize = new Sequelize(
+
+export const sequelize = new Sequelize(
   process.env.ENVIROMENT === 'test'
     ? process.env.TEST_DB_DATABASE_NAME
     : process.env.DB_DATABASE_NAME,
@@ -22,18 +23,17 @@ const sequelize = new Sequelize(
       idle: 10000,
     },
     define: {
-      freezeTableName: true,
-      timestamps: false,
       charset: 'utf8',
       collate: 'utf8_general_ci',
+      underscored: true
     },
   },
 )
 
 sequelize
   .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.')
+  .then(async () => {
+    console.log('Database Connection has been established successfully.')
   })
   .catch(err => {
     console.error('Unable to connect to the database:', err)
@@ -42,8 +42,8 @@ sequelize
 
 // config models
 const models = {
-  Post: sequelize.import<PostInstance, IPostAttributes>('./models/PostModel'),
   User: sequelize.import<UserInstance, IUserAttributes>('./models/UserModel'),
+  Post: sequelize.import<PostInstance, IPostAttributes>('./models/PostModel'),
   Comment: sequelize.import<CommentInstance, ICommentAttributes>('./models/CommentModel'),
   sequelize,
 }
@@ -53,24 +53,5 @@ Object.keys(models).forEach(key => {
     models[key].associate(models)
   }
 })
-
-models.User.hasMany(models.Post, {
-  foreignKey: 'user_id',
-  sourceKey: 'id',
-  constraints: false,
-})
-
-models.User.hasMany(models.Comment, {
-  foreignKey: 'user_id',
-  sourceKey: 'id',
-  constraints: false,
-})
-
-models.Post.hasMany(models.Comment, {
-  foreignKey: 'post_id',
-  sourceKey: 'id',
-  constraints: false,
-})
-
 
 export default models

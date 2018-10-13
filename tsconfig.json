@@ -15,11 +15,13 @@
     "target": "es6",
     "module": "commonjs",
     "sourceMap": true,
-    "rootDir": "./src",
+    "rootDir": ".",
     "outDir": "build"
   },
   "include": [
-    "src/**/*"
+    "fixtures/**/*",
+    "src/**/*",
+    "tests/**/*",
   ],
   "types": "./index.d.ts",
   "ignore": ["node_modules", ".npm"],

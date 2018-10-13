@@ -1,9 +1,6 @@
 
 // tslint:disable-next-line
-const dotEnv = require('dotenv')
-if (process.env.ENVIROMENT !== 'production') {
-  dotEnv.load()
-}
+require('dotenv').load()
 // tslint:disable-next-line
 const server = require('./server')
 server.startServer()

@@ -1,25 +1,30 @@
 import {
-  GraphQLObjectType,
-  GraphQLNonNull,
   GraphQLID,
+  GraphQLNonNull,
+  GraphQLObjectType,
   GraphQLString,
 } from 'graphql'
 import { toGlobalId } from 'graphql-relay'
-import { nodeInterface } from '../Node/nodeDefinitions'
 import models from '../../../database/core'
+import { getGlobalIdType } from '../../gqlUtils/getGlobalIdType'
+import { nodeInterface } from '../Node/nodeDefinitions'
 import UserType from '../User/UserType'
 
-const Post = new GraphQLObjectType({
-  name: 'Post',
-  description: 'Post type definition',
+export const typeName = 'Post'
+export const PostGlobalIdType = getGlobalIdType(typeName)
+const PostType = new GraphQLObjectType({
+  name: typeName,
   interfaces: [nodeInterface],
   // @ts-ignore
-  isTypeOf: obj => obj instanceof models.Post,
+  isTypeOf: obj => obj.__typeOfGqlNode
+    ? obj.__typeOfGqlNode === typeName
+    // @ts-ignore
+    : obj instanceof models.Post,
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
-      description: `The Post's global graphQl ID`,
-      resolve: _ => toGlobalId('Post', _.id),
+      description: `The ${typeName}'s global graphQl ID`,
+      resolve: post => toGlobalId(typeName, post.id),
     },
     originalId: {
       type: new GraphQLNonNull(GraphQLString),
@@ -32,7 +37,6 @@ const Post = new GraphQLObjectType({
     },
     author: {
       type: UserType,
-      description: `Author of current post`,
       resolve: async (parent) => {
         return models.User.findById(parent.user_id)
       },
@@ -44,4 +48,4 @@ const Post = new GraphQLObjectType({
   }),
 })
 
-export default Post
+export default PostType

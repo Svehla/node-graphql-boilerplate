@@ -1,5 +1,9 @@
 import * as Sequelize from 'sequelize'
-import { UserRole } from '../../constants'
+
+export enum UserRole {
+  Admin = 'Admin',
+  Pleb = 'Pleb',
+}
 
 export interface IUserAttributes {
   id?: number
@@ -7,9 +11,8 @@ export interface IUserAttributes {
   name: string
   role: UserRole
   password: string
-  created_at?: number
+  created_at: number
 }
-
 
 export type UserInstance = Sequelize.Instance<IUserAttributes> & IUserAttributes
 
@@ -35,8 +38,22 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
     },
     created_at: {
       type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW
     },
   })
+
+
+  User.associate = (models) => {
+    models.User.hasMany(models.Post, {
+      foreignKey: 'user_id',
+      sourceKey: 'id',
+      constraints: false,
+    })
+    models.User.hasMany(models.Comment, {
+      foreignKey: 'user_id',
+      sourceKey: 'id',
+      constraints: false,
+    })
+  }
+
   return User
 }

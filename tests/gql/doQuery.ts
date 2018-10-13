@@ -1,16 +1,32 @@
-import axios from 'axios'
+import fetch from 'node-fetch'
 
-export const doQuery = (query: string, token?: string) => {
-  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {}
-  return axios({
-    // TODO: add env variables
-    url: `http://localhost:3020/graphql`,
-    method: 'post',
+interface IConfig {
+  variables: object | undefined
+}
+const HTTP_API_URL = `http://localhost:${process.env.PORT}/graphql`
+export const doQuery = async (
+  query: string,
+  token?: string,
+  config?: IConfig
+) => {
+  const variables = config && config.variables
+  const headers = token ? { Authorization: `Bearer ${token}` } : {}
+
+  const response = await fetch(HTTP_API_URL, {
+    method: 'POST',
     headers: {
-      // ...authHeaders,
-      ...authHeaders,
-      'Content-Type': 'application/graphql',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      ...headers
     },
-    data: query,
+    body: JSON.stringify({
+      query,
+      ...(variables ? { variables } : {}),
+    })
   })
+  const data = await response.json()
+  return {
+    status: response.status,
+    data
+  }
 }

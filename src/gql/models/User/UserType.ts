@@ -1,84 +1,51 @@
 import {
-  GraphQLString,
-  GraphQLObjectType,
-  GraphQLNonNull,
   GraphQLID,
-  GraphQLInt,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
 } from 'graphql'
-import {
-  connectionDefinitions,
-  connectionArgs,
-} from 'graphql-relay'
+import { GraphQLDateTime, GraphQLEmail } from 'graphql-custom-types'
 import { toGlobalId } from 'graphql-relay'
-import { connectionToSqlQuery } from 'graphql-cursor-sql-helper'
-import { GraphQLEmail } from 'graphql-custom-types'
-import GraphQLUserRole from './types/GraphQLUserRole'
-import { nodeInterface } from '../Node/nodeDefinitions'
 import models from '../../../database/core'
-import PostType from '../Post/PostType'
+import { nodeInterface } from '../Node/nodeDefinitions'
+import GraphQLUserRoleType from './types/GraphQLUserRoleType'
 
+export const typeName = 'User'
 const userType = new GraphQLObjectType({
-  name: 'User',
-  interfaces: [nodeInterface],
-  // @ts-ignore
-  isTypeOf: obj => obj instanceof models.User,
-  description: `User entity`,
+  name: typeName,
+  // TODO: WTF INTERFACE does not work? but PostType is ok?
+  // interfaces: [nodeInterface],
+  isTypeOf: obj => obj.__typeOfGqlNode
+    ? obj.__typeOfGqlNode === typeName
+    // @ts-ignore
+    : obj instanceof models.User,
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
-      description: `The User's global graphQl ID`,
-      resolve: _ => toGlobalId('User', _.id),
+      description: `The ${typeName}'s global graphQl ID`,
+      resolve: _ => toGlobalId(typeName, _.id),
     },
     originalId: {
       type: new GraphQLNonNull(GraphQLString),
-      description: `The User's real DB ID`,
+      description: `The ${typeName}'s real DB ID`,
       resolve: _ => _.id,
-    },
-    createdAt: {
-      type: GraphQLString,
-      resolve: _ => _.created_at
     },
     email: {
       type: GraphQLEmail,
-      description: `email of user`,
-    },
-    role: {
-      type: GraphQLUserRole,
-      description: `role of user`,
     },
     name: {
       type: GraphQLString,
-      description: `Name of user`,
     },
-    posts: {
-      type: connectionDefinitions({
-        name: 'UserPostType',
-        nodeType: PostType,
-        connectionFields: {
-          totalCount: { type: new GraphQLNonNull(GraphQLInt) },
-        },
-      }).connectionType,
-      args: connectionArgs,
-      description: `Get all available posts`,
-      resolve: async (parent, { messageFromDate, ...paginationArgs }) => {
-        const sqlCondition = {
-          where: {
-            user_id: parent.id,
-          },
-        }
-        const totalCount = await models.Post.count(sqlCondition)
-        return connectionToSqlQuery(
-          totalCount,
-          paginationArgs,
-          ({ offset, limit }) => (
-            models.Post.findAll({
-              offset,
-              limit,
-              ...sqlCondition,
-            })
-          ),
-        )
-      },
+    role: {
+      type: GraphQLUserRoleType,
+    },
+    createdAt: {
+      type: GraphQLDateTime,
+      resolve: school => school.created_at
+    },
+    updatedAt: {
+      type: GraphQLDateTime,
+      resolve: school => school.updated_at
     },
   }),
 })

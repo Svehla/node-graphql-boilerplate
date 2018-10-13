@@ -1,19 +1,21 @@
 # this dockerfile is for prod instance
-
 FROM keymetrics/pm2:latest-alpine
+EXPOSE 2020
+
+RUN mkdir -p /app
+WORKDIR /app
+
+RUN apk update
+
+RUN apk add dumb-init
 
 # copy whole project (except .dockerignore) to docker machine
-COPY . /usr/app/
+COPY . /app/
 
-WORKDIR /usr/app
-
-# install libs
-RUN yarn
-
+# install nodejs packages
+RUN yarn install
 
 # build app
 RUN yarn run build
-
-EXPOSE 3020
 
 CMD ["pm2-runtime", "process.yml"]

@@ -6,6 +6,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# temporary files for generating a encrypting pdfs 
+temp/*
+!temp/readme.md
+
 # Test coverage
 .nyc_output/**/*
 
@@ -17,7 +21,6 @@ yarn-error.log*
 /jspm_packages
 /bower_components
 
-
 # Yarn Integrity file
 .yarn-integrity
 
@@ -26,7 +29,6 @@ yarn-error.log*
 
 # dotenv environment variables file(s)
 .env
-.env.example
 
 #Build generated
 dist/
