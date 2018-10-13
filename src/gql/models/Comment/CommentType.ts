@@ -10,14 +10,14 @@ import { getGlobalIdType } from '../../gqlUtils/getGlobalIdType'
 import { nodeInterface } from '../Node/nodeDefinitions'
 import PostType from '../Post/PostType'
 import UserType from '../User/UserType'
+import NodeGqlImplement from '../NodeGqlImplement'
 
-export const typeName = 'Comment'
+const typeName = NodeGqlImplement.Comment
 export const CommentGlobalIdType = getGlobalIdType(typeName)
 
 const CommentType = new GraphQLObjectType({
   name: typeName,
-  // TODO: WTF INTERFACE does not work? but PostType is ok?
-  // interfaces: [nodeInterface],
+  interfaces: [nodeInterface],
   isTypeOf: obj => obj.__typeOfGqlNode
     ? obj.__typeOfGqlNode === typeName
     // @ts-ignore
