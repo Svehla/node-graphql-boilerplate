@@ -1,4 +1,3 @@
-
 import * as jwt from 'jsonwebtoken'
 
 export const getJwtToken = (id: string, email: string): string => (

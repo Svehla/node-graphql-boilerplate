@@ -1,9 +1,9 @@
 
 import {
-  GraphQLNonNull,
   GraphQLEnumType,
-  GraphQLList,
   GraphQLInputObjectType,
+  GraphQLList,
+  GraphQLNonNull,
 } from 'graphql'
 
 enum OrderByKeyword {

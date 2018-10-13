@@ -6,6 +6,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# temporary files for generating a encrypting pdfs 
+temp/*
+!temp/readme.md
+
 # Test coverage
 .nyc_output/**/*
 
@@ -16,7 +20,6 @@ yarn-error.log*
 /node_modules
 /jspm_packages
 /bower_components
-
 
 # Yarn Integrity file
 .yarn-integrity

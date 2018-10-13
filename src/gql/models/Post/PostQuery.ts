@@ -1,66 +1,55 @@
-import {
-  GraphQLNonNull,
-  GraphQLInt,
-} from 'graphql'
-import {
-  connectionDefinitions,
-  connectionArgs,
-} from 'graphql-relay'
-import { connectionToSqlQuery } from 'graphql-cursor-sql-helper'
 import * as Case from 'case'
-import orderByParam from '../../types/orderByEnumType'
-import PostType from './PostType'
+import {
+  GraphQLInt,
+  GraphQLNonNull
+} from 'graphql'
+import { connectionDefinitions } from 'graphql-relay'
 import models from '../../../database/core'
-import { OrderByPostKey } from '../../../constants'
-import GraphQLPagePagination from '../../types/GraphQLPagePagination'
+import orderByParam from '../../gqlUtils/orderByEnumType'
+import { connectionPageParams, pageConnectionToSqlQuery } from '../../gqlUtils/pagination'
+import PostType from './PostType'
+
+enum OrderByPostKey {
+  CreatedAt = 'CreatedAt',
+  Text = 'Text',
+}
 
 export default {
   posts: {
     type: connectionDefinitions({
-      name: 'PostTypes',
+      name: 'PostsTypes',
       nodeType: PostType,
       connectionFields: {
         totalCount: { type: new GraphQLNonNull(GraphQLInt) },
       },
     }).connectionType,
     args: {
-      ...connectionArgs,
-      ...GraphQLPagePagination,
+      first: { type: GraphQLInt, description: 'fake for relay' },
+      ...connectionPageParams,
       orderBy: {
-        type: orderByParam(
-          `orderByPost`,
-          [OrderByPostKey.CreatedAt, OrderByPostKey.Text]
-        )
-      },
+        type: orderByParam(`orderByPost`, Object.keys(OrderByPostKey))
+      }
     },
     description: `Get all available posts`,
-    resolve: async (
-      parent,
-      { messageFromDate, orderBy, page, rowsPerPage, ...paginationArgs }
-    ) => {
+    resolve: async (parent, args) => {
+      const { orderBy } = args
       const totalCount = await models.Post.count()
       const orderBySqlParam = orderBy
         ? orderBy.map(({ order, key }) => [Case.snake(key), order])
-        : [['created_at', 'ASC']]
-        
-      return connectionToSqlQuery(
+        : [[OrderByPostKey.CreatedAt, 'ASC']]
+
+      return pageConnectionToSqlQuery(
         totalCount,
-        paginationArgs,
-        () => (
-          models.Post.findAll({
-            offset: page * rowsPerPage,
-            limit: rowsPerPage,
-            order: orderBySqlParam,
-          })
-          /*
+        args,
+        ({ offset, limit }) => (
           models.Post.findAll({
             offset,
             limit,
             order: orderBySqlParam,
           })
-          */
         ),
       )
     },
-  },
+  }
 }
+

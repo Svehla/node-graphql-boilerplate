@@ -8,11 +8,12 @@
     "new-parens": true,
     "no-arg": true,
     "arrow-parens": false,
+    "no-unused-variable": true,
     "no-bitwise": true,
     "object-literal-sort-keys": false,
     "no-conditional-assignment": true,
     "no-consecutive-blank-lines": false,
-    "no-unused-variable": true,
+    "whitespace": [true, "check-module"],
     "trailing-comma": [true, {
       "severity": "warning"
     }],

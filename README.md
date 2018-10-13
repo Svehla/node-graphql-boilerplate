@@ -41,16 +41,17 @@ this package contains 2 types of tests:
 - models: check if graphQl contains all necessary properties
 
 
-### run tests
+### run tests
 - `test` (or `docker-npm start docker-db-init` for docker instance)
 
-### run tests with watch mode
+### run tests with watch mode
 - `test:watch` script VS `docker-test:watch` script
 
 
 ## Production build
-### !!!THIS IS NOT IMPLEMENTED YET!!!
 1. run `yarn build` to build static js files
+2. deploy... its up to you...
+3. use pm2 for run on your server/or use prod dockerfile located in docker/Dockerfile.prod
 
 
 ## Authorization
@@ -81,10 +82,7 @@ this mutation return jwt -> you can put this jwt to `Authorization`
 
 
 TODO:
-- require .env for testing without docker
-- dont remove prod db with clean script (cant remove db without warning)
-- deploy on server
-- build typescript
+- sequalize db migrations with enums 
 
 ## production startup
 ```
@@ -102,9 +100,9 @@ not implemented yet (db does not lost connection)
 http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#starting-a-configuration-file
 
 
-## docker deploy
+## docker deploy
 
-### node app
+### node app
 
 #### create docker image
 `docker build -t node_prod_image -f docker/Dockerfile.prod .`
@@ -112,7 +110,7 @@ http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#starting-a-configuration-
 #### run build docker image
 ```bash
 docker run \
- --env PORT=3020 \
+ --env PORT=2020 \
  --env ENVIROMENT=dev \
  --env JWT_SECRET=yeeey \
  --env DB_HOST=host.docker.internal \
@@ -120,11 +118,11 @@ docker run \
  --env DB_DATABASE_NAME=example_db \
  --env DB_PORT=5432 \
  --env DB_PASSWORD=root \
--p 3020:3020 -it node_prod_image
+-p 2020:2020 -it node_prod_image
 ```
 
 
-### db
+### db
 `docker-compose up db`
 
 ### link containers

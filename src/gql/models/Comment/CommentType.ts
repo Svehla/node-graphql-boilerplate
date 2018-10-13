@@ -8,44 +8,47 @@ import { toGlobalId } from 'graphql-relay'
 import models from '../../../database/core'
 import { getGlobalIdType } from '../../gqlUtils/getGlobalIdType'
 import { nodeInterface } from '../Node/nodeDefinitions'
+import PostType from '../Post/PostType'
 import UserType from '../User/UserType'
 
-export const typeName = 'Post'
-export const PostGlobalIdType = getGlobalIdType(typeName)
-const PostType = new GraphQLObjectType({
+export const typeName = 'Comment'
+export const CommentGlobalIdType = getGlobalIdType(typeName)
+
+const CommentType = new GraphQLObjectType({
   name: typeName,
-  interfaces: [nodeInterface],
-  // @ts-ignore
+  // TODO: WTF INTERFACE does not work? but PostType is ok?
+  // interfaces: [nodeInterface],
   isTypeOf: obj => obj.__typeOfGqlNode
     ? obj.__typeOfGqlNode === typeName
     // @ts-ignore
-    : obj instanceof models.Post,
+    : obj instanceof models.Comment,
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
       description: `The ${typeName}'s global graphQl ID`,
-      resolve: post => toGlobalId(typeName, post.id),
+      resolve: reportComment => toGlobalId(typeName, reportComment.id),
     },
     originalId: {
       type: new GraphQLNonNull(GraphQLString),
-      description: `The Post's real DB ID`,
-      resolve: _ => _.id,
+      description: `The ${typeName}'s real DB ID`,
+      resolve: reportComment => reportComment.id,
     },
     text: {
       type: GraphQLString,
-      description: `The Post's text`,
     },
     author: {
       type: UserType,
       resolve: async (parent) => {
-        return models.User.findById(parent.user_id)
+        return models.User.findById(parent.author_user_id)
       },
     },
-    createdAt: {
-      type: GraphQLString,
-      resolve: post => post.created_at
+    post: {
+      type: PostType,
+      resolve: async (parent) => {
+        return models.Post.findById(parent.post_id)
+      },
     },
   }),
 })
 
-export default PostType
+export default CommentType

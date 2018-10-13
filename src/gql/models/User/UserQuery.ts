@@ -1,5 +1,5 @@
-import UserType from './UserType'
 import { isNilOrEmpty } from 'ramda-adjunct'
+import UserType from './UserType'
 
 export default {
   viewer: {

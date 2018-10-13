@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize'
 
 export interface IPostAttributes {
   id?: number
-  user_id?: number
+  author_user_id?: number
   text?: string
   created_at?: number
   updated_at?: number
@@ -17,7 +17,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
       primaryKey: true,
       autoIncrement: true,
     },
-    user_id: {
+    author_user_id: {
       type: DataTypes.INTEGER,
     },
     text: {
@@ -34,5 +34,14 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
       allowNull: false
     }
   })
+
+  Post.associate = (models) => {
+    models.Post.hasMany(models.Comment, {
+      foreignKey: 'post_id',
+      sourceKey: 'id',
+      constraints: false,
+    })
+    models.Post.belongsTo(models.User, { foreignKey: 'user_id' })
+  }
   return Post
 }

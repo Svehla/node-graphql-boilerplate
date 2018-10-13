@@ -1,20 +1,9 @@
 import { GraphQLNonNull, GraphQLString } from 'graphql'
-import { mutationWithClientMutationId } from 'graphql-relay'
-import { GraphQLEnumType } from 'graphql'
 import { GraphQLEmail, GraphQLPassword } from 'graphql-custom-types'
-import { userLogin } from '../../../services/auth'
-import { INVALID_CREDENTIALS } from '../../../constants'
-
-
-const PossibleErrors = new GraphQLEnumType({
-  name: 'UserLoginErrors',
-  values: {
-    INVALID_CREDENTIALS: {
-      value: INVALID_CREDENTIALS,
-    },
-  },
-})
-
+import { mutationWithClientMutationId } from 'graphql-relay'
+import { userLogin } from '../../../../auth/jwtPassportAuth'
+import { InvalidLoginCredentialsError } from '../userErrors'
+import UserType from '../UserType'
 
 const UserLoginMutation = mutationWithClientMutationId({
   name: 'UserLoginMutation',
@@ -31,8 +20,8 @@ const UserLoginMutation = mutationWithClientMutationId({
       type: GraphQLString,
       resolve: ({ token }) => token,
     },
-    error: {
-      type: PossibleErrors
+    user: {
+      type: UserType
     }
   },
   mutateAndGetPayload: async ({ email, password }, { req }) => {
@@ -40,9 +29,7 @@ const UserLoginMutation = mutationWithClientMutationId({
       const userLoginData = await userLogin({ email, password, req })
       return userLoginData
     } catch (e) {
-      return {
-        error: INVALID_CREDENTIALS
-      }
+      throw new InvalidLoginCredentialsError()
     }
   },
 })

@@ -1,7 +1,7 @@
-import * as passport from 'passport'
-import { Strategy as LocalStrategy } from 'passport-local'
-import { Strategy as BearerStrategy } from 'passport-http-bearer'
 import * as jwt from 'jsonwebtoken'
+import * as passport from 'passport'
+import { Strategy as BearerStrategy } from 'passport-http-bearer'
+import { Strategy as LocalStrategy } from 'passport-local'
 import * as TwinBcrypt from 'twin-bcrypt'
 import models from '../database/core'
 
@@ -12,6 +12,9 @@ const JWTSecret = process.env.JWT_SECRET
 export const setupPassport = () => {
   passport.serializeUser((user: { id: number }, done) => {
     done(null, user.id)
+  })
+  passport.deserializeUser((user, done) => {
+    done(null, user)
   })
   /**
    * implement of login
@@ -41,38 +44,20 @@ export const setupPassport = () => {
     }),
   )
 
-    // TODO: works only for teachers yet
   passport.use(new BearerStrategy(async (token, cb) => {
     if (token) {
       try {
         const decoded = jwt.verify(token, JWTSecret)
         // @ts-ignore
         const id = decoded.id || null
-        // @ts-ignore
-        const email = decoded.email || null
-
-        const findedUser = await models.User.findOne<{ email: string, id: number }>({
-          where: {
-            email,
-            id,
-          },
-        })
-
+        const findedUser = await models.User.findById(id)
         if (findedUser) {
-          /* TODO: should it be there for isTypeOf?
-          {
-            // remove unused properties
-            // @ts-ignore
-            ...findedUser.dataValues,
-          }
-          */
           cb(null, findedUser)
         } else {
           cb(null, null)
         }
       } catch (err) {
-        console.error(`token is not valid`)
-        // console.error(err.toSring())
+        // console.error(`token is not valid`)
         cb(null, null)
       }
     } else {
@@ -99,8 +84,11 @@ export const userLogin = ({ email, password, req }) => (
           email: user.email,
         }
 
-        user.token = jwt.sign(payload, JWTSecret)
-        resolve(user)
+        const data = {
+          user,
+          token: jwt.sign(payload, JWTSecret)
+        }
+        resolve(data)
       })
     })({ body: { email, password } })
   })
@@ -116,11 +104,20 @@ export const customBearerAuth = (req, res, next) => {
 
     // authentication error
     if (!user) { return next(null) }
-
     // success
     req.login(user, (loginErr) => {
       if (loginErr) { return next(loginErr) }
       return next()
     })
   })(req, res, next)
+}
+
+export const onConnectWssAuth = async (connectionParams, webSocket) => {
+  if (connectionParams.token) {
+    const decoded = jwt.verify(connectionParams.token, JWTSecret)
+    // @ts-ignore
+    const id = decoded.id || null
+    const findedUser = await models.User.findById(id)
+    return { user: findedUser }
+  }
 }
