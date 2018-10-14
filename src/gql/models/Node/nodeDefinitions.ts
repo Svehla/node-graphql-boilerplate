@@ -4,7 +4,6 @@ import { checkPermissions } from '../../../auth/checkPermissions'
 import models from '../../../database/core'
 import { InvalidNodeIdError, nodeNotFoundError, UnknownNodeTypeError } from './nodeErrors'
 import NodeGqlImplement from '../NodeGqlImplement'
-import { typeName as commentTypeName } from '../Comment/CommentType'
 
 const nDefinitions = nodeDefinitions(async (globalId, { req: { user }}) => {
   const { type, id: unparsedId } = fromGlobalId(globalId)
