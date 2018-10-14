@@ -8,6 +8,8 @@ import { isNilOrEmpty } from 'ramda-adjunct'
 import { gqlAuthMutation } from '../../../../auth/checkPermissions'
 import models from '../../../../database/core'
 import { PostNotFoundError } from '../PostErrors'
+import { PostGlobalIdType } from '../PostType'
+import NodeGqlImplement from '../../NodeGqlImplement'
 
 const DeletePostMutation = mutationWithClientMutationId({
   name: 'DeletePostMutation',
@@ -34,7 +36,7 @@ const DeletePostMutation = mutationWithClientMutationId({
 
       if (deletedRows === 1) {
         return {
-          deletedPostId: toGlobalId(postTypeName, postId),
+          deletedPostId: toGlobalId(NodeGqlImplement.Post, postId),
         }
       } else {
         throw new PostNotFoundError()
