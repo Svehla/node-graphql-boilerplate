@@ -9,12 +9,12 @@ import { toGlobalId } from 'graphql-relay'
 import models from '../../../database/core'
 import { nodeInterface } from '../Node/nodeDefinitions'
 import GraphQLUserRoleType from './types/GraphQLUserRoleType'
+import NodeGqlImplement from '../NodeGqlImplement'
 
-export const typeName = 'User'
+export const typeName = NodeGqlImplement.User
 const userType = new GraphQLObjectType({
   name: typeName,
-  // TODO: WTF INTERFACE does not work? but PostType is ok?
-  // interfaces: [nodeInterface],
+  interfaces: [nodeInterface],
   isTypeOf: obj => obj.__typeOfGqlNode
     ? obj.__typeOfGqlNode === typeName
     // @ts-ignore

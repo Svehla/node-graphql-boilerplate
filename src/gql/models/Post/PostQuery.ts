@@ -36,7 +36,7 @@ export default {
       const totalCount = await models.Post.count()
       const orderBySqlParam = orderBy
         ? orderBy.map(({ order, key }) => [Case.snake(key), order])
-        : [[OrderByPostKey.CreatedAt, 'ASC']]
+        : [[Case.snake(OrderByPostKey.CreatedAt), 'ASC']]
 
       return pageConnectionToSqlQuery(
         totalCount,

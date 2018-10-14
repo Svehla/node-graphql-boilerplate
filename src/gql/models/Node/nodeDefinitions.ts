@@ -3,10 +3,7 @@ import { isNilOrEmpty } from 'ramda-adjunct'
 import { checkPermissions } from '../../../auth/checkPermissions'
 import models from '../../../database/core'
 import { InvalidNodeIdError, nodeNotFoundError, UnknownNodeTypeError } from './nodeErrors'
-
-import { typeName as commentTypeName } from '../Comment/CommentType'
-import { typeName as postTypeName } from '../Post/PostType'
-import { typeName as userTypeName } from '../User/UserType'
+import NodeGqlImplement from '../NodeGqlImplement'
 
 const nDefinitions = nodeDefinitions(async (globalId, { req: { user }}) => {
   const { type, id: unparsedId } = fromGlobalId(globalId)
@@ -17,15 +14,15 @@ const nDefinitions = nodeDefinitions(async (globalId, { req: { user }}) => {
 
   let foundNode = null
   switch (type) {
-    case postTypeName: {
+    case NodeGqlImplement.Post: {
       foundNode = await models.Post.findById(id)
       break
     }
-    case commentTypeName: {
+    case NodeGqlImplement.Comment: {
       foundNode = await models.Comment.findById(id)
       break
     }
-    case userTypeName: {
+    case NodeGqlImplement.User: {
       checkPermissions({ onlyLogged: true }, user)
       foundNode = await models.User.findById(id)
       break
