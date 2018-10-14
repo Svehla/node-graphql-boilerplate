@@ -8,7 +8,6 @@ import { isNilOrEmpty } from 'ramda-adjunct'
 import { gqlAuthMutation } from '../../../../auth/checkPermissions'
 import models from '../../../../database/core'
 import { PostNotFoundError } from '../PostErrors'
-import { PostGlobalIdType, typeName as postTypeName } from '../PostType'
 
 const DeletePostMutation = mutationWithClientMutationId({
   name: 'DeletePostMutation',
