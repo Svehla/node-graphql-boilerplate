@@ -1,16 +1,15 @@
 import { GraphQLObjectType, GraphQLSchema } from 'graphql'
-import CreateComment from './models/Comment/Mutations/CreateCommentMutation'
-import newComment from './models/Comment/Susbscriptions/newCommentSubscription'
+import CreateComment from './models/Comment/mutations/createCommentMutation'
+import newComment from './models/Comment/subscriptions/newCommentSubscription'
 import { nodeField } from './models/Node/nodeDefinitions'
-import CreatePost from './models/Post/Mutations/CreatePostMutation'
-import DeletePost from './models/Post/Mutations/DeletePostMutation'
-import UpdatePost from './models/Post/Mutations/UpdatePostMutation'
+import CreatePost from './models/Post/mutations/createPostMutation'
+import DeletePost from './models/Post/mutations/deletePostMutation'
+import UpdatePost from './models/Post/mutations/updatePostMutation'
 import PostQuery from './models/Post/PostQuery'
 import UserLogin from './models/User/Mutations/UserLoginMutation'
 import UserQuery from './models/User/UserQuery'
 
 const rootSchema = new GraphQLSchema({
-  // @ts-ignore
   query: new GraphQLObjectType({
     name: 'Query',
     fields: () => ({
@@ -19,7 +18,6 @@ const rootSchema = new GraphQLSchema({
       ...PostQuery,
     }),
   }),
-  // @ts-ignore
   mutation: new GraphQLObjectType({
     name: 'Mutation',
     fields: () => ({
@@ -31,7 +29,6 @@ const rootSchema = new GraphQLSchema({
       CreateComment,
     }),
   }),
-  // @ts-ignore
   subscription: new GraphQLObjectType({
     name: 'Subscription',
     fields: {
