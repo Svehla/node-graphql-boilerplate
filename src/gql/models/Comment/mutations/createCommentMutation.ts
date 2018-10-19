@@ -5,10 +5,10 @@ import models from '../../../../database/core'
 import pubsub from '../../../publicSubscription'
 import { PostGlobalIdType } from '../../Post/PostType'
 import CommentType from '../CommentType'
-import { SubsTypes } from '../Susbscriptions/newCommentSubscription'
+import { SubsTypes } from '../subscriptions/newCommentSubscription'
 
-const CreateReportCommentMutation = mutationWithClientMutationId({
-  name: 'CreateReportCommentMutation',
+export default mutationWithClientMutationId({
+  name: 'CreateReportComment',
   inputFields: {
     postId: {
       type: new GraphQLNonNull(PostGlobalIdType),
@@ -39,6 +39,4 @@ const CreateReportCommentMutation = mutationWithClientMutationId({
     },
   )
 })
-
-export default CreateReportCommentMutation
 

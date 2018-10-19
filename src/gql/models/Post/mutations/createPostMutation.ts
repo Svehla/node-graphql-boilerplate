@@ -8,8 +8,8 @@ import models from '../../../../database/core'
 import { PostNotCreatedError } from '../PostErrors'
 import PostType from '../PostType'
 
-const CreatePostMutation = mutationWithClientMutationId({
-  name: 'CreatePostMutation',
+export default mutationWithClientMutationId({
+  name: 'CreatePost',
   description: `this mutation create post`,
   inputFields: {
     text: {
@@ -38,5 +38,3 @@ const CreatePostMutation = mutationWithClientMutationId({
     }
   ),
 })
-
-export default CreatePostMutation
