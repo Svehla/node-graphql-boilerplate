@@ -15,7 +15,7 @@ import NodeGqlImplement from '../NodeGqlImplement'
 const typeName = NodeGqlImplement.Comment
 export const CommentGlobalIdType = getGlobalIdType(typeName)
 
-const CommentType = new GraphQLObjectType({
+export default new GraphQLObjectType({
   name: typeName,
   interfaces: [nodeInterface],
   isTypeOf: obj => obj.__typeOfGqlNode
@@ -51,4 +51,3 @@ const CommentType = new GraphQLObjectType({
   }),
 })
 
-export default CommentType

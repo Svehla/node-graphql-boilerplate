@@ -23,8 +23,7 @@ process.on('unhandledRejection', err => {
 const startServer = async () => {
   const port = process.env.PORT
   const app = express()
-
-  app.use(cors())
+  app.use(cors({ origin:true, credentials: true }))
   app.use(helmet())
   app.use(bodyParser.json())
   app.use(bodyParser.text({ type: 'application/graphql' }))

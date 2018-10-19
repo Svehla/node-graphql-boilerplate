@@ -5,8 +5,8 @@ import { userLogin } from '../../../../auth/jwtPassportAuth'
 import { InvalidLoginCredentialsError } from '../userErrors'
 import UserType from '../UserType'
 
-const UserLoginMutation = mutationWithClientMutationId({
-  name: 'UserLoginMutation',
+export default mutationWithClientMutationId({
+  name: 'UserLogin',
   inputFields: {
     email: {
       type: new GraphQLNonNull(GraphQLEmail),
@@ -34,4 +34,3 @@ const UserLoginMutation = mutationWithClientMutationId({
   },
 })
 
-export default UserLoginMutation

@@ -11,9 +11,8 @@ import { PostNotFoundError } from '../PostErrors'
 import { PostGlobalIdType } from '../PostType'
 import NodeGqlImplement from '../../NodeGqlImplement'
 
-const DeletePostMutation = mutationWithClientMutationId({
-  name: 'DeletePostMutation',
-  description: `this mutation deletes post`,
+export default mutationWithClientMutationId({
+  name: 'DeletePost',
   inputFields: {
     postId: {
       type: new GraphQLNonNull(PostGlobalIdType),
@@ -45,4 +44,3 @@ const DeletePostMutation = mutationWithClientMutationId({
   )
 })
 
-export default DeletePostMutation

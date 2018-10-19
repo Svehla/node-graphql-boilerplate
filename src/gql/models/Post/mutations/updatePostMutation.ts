@@ -9,8 +9,8 @@ import { PostNotFoundError } from '../PostErrors'
 import PostType from '../PostType'
 import { PostGlobalIdType } from '../PostType'
 
-const UpdatePostMutation = mutationWithClientMutationId({
-  name: 'UpdatePostMutation',
+export default mutationWithClientMutationId({
+  name: 'UpdatePost',
   description: `this mutation updates a post`,
   inputFields: {
     postId: {
@@ -43,4 +43,3 @@ const UpdatePostMutation = mutationWithClientMutationId({
   )
 })
 
-export default UpdatePostMutation
