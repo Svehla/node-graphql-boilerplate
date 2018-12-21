@@ -19,8 +19,8 @@ if you want change port of app and you use docker -> you have to reconfigure `do
 
 ## Installation
 1. run `yarn` or `npm install` to install dependecies
-1. run `yarn run docker-db-hard-init` to install dependecies
-3. run `yarn run docker-start` to start app and database
+1. run `yarn run docker:db-hard-init` to install dependecies
+3. run `yarn run docker:start` to start app and database
 
 ## Developing (local vs docker)
 for developing you can use docker or install your own server
@@ -28,8 +28,8 @@ for developing you can use docker or install your own server
 In package json is every script available via docker with `docker-` prefix
 
 fox example:
-- `start` script VS `docker-start` script
-- `test` script VS `docker-test` script
+- `start` script VS `docker:start` script
+- `test` script VS `docker:test` script
 - `test:watch` script VS `docker-test:watch` script
 
 if you want to init db schema use `npm start db-init` (or `npm start docker-db-init` for docker instance)
@@ -40,12 +40,8 @@ this package contains 2 types of tests:
 - integration: GraphQL HTTP endpoins
 - models: check if graphQl contains all necessary properties
 
-
-### run tests
-- `test` (or `docker-npm start docker-db-init` for docker instance)
-
 ### run tests with watch mode
-- `test:watch` script VS `docker-test:watch` script
+- `test:watch` script VS `docker:test:watch` script
 
 
 ## Production build
