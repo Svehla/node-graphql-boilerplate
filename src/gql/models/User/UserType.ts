@@ -43,6 +43,10 @@ const userType = new GraphQLObjectType({
       type: GraphQLDateTime,
       resolve: school => school.created_at
     },
+    profileImgUrl: {
+      type: GraphQLDateTime,
+      resolve: school => school.profile_img_url
+    },
     updatedAt: {
       type: GraphQLDateTime,
       resolve: school => school.updated_at

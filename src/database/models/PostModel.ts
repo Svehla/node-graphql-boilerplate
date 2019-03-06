@@ -32,7 +32,7 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
       allowNull: false
-    }
+    },
   })
 
   Post.associate = (models) => {

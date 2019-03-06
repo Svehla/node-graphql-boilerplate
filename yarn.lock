@@ -2158,6 +2158,13 @@ marked@^0.5.0:
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.5.2.tgz#3efdb27b1fd0ecec4f5aba362bddcd18120e5ba9"
   integrity sha512-fdZvBa7/vSQIZCi4uuwo2N3q+7jJURpMVCcbaX0S1Mg65WZ5ilXvC67MviJAsdjqqgD+CEq4RKo5AYGgINkVAA==
 
+math-random-seed@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/math-random-seed/-/math-random-seed-2.0.0.tgz#2c5dabb9d477162bf321d42e485da0704ad90e2e"
+  integrity sha512-QJ7/oqB5MExXjyJCUC8tQGIHo9GL2vB9YY3i16qZCige9SQBJrQTtF/eBG8rFZU/xQxLKIbzeYeOuRYuzFrncg==
+  dependencies:
+    random-bytes-seed "^1.0.3"
+
 md5-hex@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/md5-hex/-/md5-hex-2.0.0.tgz#d0588e9f1c74954492ecd24ac0ac6ce997d92e33"
@@ -2767,6 +2774,11 @@ ramda-adjunct@^2.9.0:
 ramda@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
+
+random-bytes-seed@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/random-bytes-seed/-/random-bytes-seed-1.0.3.tgz#126f1201dba2ec70cd0784f94a810396cad24a15"
+  integrity sha512-O+eniMt8Sj2iAn2q1x5VEirS/XvbtwYcXNDbOAcRtGN+OhC48cmzS5ksf9qEHRVKC1I8A4qzjucNVElddofB0A==
 
 range-parser@~1.2.0:
   version "1.2.0"

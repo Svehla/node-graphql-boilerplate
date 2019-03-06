@@ -3,11 +3,10 @@ import {
   GraphQLInt,
   GraphQLNonNull
 } from 'graphql'
-import { connectionDefinitions } from 'graphql-relay'
+import { connectionDefinitions, connectionArgs } from 'graphql-relay'
 import models from '../../../database/core'
-import orderByParam from '../../gqlUtils/orderByEnumType'
-import { connectionPageParams, pageConnectionToSqlQuery } from '../../gqlUtils/pagination'
 import PostType from './PostType'
+import { connectionToSqlQuery } from 'graphql-cursor-sql-helper'
 
 enum OrderByPostKey {
   CreatedAt = 'CreatedAt',
@@ -23,13 +22,7 @@ export default {
         totalCount: { type: new GraphQLNonNull(GraphQLInt) },
       },
     }).connectionType,
-    args: {
-      first: { type: GraphQLInt, description: 'fake for relay' },
-      ...connectionPageParams,
-      orderBy: {
-        type: orderByParam(`orderByPost`, Object.keys(OrderByPostKey))
-      }
-    },
+    args: connectionArgs,
     description: `Get all available posts`,
     resolve: async (parent, args) => {
       const { orderBy } = args
@@ -38,18 +31,18 @@ export default {
         ? orderBy.map(({ order, key }) => [Case.snake(key), order])
         : [[Case.snake(OrderByPostKey.CreatedAt), 'ASC']]
 
-      return pageConnectionToSqlQuery(
+      return connectionToSqlQuery(
         totalCount,
         args,
-        ({ offset, limit }) => (
-          models.Post.findAll({
+        ({ offset, limit }) => {
+          return models.Post.findAll({
             offset,
             limit,
             order: orderBySqlParam,
           })
-        ),
+        }
       )
-    },
+    }
   }
 }
 

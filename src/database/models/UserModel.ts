@@ -12,6 +12,7 @@ export interface IUserAttributes {
   role: UserRole
   password: string
   created_at: number
+  profile_img_url?: string
 }
 
 export type UserInstance = Sequelize.Instance<IUserAttributes> & IUserAttributes
@@ -39,6 +40,10 @@ export default (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) 
     created_at: {
       type: DataTypes.DATE,
     },
+    profile_img_url: {
+      type: DataTypes.STRING,
+      allowNull: true
+    }
   })
 
 

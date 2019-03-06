@@ -7,7 +7,9 @@ services:
       context: .
     command: npm start
     ports:
-      - 127.0.0.1:2020:2020
+      # Make docker machine listening on 0.0.0.0 (direct access e.g from wifi)
+      # https://www.reddit.com/r/docker/comments/731cop/docker_compose_change_default_ip_from_0000/
+      - 0.0.0.0:2020:2020
     volumes:
       - .:/app
       # exclude folder from volume https://stackoverflow.com/questions/29181032/add-a-volume-to-docker-but-exclude-a-sub-folder

@@ -10,6 +10,7 @@ import { getGlobalIdType } from '../../gqlUtils/getGlobalIdType'
 import { nodeInterface } from '../Node/nodeDefinitions'
 import UserType from '../User/UserType'
 import NodeGqlImplement from '../NodeGqlImplement'
+import { GraphQLDateTime } from 'graphql-custom-types'
 
 const typeName = NodeGqlImplement.Post
 export const PostGlobalIdType = getGlobalIdType(typeName)
@@ -39,11 +40,11 @@ const PostType = new GraphQLObjectType({
     author: {
       type: UserType,
       resolve: async (parent) => {
-        return models.User.findById(parent.user_id)
+        return models.User.findById(parent.author_user_id)
       },
     },
     createdAt: {
-      type: GraphQLString,
+      type: GraphQLDateTime,
       resolve: post => post.created_at
     },
   }),
