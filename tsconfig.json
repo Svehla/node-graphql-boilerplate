@@ -1,31 +1,32 @@
 {
   "compilerOptions": {
-    "lib": [
-      "es6",
-      "es2018.promise", 
-      "dom",
-      "esnext.asynciterable"
-    ],
-    "types" : [ "node", "core-js" ], 
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "removeComments": false,
-    "noImplicitAny": false,
-    "target": "es6",
+    "target": "es5",
+    "lib": ["esnext", "es2018.promise", "es2017", "dom", "esnext.asynciterable"],
+    "allowJs": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
-    "sourceMap": true,
-    "rootDir": ".",
-    "outDir": "build"
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noUnusedParameters": false,
+    "noUnusedLocals": false
   },
   "include": [
-    "fixtures/**/*",
-    "src/**/*",
-    "tests/**/*",
-  ],
-  "types": "./index.d.ts",
-  "ignore": ["node_modules", ".npm"],
-  "exclude": [
-    "node_modules"
+    "./index.d.ts",
+    "**/*.ts"
   ]
 }
