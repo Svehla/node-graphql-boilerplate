@@ -1,14 +1,14 @@
 {
-  "name": "storemode-bff-gateway-service",
+  "name": "nodejs-full-backend",
   "version": "1.0.0",
   "description": "this is helper backend which",
   "repository": {
     "type": "git",
     "url": "git@gitlab.dsg-i.com:store-mode/storemode-bff-gateway-service.git"
   },
-  "license": "ISC",
-  "author": "",
-  "main": "src/index.js",
+  "license": "MIT",
+  "author": "Jakub Švehla",
+  "main": "src/main.ts",
   "scripts": {
     "build": "rm -rf ./build && tsc -p ./",
     "db:init-schema": "ts-node ./scripts/createDbCLI",
