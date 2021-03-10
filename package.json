@@ -2,10 +2,6 @@
   "name": "nodejs-full-backend",
   "version": "1.0.0",
   "description": "this is helper backend which",
-  "repository": {
-    "type": "git",
-    "url": "git@gitlab.dsg-i.com:store-mode/storemode-bff-gateway-service.git"
-  },
   "license": "MIT",
   "author": "Jakub Švehla",
   "main": "src/main.ts",
