@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GraphQLObjectType, GraphQLSchema } from 'graphql'
-import { addUserMutation } from './User/userMutations'
-import { userLoginMutation } from './User/userLoginMutations'
+import { userLoginMutation } from './User/userLoginMutation'
 import { userQueryFields } from './User/QueryUser'
+import { userRegistrationMutation } from './User/userRegistrationMutation'
+import { verifyUserEmailMutation } from './User/verifyUserEmailMutation'
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -16,8 +17,9 @@ const schema = new GraphQLSchema({
     name: 'RootMutationType',
     // @ts-ignore
     fields: () => ({
-      addUserMutation: addUserMutation(),
       userLogin: userLoginMutation(),
+      userRegistrationMutation: userRegistrationMutation(),
+      verifyUserEmailMutation: verifyUserEmailMutation(),
     }),
   }),
 })

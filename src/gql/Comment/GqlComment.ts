@@ -1,26 +1,26 @@
-import { GraphQLID, GraphQLString } from '../../libs/gqlLib/typedGqlTypes'
-import { graphQLNonNull, graphQLObjectType } from '../../libs/gqlLib/typedGqlTypes'
+import { graphQLObjectType, gtGraphQLNonNull } from '../../libs/gqlLib/typedGqlTypes'
+import { gtGraphQLID, gtGraphQLString } from '../../libs/gqlLib/typedGqlTypes'
 
 export const GqlComment = graphQLObjectType(
   {
     name: 'Comment',
     fields: () => ({
       id: {
-        type: graphQLNonNull(GraphQLID),
+        type: gtGraphQLNonNull(gtGraphQLID),
       },
       rawId: {
-        type: GraphQLID,
+        type: gtGraphQLID,
       },
 
       text: {
-        type: GraphQLString,
+        type: gtGraphQLString,
       },
 
       createdAt: {
-        type: GraphQLString,
+        type: gtGraphQLString,
       },
       updatedAt: {
-        type: GraphQLString,
+        type: gtGraphQLString,
       },
     }),
   },

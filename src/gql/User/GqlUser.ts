@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GqlPost } from '../Post/GqlPost'
-import {
-  GraphQLID,
-  GraphQLInt,
-  GraphQLString,
-  graphQLSimpleEnum,
-} from '../../libs/gqlLib/typedGqlTypes'
 import { UserRole } from '../../database/EntityUser'
 import { authGqlTypeDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
-import { graphQLNonNull, graphQLObjectType } from '../../libs/gqlLib/typedGqlTypes'
+import {
+  graphQLObjectType,
+  graphQLSimpleEnum,
+  gtGraphQLID,
+  gtGraphQLInt,
+  gtGraphQLNonNull,
+  gtGraphQLString,
+} from '../../libs/gqlLib/typedGqlTypes'
 import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
 import { pipe } from 'ramda'
 
@@ -25,28 +26,28 @@ export const GqlUser = graphQLObjectType(
     name: 'User',
     fields: () => ({
       id: {
-        type: graphQLNonNull(GraphQLID),
+        type: gtGraphQLNonNull(gtGraphQLID),
       },
       firstName: {
-        type: GraphQLString,
+        type: gtGraphQLString,
       },
       email: {
-        type: GraphQLString,
+        type: gtGraphQLString,
       },
       age: {
-        type: GraphQLInt,
+        type: gtGraphQLInt,
       },
       profileImgUrl: {
-        type: GraphQLString,
+        type: gtGraphQLString,
       },
       lastName: {
-        type: GraphQLString,
+        type: gtGraphQLString,
       },
       fullName: {
-        type: GraphQLString,
+        type: gtGraphQLString,
       },
       index: {
-        type: GraphQLInt,
+        type: gtGraphQLInt,
       },
       role: {
         type: GqlUserRole,
@@ -57,19 +58,17 @@ export const GqlUser = graphQLObjectType(
             type: listPaginationArgs('user_posts_args'),
           },
         },
-        type: wrapPaginationList('user_posts', graphQLNonNull(GqlPost)),
+        type: wrapPaginationList('user_posts', gtGraphQLNonNull(GqlPost)),
       },
     }),
   },
   {
-    id: p => `User:${p.id}`,
-
     fullName: p => `${p.firstName} ${p.lastName}`,
 
     posts: pipe(
       authGqlTypeDecorator({ onlyLogged: true }),
       authGqlTypeDecorator({ allowRoles: [UserRole.Admin, UserRole.Editor] })
-    )(async (p, args) => {
+    )(async (p, args, ctx) => {
       const repository = getRepository(entities.Post)
 
       const [posts, count] = await repository.findAndCount({
