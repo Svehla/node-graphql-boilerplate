@@ -1,14 +1,14 @@
 {
-  "name": "storemode-bff-gateway-service",
+  "name": "nodejs-full-backend",
   "version": "1.0.0",
   "description": "this is helper backend which",
   "repository": {
     "type": "git",
     "url": "git@gitlab.dsg-i.com:store-mode/storemode-bff-gateway-service.git"
   },
-  "license": "ISC",
-  "author": "",
-  "main": "src/index.js",
+  "license": "MIT",
+  "author": "Jakub Švehla",
+  "main": "src/main.ts",
   "scripts": {
     "build": "rm -rf ./build && tsc -p ./",
     "db:init-schema": "ts-node ./scripts/createDbCLI",
@@ -18,12 +18,18 @@
     "docker:dev": "docker-compose up --build",
     "docker:stop": "docker-compose stop",
     "docker:install": "docker-compose run --no-deps --rm app npm i",
+    "docker:test": "docker-compose run app npm run test",
+    "docker:test-coverage": "docker-compose run app npm run test-coverage",
+    "docker:test:watch": "docker-compose run app npm run test:watch",
     "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/index.ts",
     "l": "yarn run lint:fix",
     "lint": "eslint \"{src,fixtures,scripts,dbMigrationsScripts,tests}/**/*.{js,ts}\"",
     "lint:fix": "eslint \"{src,fixtures,scripts,dbMigrationsScripts,tests}/**/*.{js,ts}\" --fix",
     "ts:check-types": "tsc",
-    "ts:check-types:watch": "tsc --watch"
+    "ts:check-types:watch": "tsc --watch",
+    "test": "cross-env ENVIRONMENT=test npm run db-hard-init && cross-env ENVIRONMENT=test mocha -r ts-node/register tests/gql/**/*.test.ts --exit",
+    "test:coverage": "cross-env ENVIRONMENT=test npm run db-hard-init && cross-env ENVIRONMENT=test nyc mocha -r ts-node/register tests/gql/**/*.test.ts --exit",
+    "test:watch": "cross-env ENVIRONMENT=test npm run db-hard-init && cross-env ENVIRONMENT=test mocha -r ts-node/register tests/gql/**/*.test.ts --watch --recursive --watch-extensions ts"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
