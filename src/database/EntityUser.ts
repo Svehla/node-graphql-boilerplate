@@ -15,16 +15,14 @@ export class User {
   })
   email: string
 
-  @Column({
-    nullable: true,
-  })
-  firstName: string
-
   @Column({ nullable: true })
   password: string
 
+  @Column('boolean', { default: false })
+  isUserEmailVerified = false
+
   @Column({ nullable: true })
-  lastName: string
+  verifyEmailToken: string
 
   @Column({
     nullable: true,

@@ -1,37 +1,48 @@
 import {
+  GraphQLBoolean,
   GraphQLEnumType,
+  GraphQLFloat,
+  GraphQLID,
   GraphQLInputObjectType,
+  GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLScalarType,
-  GraphQLBoolean as _GraphQLBoolean,
-  GraphQLFloat as _GraphQLFloat,
-  GraphQLID as _GraphQLID,
-  GraphQLInt as _GraphQLInt,
-  GraphQLString as _GraphQLString,
+  GraphQLString,
 } from 'graphql'
+import { GraphQLEmail, GraphQLPassword } from 'graphql-custom-types'
+
+// Custom types
+export const gtGraphQLEmail = (GraphQLEmail as any) as string
+
+export const gtGraphQLPassword = (...args: ConstructorParameters<typeof GraphQLPassword>) =>
+  (new GraphQLPassword(...args) as any) as string
 
 // TODO: add context as global interface to keep update it by anyone?
 
-export const GraphQLInt = (_GraphQLInt as any) as number | undefined | null
-export const GraphQLID = (_GraphQLID as any) as string | undefined | null
-export const GraphQLString = (_GraphQLString as any) as string | undefined | null
-export const GraphQLBoolean = (_GraphQLBoolean as any) as boolean | undefined | null
-export const GraphQLFloat = (_GraphQLFloat as any) as number | undefined | null
+// i decide to use `gt` prefix => gt === graphqlType
+export const gtGraphQLInt = (GraphQLInt as any) as number | undefined | null
+export const gtGraphQLID = (GraphQLID as any) as string | undefined | null
+export const gtGraphQLString = (GraphQLString as any) as string | undefined | null
+export const gtGraphQLBoolean = (GraphQLBoolean as any) as boolean | undefined | null
+export const gtGraphQLFloat = (GraphQLFloat as any) as number | undefined | null
 
-type ReturnTypeIfFn<T> = T extends (...args: any[]) => any ? ReturnType<T> : T
+type ReturnTypeIfFn<T> = T extends (...args: any[]) => infer Ret ? Ret : T
+
 type MaybePromise<T> = Promise<T> | T
 
-export const graphQLNonNull = <T>(arg: T | null | undefined): T =>
-  // @ts-expect-error
-  new GraphQLNonNull(arg)
+export const gtGraphQLNonNull = <T>(arg: T | null | undefined) =>
+  (new GraphQLNonNull(arg as any) as any) as T
 
-export const graphQLList = <T>(arg: T): T[] =>
-  // @ts-expect-error
-  new GraphQLList(arg)
+export const gtGraphQLList = <T>(arg: T) => (new GraphQLList(arg as any) as any) as T[]
 
-export const graphQLInputObjectType = <Fields extends Record<string, { type: any }>>(gqlShape: {
+export const gtGraphQLScalarType = <T>(
+  config: ConstructorParameters<typeof GraphQLScalarType>[0]
+): T =>
+  // @ts-expect-error
+  new GraphQLScalarType(config)
+export const gtGraphQLInputObjectType = <Fields extends Record<string, { type: any }>>(gqlShape: {
   name: string
   fields: () => Fields
 }): { [FieldKey in keyof Fields]: ReturnTypeIfFn<Fields[FieldKey]['type']> } | undefined =>
@@ -155,12 +166,6 @@ export const gqlMutation = <
     resolve: (a: undefined, ...rest: Parameters<typeof resolve>) => resolve(...rest),
   }
 }
-
-export const graphQLScalarType = <T>(
-  config: ConstructorParameters<typeof GraphQLScalarType>[0]
-): T =>
-  // @ts-expect-error
-  new GraphQLScalarType(config)
 
 // is used to be resolved by `ReturnTypeIfFn<...>` generic
 export const circularDependencyTsHack = <T>(arg: T): T => {

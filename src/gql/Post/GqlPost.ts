@@ -2,11 +2,11 @@
 import { GqlComment } from '../Comment/GqlComment'
 import { GqlUser } from '../User/GqlUser'
 import {
-  GraphQLID,
-  GraphQLString,
   circularDependencyTsHack,
-  graphQLNonNull,
   graphQLObjectType,
+  gtGraphQLID,
+  gtGraphQLNonNull,
+  gtGraphQLString,
 } from '../../libs/gqlLib/typedGqlTypes'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
@@ -17,19 +17,19 @@ export const GqlPost = graphQLObjectType(
     name: 'Post',
     fields: () => ({
       id: {
-        type: graphQLNonNull(GraphQLID),
+        type: gtGraphQLNonNull(gtGraphQLID),
       },
       rawId: {
-        type: GraphQLID,
+        type: gtGraphQLID,
       },
       name: {
-        type: GraphQLString,
+        type: gtGraphQLString,
       },
       text: {
-        type: GraphQLString,
+        type: gtGraphQLString,
       },
       authorId: {
-        type: GraphQLID,
+        type: gtGraphQLID,
       },
       author: {
         type: circularDependencyTsHack(() => GqlUser),

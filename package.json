@@ -22,9 +22,6 @@
     "ts:check-types:watch": "tsc --watch"
   },
   "dependencies": {
-    "@types/bcryptjs": "^2.4.2",
-    "@types/cors": "^2.8.10",
-    "@types/jsonwebtoken": "^8.5.0",
     "apollo-errors": "^1.9.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -36,7 +33,6 @@
     "graphql-playground-middleware-express": "^1.7.22",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.1",
-    "math-random-seed": "^2.0.0",
     "moment": "^2.29.1",
     "pg": "^8.5.1",
     "prettier": "^2.2.1",
@@ -48,15 +44,18 @@
     "typescript": "^4.1.3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/body-parser": "^1.19.0",
+    "@types/cors": "^2.8.10",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.11",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/node": "^14.14.21",
     "@types/pg": "^7.14.11",
     "@types/ramda": "^0.27.36",
     "@typescript-eslint/eslint-plugin": "^4.14.0",
     "@typescript-eslint/parser": "^4.14.0",
-    "eslint": "^7.18.0",
+    "eslint": "^7.21.0",
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-sort-imports-es6-autofix": "^0.5.0"

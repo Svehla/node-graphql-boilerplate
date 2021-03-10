@@ -33,4 +33,6 @@ export const appEnvs = validateConfig({
   auth: {
     JWT_SECRET: getStringFromEnvParser('JWT_SECRET'),
   },
+
+  // TODO: add email configs
 })

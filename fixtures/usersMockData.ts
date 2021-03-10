@@ -1,40 +1,6 @@
 import { UserRole } from '../src/database/EntityUser'
 import bcrypt from 'bcryptjs'
-// @ts-ignore
-import seed from 'math-random-seed'
 
-const names = [
-  'Oliver',
-  'Jake',
-  'Noah',
-  'James',
-  'Jack',
-  'Connor',
-  'Liam',
-  'John',
-  'Harry',
-  'Callum',
-  'Mason',
-  'Robert',
-  'Jacob',
-  'Michael',
-  'Joe',
-  'Ethan',
-  'David',
-  'George',
-  'Reece',
-  'Richard',
-  'Oscar',
-  'Rhys',
-  'Alexander',
-  'Joseph',
-  'Charlie',
-  'Charles',
-  'William',
-  'Damian',
-  'Daniel',
-  'Thomas',
-]
 const fakeImages = [
   'https://randomuser.me/api/portraits/men/13.jpg',
   'https://randomuser.me/api/portraits/men/32.jpg',
@@ -73,14 +39,6 @@ const fakeImages = [
   'https://randomuser.me/api/portraits/women/29.jpg',
 ]
 
-const getIntSeedRanInRange = (seedNum: number, max: number): number =>
-  Math.floor(seed(seedNum.toString())() * max)
-
-const getRandomName = (index: number) =>
-  names[getIntSeedRanInRange(index - 1, names.length - 1)] +
-  ' ' +
-  names[getIntSeedRanInRange(index, names.length)]
-
 const salt = bcrypt.genSaltSync(10)
 const passwordHash = bcrypt.hashSync('password1', salt)
 
@@ -92,8 +50,6 @@ export const usersMockData = [
       age: index,
       role: UserRole.Admin,
       password: passwordHash,
-      firstName: getRandomName(index),
-      lastName: `$l-{getRandomName(index)}`,
       profileImgUrl: fakeImages[index],
     })),
 ]
