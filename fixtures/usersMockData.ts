@@ -1,7 +1,7 @@
-import * as seed from 'math-random-seed'
-import { IUserAttributes, UserRole } from '../src/database/models/UserModel'
-import * as moment from 'moment'
-import * as TwinBcrypt from 'twin-bcrypt'
+import { UserRole } from '../src/database/EntityUser'
+import bcrypt from 'bcryptjs'
+// @ts-ignore
+import seed from 'math-random-seed'
 
 const names = [
   'Oliver',
@@ -33,7 +33,7 @@ const names = [
   'William',
   'Damian',
   'Daniel',
-  'Thomas'
+  'Thomas',
 ]
 const fakeImages = [
   'https://randomuser.me/api/portraits/men/13.jpg',
@@ -74,22 +74,26 @@ const fakeImages = [
 ]
 
 const getIntSeedRanInRange = (seedNum: number, max: number): number =>
-  Math.floor(seed(seedNum.toString())() * max)
+  Math.floor(seed(seedNum.toString())() * max)
 
 const getRandomName = (index: number) =>
-  names[getIntSeedRanInRange(index - 1, names.length - 1)] + ' ' +
+  names[getIntSeedRanInRange(index - 1, names.length - 1)] +
+  ' ' +
   names[getIntSeedRanInRange(index, names.length)]
 
-const userMockData: IUserAttributes[] = [
-  ...Array(fakeImages.length).fill(0).map((_, index) => ({
-    email: 'some@email.com',
-    name: getRandomName(index),
-    role: UserRole.Admin,
-    // pwd 1111 hash
-    password: TwinBcrypt.hashSync('top-kek'),
-    created_at: moment('1.1.2015', 'DD.MM.YYYY').add('days', index).valueOf(),
-    profile_img_url: fakeImages[index]
-  }))
-]
+const salt = bcrypt.genSaltSync(10)
+const passwordHash = bcrypt.hashSync('password1', salt)
 
-export default userMockData
+export const usersMockData = [
+  ...Array(fakeImages.length)
+    .fill(0)
+    .map((_, index) => ({
+      email: `user-${index}@example.com`,
+      age: index,
+      role: UserRole.Admin,
+      password: passwordHash,
+      firstName: getRandomName(index),
+      lastName: `$l-{getRandomName(index)}`,
+      profileImgUrl: fakeImages[index],
+    })),
+]

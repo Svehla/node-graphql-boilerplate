@@ -1,7 +1,4 @@
-
-
-import { IPostAttributes } from '../src/database/models/PostModel'
-import * as moment from 'moment'
+// import moment from 'moment'
 
 const postMessages = [
   '1. Color Block Instagram Feed Theme',
@@ -29,13 +26,14 @@ const postMessages = [
   '23. Across the Grid – Instagram Feed Themes',
   '24. HDR Instagram Feed Theme',
 ]
-// images are stolen from: https://randomuser.me/photos
-const userMockData: IPostAttributes[] = [
-  ...Array(60).fill(0).map((_, i) => ({
-    author_user_id: i,
-    text: postMessages[i],
-    created_at: moment('1.1.2016', 'DD.MM.YYYY').add('days', i).valueOf(),
-  }))
-]
 
-export default userMockData
+// images are used from: https://randomuser.me/photos
+export const postsMockData = [
+  ...Array(60)
+    .fill(0)
+    .map((_, i) => ({
+      authorId: i,
+      text: postMessages[i],
+      // createdAt: moment('1.1.2016', 'DD.MM.YYYY').add(i, 'days').valueOf(),
+    })),
+]

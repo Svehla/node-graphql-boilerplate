@@ -1,24 +1,20 @@
-import { ICommentAttributes } from '../src/database/models/CommentModel'
-
-const userMockData: ICommentAttributes[] = [
+export const commentsMockData = [
   {
     // id: 1,
-    author_user_id: 1,
-    post_id: 1,
-    text: 'Thx for your life'
+    authorId: 1,
+    postId: 1,
+    text: 'comment 1',
   },
   {
     // id: 2,
-    author_user_id: 2,
-    post_id: 1,
-    text: 'peace'
+    authorId: 2,
+    postId: 1,
+    text: 'comment 2',
   },
   {
     // id: 3,
-    author_user_id: 1,
-    post_id: 1,
-    text: 'your mom is :D'
+    authorId: 1,
+    postId: 1,
+    text: 'comment 3',
   },
 ]
-
-export default userMockData

@@ -1,18 +1,17 @@
-import { formatError } from 'apollo-errors'
-import * as bodyParser from 'body-parser'
-import * as cors from 'cors'
-import * as express from 'express'
-import * as graphqlHTTP from 'express-graphql'
-import { execute, subscribe } from 'graphql'
+import { appEnvs } from './appEnvs'
+// import { customFormatErrorFn } from 'apollo-errors'
+import { customBearerAuth } from './auth/customBearerAuthMiddleware'
+import { dbConnection } from './database/dbCore'
+import { graphqlHTTP } from 'express-graphql'
+import cors from 'cors'
+import express from 'express'
 import graphqlPlayground from 'graphql-playground-middleware-express'
-import * as helmet from 'helmet'
-import { createServer } from 'http'
-import * as passport from 'passport'
-import { SubscriptionServer } from 'subscriptions-transport-ws'
-import { customBearerAuth, onConnectWssAuth, setupPassport } from './auth/jwtPassportAuth'
-import schema from './gql/rootSchema'
+// import jwksClient from 'jwks-rsa'
+// import jwt from 'express-jwt'
+import schema from './gql/schema'
 
-setupPassport()
+const app = express()
+
 process.on('uncaughtException', err => {
   console.error(err)
 })
@@ -20,71 +19,78 @@ process.on('unhandledRejection', err => {
   console.error(err)
 })
 
+// const checkAuth0Jwt = jwt({
+//   secret: jwksClient.expressJwtSecret({
+//     cache: true,
+//     rateLimit: true,
+//     jwksRequestsPerMinute: 5,
+//     jwksUri: `https://${appEnvs.auth0.DOMAIN}/.well-known/jwks.json`,
+//   }),
+//   audience: appEnvs.auth0.AUDIENCE,
+//   issuer: `https://${appEnvs.auth0.DOMAIN}/`,
+//   algorithms: ['RS256'],
+// })
+
 const startServer = async () => {
-  const port = process.env.PORT
-  const app = express()
-  app.use(cors({ origin:true, credentials: true }))
-  app.use(helmet())
-  app.use(bodyParser.json())
-  app.use(bodyParser.text({ type: 'application/graphql' }))
-  app.use(passport.initialize())
-  app.use(passport.session())
+  // wait till the app is connected into database
+  await dbConnection
 
-  const playroundUrl = process.env.ENVIROMENT !== 'production'
-    ? '/playground'
-    : '/super-secret-playground'
+  const port = appEnvs.PORT
+  // custom back-office setup
+  app.use(express.text({ type: 'application/graphql' }))
+  app.use(express.urlencoded())
+  app.use(express.json())
 
-  app.get(playroundUrl, graphqlPlayground({
-    endpoint: '/graphql',
-    subscriptionEndpoint: '/subscriptions'
-  }))
+  app.use(cors({ origin: appEnvs.frontOffice.DOMAIN }))
+
+  // app.use(checkJwt)
+  // app.get('/api/external', checkAuth0Jwt, (_req, res) => {
+  //   res.send({
+  //     msg: 'Your access token was successfully validated!',
+  //   })
+  // })
+
+  app.get(
+    '/playground',
+    graphqlPlayground({
+      endpoint: '/graphql',
+      subscriptionEndpoint: '/subscriptions',
+    })
+  )
 
   app.use(
     '/graphql',
     customBearerAuth,
     graphqlHTTP(req => ({
-      formatError,
+      // TODO: add error formatting?
+      // formatError: customFormatErrorFn,
       schema,
       context: {
         req,
       },
-    })),
+    }))
   )
 
-  const ws = createServer(app)
-  return ws.listen(port, () => {
-    // Set up the WebSocket for handling GraphQL subscriptions
-    // tslint:disable-next-line
-    new SubscriptionServer({
-      execute,
-      subscribe,
-      schema,
-      onConnect: onConnectWssAuth
-    }, {
-      server: ws,
-      path: '/subscriptions',
-    })
-    if (process.env.ENVIROMENT !== 'test') {
-      console.log(`
+  app.listen(port)
 
---------- server is ready now ---------
-Current env: ${process.env.ENVIROMENT}
-Server URL: http://localhost:${process.env.PORT}/graphql
----------------------------------------
-      `)
-    }
+  app.get('*', (_req, res) => {
+    res.send(`<h1>404</h1>`)
   })
+
+  console.info(`
+  --------- server is ready now ---------
+  GQL URL: http://localhost:${port}/graphql
+  Playground URL: http://localhost:${port}/playground
+  ---------------------------------------
+  `)
 }
 
-const stopServer = async (server) => {
+const stopServer = async (server: any) => {
   // TODO: TypeError: Cannot read property 'close' of undefined
   server.close()
-  if (process.env.ENVIROMENT !== 'test') {
-    console.log('----------- server stopped ------------')
+  if (appEnvs.ENVIRONMENT !== 'production') {
+    console.info('----------- server stopped ------------')
   }
 }
 
-export {
-  startServer,
-  stopServer,
-}
+export { startServer, stopServer }
