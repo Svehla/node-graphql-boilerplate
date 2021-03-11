@@ -44,10 +44,12 @@ const Template = (props: DataProps) => {
             </Text>
           </Column>
           <Column small={12} style={{ marginBottom: 24, textAlign: 'center' }}>
-            <Link href={verifyUrl}>Verify your email</Link>
+            <Link href={verifyUrl} type='primary'>
+              Verify your email
+            </Link>
           </Column>
           <Column small={12} style={{ marginBottom: 24, textAlign: 'center' }}>
-            <Link href={verifyUrl}>{props.verifyUrl}</Link>
+            <Link href={verifyUrl}>{verifyUrl}</Link>
           </Column>
         </Row>
       </Container>
@@ -56,7 +58,7 @@ const Template = (props: DataProps) => {
 }
 
 export const sendVerifyEmail = async (data: DataProps) => {
-  // @ts-expect-error
+  // @ts-expect-error badly typed `renderHtml()` fn
   const template = renderHtml(Template, {
     toEmail: data.toEmail,
     verifyEmailToken: data.verifyEmailToken,

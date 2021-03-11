@@ -3,7 +3,7 @@ import { appEnvs } from './appEnvs'
 import { customBearerAuth } from './auth/customBearerAuthMiddleware'
 import { dbConnection } from './database/dbCore'
 import { graphqlHTTP } from 'express-graphql'
-import axios from 'axios'
+import { verifyEmailRestGqlProxy } from './gql/User/verifyEmailRestGqlProxy'
 import cors from 'cors'
 import express from 'express'
 import graphqlPlayground from 'graphql-playground-middleware-express'
@@ -30,36 +30,8 @@ const startServer = async () => {
 
   app.use(cors({ origin: appEnvs.frontOffice.DOMAIN }))
 
-  // TODO: just POC for Rest-api GQL proxy
-  app.get('/verify-reg-token/:token', async (req, res) => {
-    try {
-      const gqlRes = await axios.post(`${appEnvs.adminService.DOMAIN}/graphql`, {
-        query: `
-          mutation verifyUserEmailMutation(
-            $verifyUserInput: Verify_user_input_mutation!
-          ) {
-            verifyUserEmailMutation(input: $verifyUserInput) {
-              isTokenVerified
-            }
-          }
-        `,
-        variables: {
-          verifyUserInput: { verifyToken: req.params.token },
-        },
-      })
-
-      const isTokenVerified = gqlRes.data.data?.verifyUserEmailMutation?.isTokenVerified
-
-      if (isTokenVerified) {
-        res.redirect('http://localhost:2020/playground')
-      } else {
-        res.send('token is not valid')
-      }
-    } catch (err) {
-      console.error(err)
-      res.send(err)
-    }
-  })
+  // TODO: just POC for Rest-api GQL proxy - kinda shitty code
+  app.get('/verify-reg-token/:token', verifyEmailRestGqlProxy)
 
   app.get(
     '/playground',
