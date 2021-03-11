@@ -16,8 +16,8 @@ const nodemailerTransporter = sendRealMail
       host: appEnvs.etherealMail.HOST,
       port: appEnvs.etherealMail.PORT,
       auth: {
-        user: appEnvs.etherealMail.auth.USER,
-        pass: appEnvs.etherealMail.auth.PASS,
+        user: appEnvs.etherealMail.AUTH_USER,
+        pass: appEnvs.etherealMail.AUTH_PASS,
       },
     })
 

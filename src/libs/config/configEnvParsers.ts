@@ -68,14 +68,15 @@ export const getSecretFromEnvFileParser = (envName: string, required = true) => 
   return readFileSync(envValue, 'utf-8').trim()
 }
 
+// TODO: should we use it?
 // this is just for obtaining static value which are not provided by env, there are only few of them
-export const getIdentityFn = <T extends string | number | boolean>(staticValue: T) => () =>
-  staticValue
+// export const getIdentityFn = <T extends string | number | boolean>(staticValue: T) => () =>
+//   staticValue
 
 export type EnvParserGetter =
   | ReturnType<typeof getNumberFromEnvParser>
   | ReturnType<typeof getStringFromEnvParser>
   | ReturnType<typeof getBoolFromEnvParser>
   | ReturnType<typeof getSecretFromEnvFileParser>
-  | ReturnType<typeof getIdentityFn>
   | ReturnType<typeof getStringEnumFromEnvParser>
+// | ReturnType<typeof getIdentityFn>

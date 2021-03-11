@@ -1,7 +1,7 @@
 import { EnvParserGetter } from './configEnvParsers'
 
 interface ConfigValidators {
-  [Key: string]: ConfigValidators | EnvParserGetter
+  [Key: string]: ConfigValidators | EnvParserGetter | string | boolean | number
 }
 
 interface RawValidatedConfig {
@@ -26,12 +26,14 @@ export const validateConfig = <T extends ConfigValidators>(configValidators: T) 
       const newPath = [...path, configKey]
       if (typeof validatorOrNested === 'object') {
         result[configKey] = validateRecursively(validatorOrNested, newPath)
-      } else {
+      } else if (typeof validatorOrNested === 'function') {
         try {
           result[configKey] = validatorOrNested()
         } catch (e) {
           errors.push([newPath.join('.'), e])
         }
+      } else {
+        result[configKey] = validatorOrNested
       }
     })
     return result

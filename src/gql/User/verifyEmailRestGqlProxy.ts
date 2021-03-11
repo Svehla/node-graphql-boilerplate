@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import { appEnvs } from '../../appEnvs'
+import { appConfig, appEnvs } from '../../appEnvs'
 import axios from 'axios'
 
 export const verifyEmailRestGqlProxy = async (req: Request, res: Response) => {
   try {
-    const gqlRes = await axios.post(`${appEnvs.adminService.DOMAIN}/graphql`, {
+    const gqlRes = await axios.post(appConfig.localGqlEndpoint, {
       query: `
       mutation verifyUserEmailMutation(
         $verifyUserInput: Verify_user_input_mutation!
