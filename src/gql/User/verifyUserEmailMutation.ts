@@ -54,7 +54,7 @@ export const verifyUserEmailMutation = () =>
 
       const userRepository = getRepository(User)
 
-      await userRepository.update(user, { isEmailVerified: true })
+      await userRepository.update(user.id, { isEmailVerified: true })
 
       return {
         isTokenVerified: true,
