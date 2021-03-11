@@ -1,13 +1,12 @@
+import './emails/index'
 import { appEnvs } from './appEnvs'
-// import { customFormatErrorFn } from 'apollo-errors'
 import { customBearerAuth } from './auth/customBearerAuthMiddleware'
 import { dbConnection } from './database/dbCore'
 import { graphqlHTTP } from 'express-graphql'
+import { verifyEmailRestGqlProxy } from './gql/User/verifyEmailRestGqlProxy'
 import cors from 'cors'
 import express from 'express'
 import graphqlPlayground from 'graphql-playground-middleware-express'
-// import jwksClient from 'jwks-rsa'
-// import jwt from 'express-jwt'
 import schema from './gql/schema'
 
 const app = express()
@@ -18,18 +17,6 @@ process.on('uncaughtException', err => {
 process.on('unhandledRejection', err => {
   console.error(err)
 })
-
-// const checkAuth0Jwt = jwt({
-//   secret: jwksClient.expressJwtSecret({
-//     cache: true,
-//     rateLimit: true,
-//     jwksRequestsPerMinute: 5,
-//     jwksUri: `https://${appEnvs.auth0.DOMAIN}/.well-known/jwks.json`,
-//   }),
-//   audience: appEnvs.auth0.AUDIENCE,
-//   issuer: `https://${appEnvs.auth0.DOMAIN}/`,
-//   algorithms: ['RS256'],
-// })
 
 const startServer = async () => {
   // wait till the app is connected into database
@@ -43,18 +30,13 @@ const startServer = async () => {
 
   app.use(cors({ origin: appEnvs.frontOffice.DOMAIN }))
 
-  // app.use(checkJwt)
-  // app.get('/api/external', checkAuth0Jwt, (_req, res) => {
-  //   res.send({
-  //     msg: 'Your access token was successfully validated!',
-  //   })
-  // })
+  // TODO: just POC for Rest-api GQL proxy - kinda shitty code
+  app.get('/verify-reg-token/:token', verifyEmailRestGqlProxy)
 
   app.get(
     '/playground',
     graphqlPlayground({
       endpoint: '/graphql',
-      subscriptionEndpoint: '/subscriptions',
     })
   )
 
@@ -62,8 +44,6 @@ const startServer = async () => {
     '/graphql',
     customBearerAuth,
     graphqlHTTP(req => ({
-      // TODO: add error formatting?
-      // formatError: customFormatErrorFn,
       schema,
       context: {
         req,

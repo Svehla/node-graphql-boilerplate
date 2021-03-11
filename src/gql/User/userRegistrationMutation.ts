@@ -1,6 +1,7 @@
 import { GqlUser } from './GqlUser'
 import { User, UserRole } from '../../database/EntityUser'
 import { appEnvs } from '../../appEnvs'
+import { emails } from '../../emails'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
@@ -65,14 +66,16 @@ export const userRegistrationMutation = () =>
 
       user.email = args.input.email
       user.password = passwordHash
-      user.isUserEmailVerified = false
+      user.isEmailVerified = false
       user.verifyEmailToken = emailVerifyToken
       user.role = UserRole.Editor
 
       await userRepository.save(user)
 
-      // TODO: send verify email emailVerifyToken
-      console.info(emailVerifyToken)
+      await emails.sendVerifyEmail({
+        toEmail: user.email,
+        verifyEmailToken: user.verifyEmailToken,
+      })
 
       const userPayload = {
         id: user.id,

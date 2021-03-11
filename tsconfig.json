@@ -16,7 +16,7 @@
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
     "noEmit": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "esModuleInterop": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,

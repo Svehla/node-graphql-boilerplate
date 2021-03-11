@@ -27,7 +27,7 @@ export const userLoginMutation = () =>
                   type: gtGraphQLNonNull(gtGraphQLEmail),
                 },
                 password: {
-                  type: gtGraphQLNonNull(gtGraphQLPassword(3, 20)),
+                  type: gtGraphQLNonNull(gtGraphQLPassword(6, 50)),
                 },
               }),
             })
@@ -65,6 +65,7 @@ export const userLoginMutation = () =>
         id: user.id,
         email: user.email,
       }
+
       return {
         user,
         token: jwt.sign(userPayload, appEnvs.auth.JWT_SECRET),

@@ -41,10 +41,11 @@ export const customBearerAuth = async (req: any, res: any, next: NextFunction) =
 
   const foundUser = await repository.findOne({ where: { id } })
 
-  if (!foundUser) {
-    res.status(401).send({ error: 'User not found' })
-    return
-  }
+  // TODO: how to handle
+  // if (!foundUser) {
+  //   res.status(401).send({ error: '401 User not found' })
+  //   return
+  // }
 
   req.user = foundUser
   next()

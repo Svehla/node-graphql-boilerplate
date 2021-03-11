@@ -13,7 +13,7 @@ services:
     volumes:
       - .:/app
       # exclude folder from volume https://stackoverflow.com/questions/29181032/add-a-volume-to-docker-but-exclude-a-sub-folder
-      - /app/node_modules
+      # - /app/node_modules
 
     env_file: .env
 

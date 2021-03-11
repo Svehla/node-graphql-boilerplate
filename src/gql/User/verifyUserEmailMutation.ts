@@ -4,7 +4,6 @@ import {
   gqlMutation,
   graphQLObjectType,
   gtGraphQLBoolean,
-  gtGraphQLID,
   gtGraphQLInputObjectType,
   gtGraphQLNonNull,
   gtGraphQLString,
@@ -17,11 +16,8 @@ export const verifyUserEmailMutation = () =>
         input: {
           type: gtGraphQLNonNull(
             gtGraphQLInputObjectType({
-              name: 'verify_user_input_mutation',
+              name: 'Verify_user_input_mutation',
               fields: () => ({
-                userId: {
-                  type: gtGraphQLNonNull(gtGraphQLID),
-                },
                 verifyToken: {
                   type: gtGraphQLNonNull(gtGraphQLString),
                 },
@@ -42,13 +38,13 @@ export const verifyUserEmailMutation = () =>
     async args => {
       const repository = getRepository(User)
 
-      const user = await repository.findOne({ where: { id: args.input.userId } })
+      const user = await repository.findOne({ where: { verifyEmailToken: args.input.verifyToken } })
 
       if (!user) {
-        throw new Error('User does not exist')
+        throw new Error('Token does not exist')
       }
 
-      if (user.isUserEmailVerified) {
+      if (user.isEmailVerified) {
         throw new Error('User email is already verified')
       }
 
@@ -58,7 +54,7 @@ export const verifyUserEmailMutation = () =>
 
       const userRepository = getRepository(User)
 
-      await userRepository.update(args.input.userId, { isUserEmailVerified: true })
+      await userRepository.update(user.id, { isEmailVerified: true })
 
       return {
         isTokenVerified: true,

@@ -7,6 +7,7 @@ import { getRepository } from 'typeorm'
 import {
   graphQLObjectType,
   graphQLSimpleEnum,
+  gtGraphQLBoolean,
   gtGraphQLID,
   gtGraphQLInt,
   gtGraphQLNonNull,
@@ -40,17 +41,11 @@ export const GqlUser = graphQLObjectType(
       profileImgUrl: {
         type: gtGraphQLString,
       },
-      lastName: {
-        type: gtGraphQLString,
-      },
-      fullName: {
-        type: gtGraphQLString,
-      },
-      index: {
-        type: gtGraphQLInt,
-      },
       role: {
         type: GqlUserRole,
+      },
+      isEmailVerified: {
+        type: gtGraphQLBoolean,
       },
       posts: {
         args: {
@@ -63,8 +58,6 @@ export const GqlUser = graphQLObjectType(
     }),
   },
   {
-    fullName: p => `${p.firstName} ${p.lastName}`,
-
     posts: pipe(
       authGqlTypeDecorator({ onlyLogged: true }),
       authGqlTypeDecorator({ allowRoles: [UserRole.Admin, UserRole.Editor] })
