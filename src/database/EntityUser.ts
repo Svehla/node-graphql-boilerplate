@@ -19,7 +19,7 @@ export class User {
   password: string
 
   @Column('boolean', { default: false })
-  isUserEmailVerified = false
+  isEmailVerified = false
 
   @Column({ nullable: true })
   verifyEmailToken: string

@@ -66,7 +66,7 @@ export const userRegistrationMutation = () =>
 
       user.email = args.input.email
       user.password = passwordHash
-      user.isUserEmailVerified = false
+      user.isEmailVerified = false
       user.verifyEmailToken = emailVerifyToken
       user.role = UserRole.Editor
 

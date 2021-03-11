@@ -44,7 +44,7 @@ export const verifyUserEmailMutation = () =>
         throw new Error('Token does not exist')
       }
 
-      if (user.isUserEmailVerified) {
+      if (user.isEmailVerified) {
         throw new Error('User email is already verified')
       }
 
@@ -54,7 +54,7 @@ export const verifyUserEmailMutation = () =>
 
       const userRepository = getRepository(User)
 
-      await userRepository.update(user, { isUserEmailVerified: true })
+      await userRepository.update(user, { isEmailVerified: true })
 
       return {
         isTokenVerified: true,
