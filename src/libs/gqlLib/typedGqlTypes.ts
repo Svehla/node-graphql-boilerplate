@@ -14,7 +14,7 @@ import {
 import { GraphQLEmail, GraphQLPassword } from 'graphql-custom-types'
 
 // Custom types
-export const gtGraphQLEmail = (GraphQLEmail as any) as string
+export const gtGraphQLEmail = (GraphQLEmail as any) as string | undefined | null
 
 export const gtGraphQLPassword = (...args: ConstructorParameters<typeof GraphQLPassword>) =>
   (new GraphQLPassword(...args) as any) as string

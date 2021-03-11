@@ -19,12 +19,9 @@ export const appEnvs = validateConfig({
     PORT: getIdentityFn(5432),
   },
 
-  // // TODO: check if this config is still valid
-  // auth0: {
-  //   DOMAIN: getStringFromEnvParser('AUTH0_DOMAIN'),
-  //   CLIENT_ID: getStringFromEnvParser('AUTH0_CLIENT_ID'),
-  //   AUDIENCE: getStringFromEnvParser('AUTH0_AUDIENCE'),
-  // },
+  adminService: {
+    DOMAIN: getIdentityFn('http://localhost:2020'),
+  },
 
   frontOffice: {
     DOMAIN: getStringFromEnvParser('BACK_OFFICE_DOMAIN'),
@@ -34,5 +31,21 @@ export const appEnvs = validateConfig({
     JWT_SECRET: getStringFromEnvParser('JWT_SECRET'),
   },
 
-  // TODO: add email configs
+  etherealMail: {
+    HOST: getStringFromEnvParser('ETHEREAL_MAIL_HOST'),
+    PORT: getNumberFromEnvParser('ETHEREAL_MAIL_PORT'),
+    auth: {
+      USER: getStringFromEnvParser('ETHEREAL_MAIL_USER'),
+      PASS: getStringFromEnvParser('ETHEREAL_MAIL_PASSWORD'),
+    },
+  },
+
+  aws: {
+    ACCESS_KEY_ID: getStringFromEnvParser('AWS_ACCESS_KEY_ID'),
+    SECRET_ACCESS_KEY: getStringFromEnvParser('AWS_SECRET_ACCESS_KEY'),
+    ses: {
+      API_VERSION: getIdentityFn('2010-12-01'),
+      REGION: getIdentityFn('eu-central-1'),
+    },
+  },
 })

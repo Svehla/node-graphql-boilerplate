@@ -1,13 +1,12 @@
+import './emails/index'
 import { appEnvs } from './appEnvs'
-// import { customFormatErrorFn } from 'apollo-errors'
 import { customBearerAuth } from './auth/customBearerAuthMiddleware'
 import { dbConnection } from './database/dbCore'
 import { graphqlHTTP } from 'express-graphql'
+import axios from 'axios'
 import cors from 'cors'
 import express from 'express'
 import graphqlPlayground from 'graphql-playground-middleware-express'
-// import jwksClient from 'jwks-rsa'
-// import jwt from 'express-jwt'
 import schema from './gql/schema'
 
 const app = express()
@@ -18,18 +17,6 @@ process.on('uncaughtException', err => {
 process.on('unhandledRejection', err => {
   console.error(err)
 })
-
-// const checkAuth0Jwt = jwt({
-//   secret: jwksClient.expressJwtSecret({
-//     cache: true,
-//     rateLimit: true,
-//     jwksRequestsPerMinute: 5,
-//     jwksUri: `https://${appEnvs.auth0.DOMAIN}/.well-known/jwks.json`,
-//   }),
-//   audience: appEnvs.auth0.AUDIENCE,
-//   issuer: `https://${appEnvs.auth0.DOMAIN}/`,
-//   algorithms: ['RS256'],
-// })
 
 const startServer = async () => {
   // wait till the app is connected into database
@@ -43,18 +30,41 @@ const startServer = async () => {
 
   app.use(cors({ origin: appEnvs.frontOffice.DOMAIN }))
 
-  // app.use(checkJwt)
-  // app.get('/api/external', checkAuth0Jwt, (_req, res) => {
-  //   res.send({
-  //     msg: 'Your access token was successfully validated!',
-  //   })
-  // })
+  // TODO: just POC for Rest-api GQL proxy
+  app.get('/verify-reg-token/:token', async (req, res) => {
+    try {
+      const gqlRes = await axios.post(`${appEnvs.adminService.DOMAIN}/graphql`, {
+        query: `
+          mutation verifyUserEmailMutation(
+            $verifyUserInput: Verify_user_input_mutation!
+          ) {
+            verifyUserEmailMutation(input: $verifyUserInput) {
+              isTokenVerified
+            }
+          }
+        `,
+        variables: {
+          verifyUserInput: { verifyToken: req.params.token },
+        },
+      })
+
+      const isTokenVerified = gqlRes.data.data?.verifyUserEmailMutation?.isTokenVerified
+
+      if (isTokenVerified) {
+        res.redirect('http://localhost:2020/playground')
+      } else {
+        res.send('token is not valid')
+      }
+    } catch (err) {
+      console.error(err)
+      res.send(err)
+    }
+  })
 
   app.get(
     '/playground',
     graphqlPlayground({
       endpoint: '/graphql',
-      subscriptionEndpoint: '/subscriptions',
     })
   )
 
@@ -62,8 +72,6 @@ const startServer = async () => {
     '/graphql',
     customBearerAuth,
     graphqlHTTP(req => ({
-      // TODO: add error formatting?
-      // formatError: customFormatErrorFn,
       schema,
       context: {
         req,
