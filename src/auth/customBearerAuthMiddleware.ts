@@ -1,19 +1,18 @@
-import { NextFunction } from 'express'
+import { AuthRequest, DecodedJWT } from './authAbstraction'
+import { NextFunction, Response } from 'express'
 import { User } from '../database/EntityUser'
 import { appEnvs } from '../appEnvs'
 import { getRepository } from 'typeorm'
 import jwt from 'jsonwebtoken'
 
-type DecodedJWT = { email: string; id: string }
-
 // https://github.com/takuya-motoshima/bearer-token-parser/blob/main/src/BearerParser.ts#L6
 const REGEX_BEARER_TOKEN = /^Bearer\s+([A-Za-z0-9\-\._~\+\/]+)=*$/
 
-export const customBearerAuth = async (req: any, res: any, next: NextFunction) => {
+export const customBearerAuth = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const authorizationHeader = req.headers.authorization
 
   if (!authorizationHeader) {
-    req.user = null
+    req.user = undefined
     next()
     return
   }
@@ -40,12 +39,6 @@ export const customBearerAuth = async (req: any, res: any, next: NextFunction) =
   const repository = getRepository(User)
 
   const foundUser = await repository.findOne({ where: { id } })
-
-  // TODO: how to handle
-  // if (!foundUser) {
-  //   res.status(401).send({ error: '401 User not found' })
-  //   return
-  // }
 
   req.user = foundUser
   next()

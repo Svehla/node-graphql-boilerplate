@@ -3,7 +3,7 @@ import { appEnvs } from './appEnvs'
 import { customBearerAuth } from './auth/customBearerAuthMiddleware'
 import { dbConnection } from './database/dbCore'
 import { graphqlHTTP } from 'express-graphql'
-import { initGoogleAuthStrategy } from './auth/googleMiddleware'
+import { initGoogleAuthStrategy, parseGoogleAuthCookieMiddleware } from './auth/googleLogin'
 import { verifyEmailRestGqlProxy } from './gql/User/verifyEmailRestGqlProxy'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -42,12 +42,17 @@ const startServer = async () => {
     '/playground',
     graphqlPlayground({
       endpoint: '/graphql',
+      // TODO: setup credentials somehow
+      // settings: {
+      //   'request.credentials': 'include',
+      // },
+      // 'request.credentials': 'include',
     })
   )
 
   app.use(
     '/graphql',
-    customBearerAuth,
+    [customBearerAuth, parseGoogleAuthCookieMiddleware],
     graphqlHTTP(req => ({
       schema,
       context: {

@@ -60,7 +60,7 @@ export const GqlUser = graphQLObjectType(
   {
     posts: pipe(
       authGqlTypeDecorator({ onlyLogged: true }),
-      authGqlTypeDecorator({ allowRoles: [UserRole.Admin, UserRole.Editor] })
+      authGqlTypeDecorator({ allowUserRoles: [UserRole.Admin, UserRole.Editor] })
     )(async (p, args, ctx) => {
       const repository = getRepository(entities.Post)
 
