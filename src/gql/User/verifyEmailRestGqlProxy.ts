@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { appConfig, appEnvs } from '../../appEnvs'
+import { appConfig, appEnvs } from '../../appConfig'
 import axios from 'axios'
 
 export const verifyEmailRestGqlProxy = async (req: Request, res: Response) => {

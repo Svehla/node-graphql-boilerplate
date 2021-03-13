@@ -2,7 +2,7 @@ import * as fixtures from '../fixtures'
 import { Comment } from '../src/database/EntityComments'
 import { Post } from '../src/database/EntityPosts'
 import { User } from '../src/database/EntityUser'
-import { appEnvs } from '../src/appEnvs'
+import { appEnvs } from '../src/appConfig'
 import { dbConnection } from '../src/database/dbCore'
 import { getRepository } from 'typeorm'
 

@@ -1,5 +1,5 @@
 import * as nodemailer from 'nodemailer'
-import { appEnvs } from '../appEnvs'
+import { appEnvs } from '../appConfig'
 import Mail from 'nodemailer/lib/mailer'
 import aws from 'aws-sdk'
 

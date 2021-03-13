@@ -1,5 +1,5 @@
 import './emails/index'
-import { appEnvs } from './appEnvs'
+import { appEnvs } from './appConfig'
 import { customBearerAuth } from './auth/customBearerAuth'
 import { dbConnection } from './database/dbCore'
 import { graphqlHTTP } from 'express-graphql'

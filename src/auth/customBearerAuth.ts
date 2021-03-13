@@ -1,7 +1,7 @@
 import { AuthRequest, DecodedJWTSchema } from './authAbstraction'
 import { NextFunction, Response } from 'express'
 import { User } from '../database/EntityUser'
-import { appEnvs } from '../appEnvs'
+import { appEnvs } from '../appConfig'
 import { getRepository } from 'typeorm'
 import jwt from 'jsonwebtoken'
 

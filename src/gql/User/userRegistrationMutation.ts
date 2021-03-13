@@ -1,6 +1,6 @@
 import { GqlUser } from './GqlUser'
 import { User, UserRole } from '../../database/EntityUser'
-import { appEnvs } from '../../appEnvs'
+import { appEnvs } from '../../appConfig'
 import { emails } from '../../emails'
 import { getRepository } from 'typeorm'
 import {

@@ -1,6 +1,6 @@
 import { GqlUser } from './GqlUser'
 import { User } from '../../database/EntityUser'
-import { appEnvs } from '../../appEnvs'
+import { appEnvs } from '../../appConfig'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,

@@ -9,7 +9,7 @@ import {
   Text,
   renderHtml,
 } from 'postonents'
-import { appEnvs } from '../../appEnvs'
+import { appEnvs } from '../../appConfig'
 import { sendEmail } from '../sendEmail'
 import React from 'react'
 

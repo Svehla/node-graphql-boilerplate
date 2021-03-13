@@ -59,7 +59,7 @@ const googleAuthCallbackPath = '/auth/google/callback' as const
 
 export const appConfig = {
   adminServiceUrl,
-  localGqlEndpoint: `${adminServiceUrl}/graphql`,
+  localGqlEndpoint: `${adminServiceUrl}/graphql` as const,
   google: {
     authLoginPath: googleAuthLoginPath,
     authCallbackPath: googleAuthCallbackPath,
