@@ -27,7 +27,7 @@ const startServer = async () => {
   const port = appEnvs.PORT
   // custom back-office setup
   app.use(express.text({ type: 'application/graphql' }))
-  app.use(express.urlencoded())
+  app.use(express.urlencoded({ extended: true }))
   app.use(express.json())
 
   app.use(cookieParser())
