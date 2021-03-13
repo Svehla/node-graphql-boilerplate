@@ -29,7 +29,7 @@ export const customBearerAuth = async (req: AuthRequest, res: Response, next: Ne
   let userId: number
 
   try {
-    const decodedJWT = DecodedJWTSchema.cast(jwt.verify(token, appEnvs.auth.JWT_SECRET))
+    const decodedJWT = DecodedJWTSchema.validateSync(jwt.verify(token, appEnvs.auth.JWT_SECRET))
     userId = parseFloat(decodedJWT.id!)
   } catch (err) {
     res.status(500).send({ error: 'Invalid JWT token format' })
