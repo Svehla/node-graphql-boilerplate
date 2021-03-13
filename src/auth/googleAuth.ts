@@ -11,16 +11,10 @@ import jwt from 'jsonwebtoken'
 // Inspiration
 // > https://tomanagle.medium.com/google-oauth-with-node-js-4bff90180fe6
 
-const googleConfig = {
-  clientId: appEnvs.google.CLIENT_ID,
-  clientSecret: appEnvs.google.CLIENT_SECRET,
-  redirect: appConfig.google.authCallbackURL,
-}
-
 const oAuth2Client = new OAuth2Client(
-  googleConfig.clientId,
-  googleConfig.clientSecret,
-  googleConfig.redirect
+  appEnvs.google.CLIENT_ID,
+  appEnvs.google.CLIENT_SECRET,
+  appConfig.google.authCallbackURL
 )
 
 const getGoogleAuthURL = () => {
