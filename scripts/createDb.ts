@@ -1,5 +1,5 @@
 import { Client } from 'pg'
-import { appEnvs } from '../src/appEnvs'
+import { appEnvs } from '../src/appConfig'
 import { dbConnection } from '../src/database/dbCore'
 import { getConnection } from 'typeorm'
 import { knex } from 'knex'

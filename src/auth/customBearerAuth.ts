@@ -1,19 +1,18 @@
-import { NextFunction } from 'express'
+import { AuthRequest, DecodedJWTSchema } from './authAbstraction'
+import { NextFunction, Response } from 'express'
 import { User } from '../database/EntityUser'
-import { appEnvs } from '../appEnvs'
+import { appEnvs } from '../appConfig'
 import { getRepository } from 'typeorm'
 import jwt from 'jsonwebtoken'
-
-type DecodedJWT = { email: string; id: string }
 
 // https://github.com/takuya-motoshima/bearer-token-parser/blob/main/src/BearerParser.ts#L6
 const REGEX_BEARER_TOKEN = /^Bearer\s+([A-Za-z0-9\-\._~\+\/]+)=*$/
 
-export const customBearerAuth = async (req: any, res: any, next: NextFunction) => {
+export const customBearerAuth = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const authorizationHeader = req.headers.authorization
 
   if (!authorizationHeader) {
-    req.user = null
+    req.user = undefined
     next()
     return
   }
@@ -27,25 +26,19 @@ export const customBearerAuth = async (req: any, res: any, next: NextFunction) =
 
   const token = regExParsedToken?.[1]
 
-  let decodedJWT: DecodedJWT
+  let userId: number
 
   try {
-    decodedJWT = jwt.verify(token, appEnvs.auth.JWT_SECRET) as DecodedJWT
+    const decodedJWT = DecodedJWTSchema.validateSync(jwt.verify(token, appEnvs.auth.JWT_SECRET))
+    userId = parseFloat(decodedJWT.id!)
   } catch (err) {
     res.status(500).send({ error: 'Invalid JWT token format' })
     return
   }
 
-  const id = decodedJWT.id
   const repository = getRepository(User)
 
-  const foundUser = await repository.findOne({ where: { id } })
-
-  // TODO: how to handle
-  // if (!foundUser) {
-  //   res.status(401).send({ error: '401 User not found' })
-  //   return
-  // }
+  const foundUser = await repository.findOne({ where: { id: userId } })
 
   req.user = foundUser
   next()

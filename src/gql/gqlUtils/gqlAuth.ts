@@ -4,7 +4,7 @@ import { notNullable } from '../../utils/typeGuards'
 
 type AuthConfig = {
   onlyLogged?: boolean
-  allowRoles?: UserRole[]
+  allowUserRoles?: UserRole[]
   deniedRoles?: UserRole[]
 }
 export const authGqlTypeDecorator = (config: AuthConfig) => <Parent, Args, T>(
@@ -26,15 +26,16 @@ export const authGqlMutationDecorator = authGqlQueryDecorator
 
 const checkUserAccessOrError = (config: AuthConfig, gqlContext: any) => {
   const user = gqlContext.req.user
+  const publicUser = gqlContext.req.publicUser
 
   if (config.onlyLogged) {
-    if (!notNullable(user)) {
+    if (!notNullable(user) && !notNullable(publicUser)) {
       throw new UserHaveToBeLoggedError()
     }
   }
-  if (Array.isArray(config.allowRoles)) {
+  if (Array.isArray(config.allowUserRoles)) {
     // @ts-ignore
-    if (!config.allowRoles.includes(user.role)) {
+    if (!config.allowUserRoles.includes(user.role)) {
       throw new UserHasNoPermissions()
     }
   }

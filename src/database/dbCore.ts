@@ -1,4 +1,4 @@
-import { appEnvs } from '../appEnvs'
+import { appEnvs } from '../appConfig'
 import { createConnection } from 'typeorm'
 import { entities } from './entities'
 
