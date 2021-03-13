@@ -3,7 +3,9 @@ import { appEnvs } from './appEnvs'
 import { customBearerAuth } from './auth/customBearerAuthMiddleware'
 import { dbConnection } from './database/dbCore'
 import { graphqlHTTP } from 'express-graphql'
+import { initGoogleAuthStrategy } from './auth/googleMiddleware'
 import { verifyEmailRestGqlProxy } from './gql/User/verifyEmailRestGqlProxy'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import graphqlPlayground from 'graphql-playground-middleware-express'
@@ -28,8 +30,11 @@ const startServer = async () => {
   app.use(express.urlencoded())
   app.use(express.json())
 
+  app.use(cookieParser())
+
   app.use(cors({ origin: appEnvs.frontOffice.DOMAIN }))
 
+  initGoogleAuthStrategy(app)
   // TODO: just POC for Rest-api GQL proxy - kinda shitty code
   app.get('/verify-reg-token/:token', verifyEmailRestGqlProxy)
 
