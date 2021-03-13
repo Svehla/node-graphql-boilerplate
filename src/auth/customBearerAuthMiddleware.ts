@@ -1,4 +1,4 @@
-import { AuthRequest, DecodedJWT } from './authAbstraction'
+import { AuthRequest, DecodedJWTSchema } from './authAbstraction'
 import { NextFunction, Response } from 'express'
 import { User } from '../database/EntityUser'
 import { appEnvs } from '../appEnvs'
@@ -26,19 +26,19 @@ export const customBearerAuth = async (req: AuthRequest, res: Response, next: Ne
 
   const token = regExParsedToken?.[1]
 
-  let decodedJWT: DecodedJWT
+  let userId: number
 
   try {
-    decodedJWT = jwt.verify(token, appEnvs.auth.JWT_SECRET) as DecodedJWT
+    const decodedJWT = DecodedJWTSchema.cast(jwt.verify(token, appEnvs.auth.JWT_SECRET))
+    userId = parseFloat(decodedJWT.id!)
   } catch (err) {
     res.status(500).send({ error: 'Invalid JWT token format' })
     return
   }
 
-  const id = decodedJWT.id
   const repository = getRepository(User)
 
-  const foundUser = await repository.findOne({ where: { id } })
+  const foundUser = await repository.findOne({ where: { id: userId } })
 
   req.user = foundUser
   next()

@@ -1,4 +1,4 @@
-import { AuthRequest, DecodedJWT } from './authAbstraction'
+import { AuthRequest, DecodedJWTSchema } from './authAbstraction'
 import { Credentials, OAuth2Client } from 'google-auth-library'
 import { Express } from 'express'
 import { NextFunction, Response } from 'express'
@@ -133,10 +133,10 @@ export const parseGoogleAuthCookieMiddleware = async (
     return
   }
 
-  let decodedJWT: DecodedJWT
+  let decodedJWT: ReturnType<typeof DecodedJWTSchema.cast>
 
   try {
-    decodedJWT = jwt.verify(authCookie, appEnvs.auth.JWT_SECRET) as DecodedJWT
+    decodedJWT = DecodedJWTSchema.cast(jwt.verify(authCookie, appEnvs.auth.JWT_SECRET))
   } catch (err) {
     res.status(500).send({ error: 'Invalid JWT token format' })
     return
