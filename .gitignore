@@ -32,6 +32,7 @@ temp/*
 
 #Build generated
 dist/
+dist-minified/
 build/
 
 # Serverless generated files

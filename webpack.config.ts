@@ -1,4 +1,5 @@
 import { CheckerPlugin } from 'awesome-typescript-loader'
+import { IgnorePlugin } from 'webpack'
 // @ts-expect-error
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 // @ts-expect-error
@@ -10,9 +11,12 @@ import webpack from 'webpack'
 
 module.exports = {
   entry: {
-    server: './src/index.ts',
+    index: './src/index.ts',
+    // index: './src/serverless_server_test.ts',
   },
   output: {
+    // coz of lambda fn
+    libraryTarget: 'commonjs2',
     path: path.join(__dirname, 'dist-minified'),
     publicPath: '/',
     filename: '[name].js',
@@ -24,15 +28,10 @@ module.exports = {
     __filename: false, // and __filename return blank or /
   },
   optimization: {
-    minimizer: [
-      new UglifyJsPlugin({
-        // minimize: true,
-        // sourceMap: true,
-        // include: /\.min\.js$/,
-      }),
-    ],
+    minimizer: [new UglifyJsPlugin({})],
+    // minimize: false,
   },
-  externals: [nodeExternals()], // Need this to avoid error when working with Express
+  // externals: [nodeExternals()], // Need this to avoid error when working with Express
   module: {
     rules: [
       // {
@@ -73,6 +72,11 @@ module.exports = {
     new CheckerPlugin(),
 
     // @ts-expect-error
-    new webpack.IgnorePlugin(/pg-native/, /\/pg\//),
+    // new webpack.IgnorePlugin(/pg-native/, /\/pg\//),
+    new webpack.IgnorePlugin(/^pg-native$/),
+
+    new IgnorePlugin({
+      resourceRegExp: /^pg-native$/,
+    }),
   ],
 }
