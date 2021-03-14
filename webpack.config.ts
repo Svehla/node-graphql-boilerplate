@@ -11,8 +11,8 @@ import webpack from 'webpack'
 
 module.exports = {
   entry: {
-    index: './src/index.ts',
-    // index: './src/serverless_server_test.ts',
+    // index: './src/index.ts',
+    index: './src/serverless_index.ts',
   },
   output: {
     // coz of lambda fn
@@ -28,8 +28,9 @@ module.exports = {
     __filename: false, // and __filename return blank or /
   },
   optimization: {
-    minimizer: [new UglifyJsPlugin({})],
-    // minimize: false,
+    // TODO: add minification
+    // minimizer: [new UglifyJsPlugin({})],
+    minimize: false,
   },
   // externals: [nodeExternals()], // Need this to avoid error when working with Express
   module: {

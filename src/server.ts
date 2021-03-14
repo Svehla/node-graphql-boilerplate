@@ -11,8 +11,6 @@ import express from 'express'
 import graphqlPlayground from 'graphql-playground-middleware-express'
 import schema from './gql/schema'
 
-const app = express()
-
 process.on('uncaughtException', err => {
   console.error(err)
 })
@@ -20,11 +18,12 @@ process.on('unhandledRejection', err => {
   console.error(err)
 })
 
-const startServer = async () => {
+const getApp = async () => {
+  const app = express()
+
   // wait till the app is connected into database
   await dbConnection
 
-  const port = appEnvs.PORT
   // custom back-office setup
   app.use(express.text({ type: 'application/graphql' }))
   app.use(express.urlencoded({ extended: true }))
@@ -60,27 +59,11 @@ const startServer = async () => {
       },
     }))
   )
-
-  app.listen(port)
-
   app.get('*', (_req, res) => {
     res.send(`<h1>404</h1>`)
   })
 
-  console.info(`
-  --------- server is ready now ---------
-  GQL URL: http://localhost:${port}/graphql
-  Playground URL: http://localhost:${port}/playground
-  ---------------------------------------
-  `)
+  return app
 }
 
-const stopServer = async (server: any) => {
-  // TODO: TypeError: Cannot read property 'close' of undefined
-  server.close()
-  if (appEnvs.ENVIRONMENT !== 'production') {
-    console.info('----------- server stopped ------------')
-  }
-}
-
-export { startServer, stopServer }
+export const app = getApp()

@@ -8,8 +8,11 @@
   "scripts": {
     "build": "rm -rf ./build && tsc -p ./",
     "buildToLambda": "rm -rf dist-minified && ts-node npm_scripts/buildClientAssets",
-    "zip:lambdaIndex": "cd dist-minified && zip index.zip index.js",
-    "x": "npm run buildToLambda && npm run zip:lambdaIndex",
+    "todo:zip:lambdaIndex": "cd dist-minified && zip index.zip index.js",
+    "x": "npm run buildToLambda && cp .env dist-minified",
+    "y": "cd api-gtw-lambda && terraform apply -auto-approve",
+    "redeploy": "npm run x && npm run y",
+    "r": "npm run redeploy",
     "db:init-schema": "ts-node ./scripts/createDbCLI",
     "db:load-data": "ts-node ./scripts/loadDataCLI",
     "db:hard-init": "npm run db:init-schema && npm run db:load-data",

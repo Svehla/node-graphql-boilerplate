@@ -13,6 +13,8 @@ export const DecodedJWTSchema = yup.object().shape({
   login_type: yup.string().required(),
 })
 
+export type DecodedJWTSchemaType = yup.TypeOf<typeof DecodedJWTSchema> // ReturnType<typeof DecodedJWTSchema.validateSync>
+
 export type AuthRequest = Request & {
   user?: User
   publicUser?: PublicUser

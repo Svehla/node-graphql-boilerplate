@@ -1,3 +1,4 @@
+// import { DecodedJWTSchemaType } from '../../auth/authAbstraction'
 import { GqlUser } from './GqlUser'
 import { User } from '../../database/EntityUser'
 import { appEnvs } from '../../appConfig'
@@ -61,9 +62,11 @@ export const userLoginMutation = () =>
         throw new Error('Error while login')
       }
 
+      // TODO: add proper : DecodedJWTSchemaType ts type
       const userPayload = {
-        id: user.id,
+        id: user.id.toString(),
         email: user.email,
+        login_type: 'custom',
       }
 
       return {
