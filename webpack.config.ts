@@ -1,9 +1,6 @@
 import { CheckerPlugin } from 'awesome-typescript-loader'
 import { IgnorePlugin } from 'webpack'
-// @ts-expect-error
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
-// @ts-expect-error
-import nodeExternals from 'webpack-node-externals'
+import TerserPlugin from 'terser-webpack-plugin'
 import path from 'path'
 import webpack from 'webpack'
 
@@ -29,8 +26,9 @@ module.exports = {
   },
   optimization: {
     // TODO: add minification
-    // minimizer: [new UglifyJsPlugin({})],
-    minimize: false,
+    // minimize: false,
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
   // externals: [nodeExternals()], // Need this to avoid error when working with Express
   module: {

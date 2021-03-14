@@ -1,4 +1,5 @@
 import './emails/index'
+// import { ApolloServer } from 'apollo-server-express'
 import { appEnvs } from './appConfig'
 import { customBearerAuth } from './auth/customBearerAuth'
 import { dbConnection } from './database/dbCore'
@@ -59,6 +60,20 @@ const getApp = async () => {
       },
     }))
   )
+
+  /*
+  // TODO: webpack bundle does not work
+  app.use('/graphql', customBearerAuth)
+  app.use('/graphql', parseGoogleAuthCookieMiddleware)
+
+  const server = new ApolloServer({ schema, tracing: true, context: ({ req }) => ({ req }) })
+
+  server.applyMiddleware({
+    app,
+    path: '/graphql',
+  })
+  */
+
   app.get('*', (_req, res) => {
     res.send(`<h1>404</h1>`)
   })
