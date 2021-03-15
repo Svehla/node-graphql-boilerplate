@@ -9,7 +9,7 @@
     "build": "rm -rf ./build && tsc -p ./",
     "buildToLambda": "rm -rf dist-minified && ts-node npm_scripts/buildClientAssets",
     "todo:zip:lambdaIndex": "cd dist-minified && zip index.zip index.js",
-    "x": "npm run buildToLambda && cp .env dist-minified",
+    "x": "npm run buildToLambda && cp .envAWS dist-minified",
     "y": "cd api-gtw-lambda && terraform apply -auto-approve",
     "redeploy": "npm run x && npm run y",
     "r": "npm run redeploy",
