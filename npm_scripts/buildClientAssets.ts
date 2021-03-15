@@ -1,14 +1,12 @@
-/* eslint-disable */
-import webpack from 'webpack';
-// @ts-expect-error
-import webpackConfig from '../webpack.config';
+import webpack from 'webpack'
+import webpackConfig from '../webpack.config'
 
-webpack(webpackConfig , (err, stats) => { // Stats Object
+webpack(webpackConfig, (err, stats) => {
   if (err || stats?.hasErrors()) {
-    console.log('Error(s) occurred during creating assets by webpack');
-    console.log(stats?.toJson().errors);
-    console.log(err);
+    console.error('Error(s) occurred during creating assets by webpack')
+    console.error(stats?.toJson().errors)
+    console.error(err)
   } else {
-    console.log('Webpack build finished succesfully');
+    console.log('Webpack build finished successfully')
   }
-});
+})

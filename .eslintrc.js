@@ -13,7 +13,7 @@ module.exports = {
     semi: 'off',
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/semi': ['error', 'never'],
-    '@typescript-eslint/no-use-before-define': [
+    '@typescript-eslit/no-use-before-define': [
       'error',
       { functions: false, classes: false, variables: false, typedefs: true },
     ],
@@ -27,6 +27,7 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-type': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
     '@typescript-eslint/ban-ts-comment': 0,
+    '@typescript-eslit/no-use-before-define': 0,
     // "@typescript-eslint/explicit-member-accessibility": [ { accessibility: "no-public", overrides: { properties: "explicit" } } ],
     'prefer-arrow-callback': 2,
     'arrow-parens': ['error', 'as-needed'],

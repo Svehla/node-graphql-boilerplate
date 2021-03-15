@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { GqlComment } from '../Comment/GqlComment'
 import { GqlUser } from '../User/GqlUser'
 import {

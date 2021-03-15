@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { GqlPost } from '../Post/GqlPost'
 import { UserRole } from '../../database/EntityUser'
 import { authGqlTypeDecorator } from '../gqlUtils/gqlAuth'
@@ -61,7 +60,7 @@ export const GqlUser = graphQLObjectType(
     posts: pipe(
       authGqlTypeDecorator({ onlyLogged: true }),
       authGqlTypeDecorator({ allowUserRoles: [UserRole.Admin, UserRole.Editor] })
-    )(async (p, args, ctx) => {
+    )(async (p, args) => {
       const repository = getRepository(entities.Post)
 
       const [posts, count] = await repository.findAndCount({

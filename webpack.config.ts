@@ -6,7 +6,7 @@ import webpack from 'webpack'
 
 // import HtmlWebPackPlugin 'html-webpack-plugin'
 
-module.exports = {
+export default {
   entry: {
     // index: './src/index.ts',
     index: './src/serverless_index.ts',

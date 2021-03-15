@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { GraphQLObjectType, GraphQLSchema } from 'graphql'
 import { userLoginMutation } from './User/userLoginMutation'
 import { userQueryFields } from './User/QueryUser'
