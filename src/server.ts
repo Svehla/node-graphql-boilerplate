@@ -32,7 +32,7 @@ const getApp = async () => {
 
   app.use(cookieParser())
 
-  app.use(cors({ origin: appEnvs.frontOffice.DOMAIN }))
+  app.use(cors({ origin: appEnvs.frontOffice.URL }))
 
   initGoogleAuthStrategy(app)
   // TODO: just POC for Rest-api GQL proxy - kinda shitty code
@@ -42,11 +42,10 @@ const getApp = async () => {
     '/playground',
     graphqlPlayground({
       endpoint: '/graphql',
-      // TODO: setup credentials somehow
-      // settings: {
-      //   'request.credentials': 'include',
-      // },
-      // 'request.credentials': 'include',
+      // @ts-expect-error: missing Partial<> generic in the playground static types
+      settings: {
+        'request.credentials': 'include',
+      },
     })
   )
 
@@ -62,7 +61,8 @@ const getApp = async () => {
   )
 
   /*
-  // TODO: webpack bundle does not work
+  // TODO: does not work after webpack bundle source code 
+
   app.use('/graphql', customBearerAuth)
   app.use('/graphql', parseGoogleAuthCookieMiddleware)
 

@@ -4,11 +4,8 @@ import TerserPlugin from 'terser-webpack-plugin'
 import path from 'path'
 import webpack from 'webpack'
 
-// import HtmlWebPackPlugin 'html-webpack-plugin'
-
 export default {
   entry: {
-    // index: './src/index.ts',
     index: './src/serverless_index.ts',
   },
   output: {
@@ -30,40 +27,14 @@ export default {
     minimize: true,
     minimizer: [new TerserPlugin()],
   },
-  // externals: [nodeExternals()], // Need this to avoid error when working with Express
   module: {
     rules: [
-      // {
-      //   test: /\.tsx?$/,
-      //   loader: 'ts-loader',
-      //   // use: [
-      //   //   {
-      //   //     loader: 'ts-loader',
-      //   //     options: {
-      //   //       configFile: 'tsconfig.webpack.json',
-      //   //     },
-      //   //   },
-      //   // ],
-      // },
       {
         test: /\.tsx?$/,
         loader: 'awesome-typescript-loader',
-        // exclude: /node_modules/,
-        // query: {
-        //   declaration: false,
-        // },
       },
     ],
   },
-  // module: {
-  //   rules: [
-  //     {
-  //       test: /\.tsx?$/,
-  //       use: 'ts-loader',
-  //       exclude: /node_modules/,
-  //     },
-  //   ],
-  // },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
@@ -71,7 +42,6 @@ export default {
     new CheckerPlugin(),
 
     // @ts-expect-error
-    // new webpack.IgnorePlugin(/pg-native/, /\/pg\//),
     new webpack.IgnorePlugin(/^pg-native$/),
 
     new IgnorePlugin({

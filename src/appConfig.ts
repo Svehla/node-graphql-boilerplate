@@ -19,12 +19,11 @@ export const appEnvs = validateConfig({
   },
 
   adminService: {
-    DOMAIN: getStringFromEnvParser('ADMIN_SERVICE_DOMAIN'),
-    PROTOCOL: getStringEnumFromEnvParser('ADMIN_SERVICE_PROTOCOL', ['http', 'https'] as const),
+    URL: getStringFromEnvParser('ADMIN_SERVICE_URL'),
   },
 
   frontOffice: {
-    DOMAIN: getStringFromEnvParser('BACK_OFFICE_URL'),
+    URL: getStringFromEnvParser('FRONT_OFFICE_URL'),
   },
 
   auth: {
@@ -53,18 +52,17 @@ export const appEnvs = validateConfig({
   },
 })
 
-const adminServiceUrl = `${appEnvs.adminService.PROTOCOL}://${appEnvs.adminService.DOMAIN}` as const
 const googleAuthLoginPath = '/auth/google' as const
 const googleAuthCallbackPath = '/auth/google/callback' as const
 
 export const appConfig = {
-  adminServiceUrl,
-  localGqlEndpoint: `${adminServiceUrl}/graphql` as const,
+  adminServiceUrl: appEnvs.adminService.URL,
+  localGqlEndpoint: `${appEnvs.adminService.URL}/graphql` as const,
   google: {
     authLoginPath: googleAuthLoginPath,
     authCallbackPath: googleAuthCallbackPath,
-    authCallbackURL: `${adminServiceUrl}${googleAuthCallbackPath}` as const,
-    loginURL: `${adminServiceUrl}${googleAuthLoginPath}` as const,
+    authCallbackURL: `${appEnvs.adminService.URL}${googleAuthCallbackPath}` as const,
+    loginURL: `${appEnvs.adminService.URL}${googleAuthLoginPath}` as const,
   },
   authCookieName: 'my-custom-auth-cookie' as const,
 }
