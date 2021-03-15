@@ -22,11 +22,20 @@ and basic configurations for nodejs backend based on these technologies:
   - terraformed infrastructure
 
 ## TODO:
-- multiple serverless deployments
 - save terraform files somewhere
 - pm production setup
 - tests
 - check the keycloak support
+- apollo tracking does not work after webpack build
+- add FB oAuth2
+- AWS
+  - what about serverless RDS?
+  - add xray AWS lambda tracing
+  - S3 cloud-front Route53 public domain setup
+  - add multiple deployment environments (test|prod|test|etc...)
+  - support more stages
+  - test AWS SES
+  - extract tf state into s3 + add dynamo locking
 
 ## Requirements
 - nodejs14+
@@ -54,4 +63,4 @@ All npm scripts are available also with the `docker:` prefix to call them direct
 ### without docker
 1. run `npm install`
 2. run `npm run db:hard-init` - to setup database into init state
-1. run `npm run dev` - to start app and database
+3. run `npm run dev` - to start app and database

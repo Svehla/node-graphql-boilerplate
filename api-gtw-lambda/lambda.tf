@@ -16,9 +16,15 @@ data "archive_file" "lambda_zip" {
 }
 
 
-variable "aws_access_key" {}
-variable "aws_secret_key" {}
-variable "aws_region" {}
+variable "aws_access_key" {
+  type = string
+}
+variable "aws_secret_key" {
+  type = string
+}
+variable "aws_region" {
+  type = string
+}
 
 provider "aws" {
   access_key = var.aws_access_key
@@ -117,7 +123,8 @@ resource "aws_api_gateway_deployment" "example" {
   ]
 
   rest_api_id = aws_api_gateway_rest_api.noad_lambda_example.id
-  stage_name  = "test"
+  # TODO make more instances
+  stage_name = "test"
 }
 
 

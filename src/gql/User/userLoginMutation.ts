@@ -1,4 +1,6 @@
-// import { DecodedJWTSchemaType } from '../../auth/authAbstraction'
+import { AuthJWTUserLoginType } from '../../database/EntityPublicUsers'
+import { DecodedJWTSchemaType } from '../../auth/authAbstraction'
+import { ErrorWhileLogin } from './userErrors'
 import { GqlUser } from './GqlUser'
 import { User } from '../../database/EntityUser'
 import { appEnvs } from '../../appConfig'
@@ -53,21 +55,21 @@ export const userLoginMutation = () =>
       const user = await repository.findOne({ where: { email: args.input.email } })
 
       if (!user) {
-        throw new Error('Error while login')
+        throw new ErrorWhileLogin()
       }
 
       const match = bcrypt.compareSync(args.input.password, user.password)
 
       if (!match) {
-        throw new Error('Error while login')
+        throw new ErrorWhileLogin()
       }
 
       // TODO: add proper : DecodedJWTSchemaType ts type
       const userPayload = {
         id: user.id.toString(),
         email: user.email,
-        login_type: 'custom',
-      }
+        login_type: AuthJWTUserLoginType.Custom,
+      } as DecodedJWTSchemaType
 
       return {
         user,

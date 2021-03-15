@@ -1,5 +1,11 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
+export enum AuthJWTUserLoginType {
+  // 'Custom' value is used to refer into different table `user`
+  Custom = 'Custom',
+  Google = 'Google',
+}
+
 export enum UserLoginType {
   Google = 'Google',
 }

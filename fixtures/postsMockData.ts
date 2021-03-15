@@ -1,5 +1,3 @@
-// import moment from 'moment'
-
 const postMessages = [
   '1. Color Block Instagram Feed Theme',
   '2. Minimalist Instagram Feed Theme',
@@ -34,6 +32,5 @@ export const postsMockData = [
     .map((_, i) => ({
       authorId: i,
       text: postMessages[i],
-      // createdAt: moment('1.1.2016', 'DD.MM.YYYY').add(i, 'days').valueOf(),
     })),
 ]

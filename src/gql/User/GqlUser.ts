@@ -13,7 +13,6 @@ import {
   gtGraphQLString,
 } from '../../libs/gqlLib/typedGqlTypes'
 import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
-import { pipe } from 'ramda'
 
 const GqlUserRole = graphQLSimpleEnum(
   'UserRoleEnum',
@@ -57,24 +56,23 @@ export const GqlUser = graphQLObjectType(
     }),
   },
   {
-    posts: pipe(
-      authGqlTypeDecorator({ onlyLogged: true }),
-      authGqlTypeDecorator({ allowUserRoles: [UserRole.Admin, UserRole.Editor] })
-    )(async (p, args) => {
-      const repository = getRepository(entities.Post)
+    posts: authGqlTypeDecorator({ allowUserRoles: [UserRole.Admin, UserRole.Editor] })(
+      async (p, args) => {
+        const repository = getRepository(entities.Post)
 
-      const [posts, count] = await repository.findAndCount({
-        skip: args.pagination.offset,
-        take: args.pagination.limit,
-        where: {
-          authorId: parseInt(p.id!, 10),
-        },
-      })
+        const [posts, count] = await repository.findAndCount({
+          skip: args.pagination.offset,
+          take: args.pagination.limit,
+          where: {
+            authorId: parseInt(p.id!, 10),
+          },
+        })
 
-      return {
-        count,
-        items: posts,
+        return {
+          count,
+          items: posts,
+        }
       }
-    }),
+    ),
   }
 )
