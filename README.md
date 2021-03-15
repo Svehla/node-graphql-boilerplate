@@ -35,7 +35,7 @@ and basic configurations for nodejs backend based on these technologies:
   - add multiple deployment environments (test|prod|test|etc...)
   - support more stages
   - test AWS SES
-  - extract tf state into s3 + add dynamo locking
+  - extract TF backend state into s3 + add dynamo locking
 
 ## Requirements
 - nodejs14+
@@ -44,11 +44,18 @@ and basic configurations for nodejs backend based on these technologies:
 
 ## Configuration
 
-Copy `.env.sample` file into `.env` and setup your local variables.
+Copy `.env.example` file into `.env` and setup your local variables.
 
 Environment details are described in the `/src/appConfig.ts`.
 
 Database docker container environments are setted in the `/docker-compose.yml`.
+
+## setup terraform:
+
+```sh
+terraform workspace new production
+terraform workspace new development  
+```
 
 ## Installation
 

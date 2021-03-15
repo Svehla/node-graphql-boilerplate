@@ -28,9 +28,8 @@ temp/*
 .eslintcache
 
 # dotenv environment variables file(s)
-_.env
 .env
-.envAWS
+.env.*
 
 #Build generated
 dist/
@@ -43,12 +42,12 @@ lambda-output.zip
 
 # terraform stuffs
 /api-gtw-lambda/.terraform
-/api-gtw-lambda/*.lock.hcl
-/api-gtw-lambda/*.plan
-/api-gtw-lambda/*.tfvars
+/api-gtw-lambda/**/*.lock.hcl
+/api-gtw-lambda/**/*.plan
+/api-gtw-lambda/**/*.tfvars
 # ???
-/api-gtw-lambda/*.tfstate
-/api-gtw-lambda/*.tfstate.backup
+/api-gtw-lambda/**/*.tfstate
+/api-gtw-lambda/**/*.tfstate.backup
 
 
 ### SublimeText ###

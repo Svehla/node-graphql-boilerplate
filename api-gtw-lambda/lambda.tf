@@ -9,34 +9,24 @@ terraform {
   }
 }
 
+
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "../dist-minified"
   output_path = "../lambda-output.zip"
 }
 
-
-variable "aws_access_key" {
-  type = string
-}
-variable "aws_secret_key" {
-  type = string
-}
-variable "aws_region" {
-  type = string
-}
-
 provider "aws" {
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
-  region     = var.aws_region
+  region     = "eu-central-1"
 }
 
 resource "aws_lambda_function" "example" {
   filename         = "../lambda-output.zip"
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
-  function_name = "ServerlessExample"
+  function_name = "${var.prefix}_ServerlessExample"
 
   # "main" is the filename within the zip file (index.js) and "handler"
   # is the name of the property under which the handler function was
@@ -50,23 +40,23 @@ resource "aws_lambda_function" "example" {
 # IAM role which dictates what other AWS services the Lambda function
 # may access.
 resource "aws_iam_role" "lambda_exec" {
-  name = "serverless_example_lambda"
+  name = "${var.prefix}_serverless_example_lambda"
 
   # TODO: add proper permisssions to write into cloudWatch
   assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
     {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Action": "sts:AssumeRole",
-          "Principal": {
-            "Service": "lambda.amazonaws.com"
-          },
-          "Effect": "Allow",
-          "Sid": ""
-        }
-      ]
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
     }
+  ]
+}
 EOF
 }
 
@@ -124,7 +114,7 @@ resource "aws_api_gateway_deployment" "example" {
 
   rest_api_id = aws_api_gateway_rest_api.noad_lambda_example.id
   # TODO make more instances
-  stage_name = "test"
+  stage_name = var.prefix
 }
 
 
@@ -137,8 +127,4 @@ resource "aws_lambda_permission" "apigw" {
   # The "/*/*" portion grants access from any method on any resource
   # within the API Gateway REST API.
   source_arn = "${aws_api_gateway_rest_api.noad_lambda_example.execution_arn}/*/*"
-}
-
-output "base_url" {
-  value = aws_api_gateway_deployment.example.invoke_url
 }
