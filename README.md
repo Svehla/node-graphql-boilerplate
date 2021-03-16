@@ -21,13 +21,13 @@ and basic configurations for nodejs backend based on these technologies:
   - AWS serverless monorepo deployment
   - add multiple deployment environments (test|prod|test|etc...)
   - terraformed infrastructure
+  - extract TF backend state into s3 + add dynamo locking
 
 ## TODO: 
 - AWS
   - S3 cloud-front Route53 public domain setup
-  - extract TF backend state into s3 + add dynamo locking
   - test AWS SES
-  - add more lambdas + dynamo support
+  - add more lambdas + dynamo (no-sql) support
   - what about serverless RDS?
   - add xray AWS lambda tracing
 - apollo tracking does not work after webpack build
