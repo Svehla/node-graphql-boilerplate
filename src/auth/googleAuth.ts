@@ -133,6 +133,7 @@ export const parseGoogleAuthCookieMiddleware = async (
     decodedJWT = DecodedJWTSchema.validateSync(jwt.verify(authCookie, appEnvs.auth.JWT_SECRET))
   } catch (err) {
     res.status(500).send({ error: 'Invalid JWT token format' })
+    req.publicUser = undefined
     return
   }
 

@@ -22,7 +22,7 @@ export const verifyEmailRestGqlProxy = async (req: Request, res: Response) => {
     const isTokenVerified = gqlRes.data.data?.verifyUserEmailMutation?.isTokenVerified
 
     if (isTokenVerified) {
-      res.redirect(`${appEnvs.adminService.DOMAIN}/playground`)
+      res.redirect(`${appEnvs.adminService.URL}/playground`)
     } else {
       res.send('token is not valid')
     }

@@ -1,138 +1,85 @@
 # node-graphql-boilerplate
 
-This repository contains best practises and necessary configuration for smap/medium/larger nodejs backend
-application based on graphQl backend
 
-All source codes are written in typescript and test coverage is higher than 90%
+This repository contains my best practices, libraries setups, boilerplate examples 
+and basic configurations for nodejs backend based on these technologies:
 
-## Requirments
+- Code
+  - Typescript
+  - GraphQL
+  - custom Graphql Typescript framework
+  - Type-orm
+  - environment variable parsing
+  - sending emails via *ethereal* or *AWS SES*
+- Security
+  - oAuth2 (google authorization)
+  - local bearer authorization
+- Database
+  - Postgres
+- *devops*
+  - Docker
+  - AWS serverless monorepo deployment
+  - add multiple deployment environments (test|prod|test|etc...)
+  - terraformed infrastructure
+  - extract TF backend state into s3 + add dynamo locking
 
-- install on your OS: `node`, `yarn`, `docker`
-- Nodejs at least 8.9.3, yarn and postgres.
+## TODO: 
+- AWS
+  - S3 cloud-front Route53 public domain setup
+  - test AWS SES
+  - add more lambdas + dynamo (no-sql) support
+  - what about serverless RDS?
+  - add xray AWS lambda tracing
+- apollo tracking does not work after webpack build
+- add FB oAuth2
+- tests
+- sql migrations
+- check the keycloak support
+- add pgadmin into docker-compose
 
-If you haven't postgres db on local machine, you can use docker and docker-compose with nodejs and postgres db container.
+## Requirements
+- nodejs14+
+- docker
+- docker-compose
 
 ## Configuration
 
-copy .env.example file to .env a config your local varibales
+Setup RDS (or whatever you want) by hand (RDS setup is not included in the .tf files)
 
-if you want change port of app and you use docker -> you have to reconfigure `docker-compose.yml`
+Copy `.env.example` file into `.env` and setup your local variables.
+
+Environment details are described in the `/src/appConfig.ts`.
+
+Database docker container environments are setted in the `/docker-compose.yml`.
+
+## setup terraform:
+
+```sh
+cd init-terraform-backend
+
+terraform init
+terraform apply
+
+cd ..
+cd api-gtw-lambda
+
+terraform init
+
+terraform workspace new production
+terraform workspace new development  
+```
 
 ## Installation
 
-1. run `yarn` or `npm install` to install dependecies
-1. run `yarn run docker:db-hard-init` to install dependecies
-1. run `yarn run docker:start` to start app and database
+All npm scripts are available also with the `docker:` prefix to call them directly in the running container
 
-## Developing (local vs docker)
+### with docker
+1. run `npm install`
+2. run `npm run docker:db:hard-init` - to setup database into init state
+3. run `npm run docker:dev`  - to start app and database
 
-for developing you can use docker or install your own server
 
-In package json is every script available via docker with `docker-` prefix
-
-fox example:
-
-- `start` script VS `docker:start` script
-- `test` script VS `docker:test` script
-- `test:watch` script VS `docker-test:watch` script
-
-if you want to init db schema use `npm start db-init` (or `npm start docker-db-init` for docker instance)
-
-## Tests
-
-this package contains 2 types of tests:
-
-- integration: GraphQL HTTP endpoins
-- models: check if graphQl contains all necessary properties
-
-### run tests with watch mode
-
-- `test:watch` script VS `docker:test:watch` script
-
-## Production build
-
-1. run `yarn build` to build static js files
-2. deploy... its up to you...
-3. use pm2 for run on your server/or use prod dockerfile located in docker/Dockerfile.prod
-
-## Authorization
-
-How to get token from logged user
-
-```graphql
-mutation UserLoginMutation {
-  UserLoginMutation(input: { email: "john0@example.com", password: "1111" }) {
-    token
-    user {
-      id
-      name
-    }
-  }
-}
-```
-
-this mutation return jwt -> you can put this jwt to `Authorization`
-
-```json
-{
-  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJlbWFpbCI6ImpvaG4uZG9lQGV4YW1wbGUuY29tIiwiaWF0IjoxNTMwOTQ3MTI4fQ.0roGF3qFgXaIk5hgTNGd0kY2Kc927CoO1xcDWpBy_SY"
-}
-```
-
-TODO:
-
-- sequalize db migrations with enums
-
-## production startup
-
-```
-
-// pm2 docker shutdown
-// http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#enabling-graceful-shutdown
-process.on('SIGINT', () => {
-  db.stop((err) => {
-    process.exit(err ? 1 : 0);
-  });
-});
-
-```
-
-not implemented yet (db does not lost connection)
-http://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/#starting-a-configuration-file
-
-## docker deploy
-
-### node app
-
-#### create docker image
-
-`docker build -t node_prod_image -f docker/Dockerfile.prod .`
-
-#### run build docker image
-
-```bash
-docker run \
- --env PORT=2020 \
- --env ENVIRONMENT=dev \
- --env JWT_SECRET=yeeey \
- --env DB_HOST=host.docker.internal \
- --env DB_USER=root \
- --env DB_DATABASE_NAME=example_db \
- --env DB_PORT=5432 \
- --env DB_PASSWORD=root \
--p 2020:2020 -it node_prod_image
-```
-
-### db
-
-`docker-compose up db`
-
-### link containers
-
-`docker network create --driver bridge node_backends`
-
-`docker network connect node_backends postgres`
-
-`docker network connect node_backends nginx`
-
-`docker run --env-file /var/www/env-conf/.env-prod-node-backend --network node_backends --restart always --name node_server_backend --detach node_prod_image`
+### without docker
+1. run `npm install`
+2. run `npm run db:hard-init` - to setup database into init state
+3. run `npm run dev` - to start app and database

@@ -14,4 +14,7 @@ export const dbConnection = createConnection({
 
   // TODO: how to live with synchronize? TODO: add env?
   synchronize: appEnvs.ENVIRONMENT === 'dev' && appEnvs.NODE_ENV === 'development',
-}).catch(error => console.error(error))
+}).catch(error => {
+  console.error(`can't connect to the database`)
+  console.error(error)
+})

@@ -20,7 +20,7 @@ type DataProps = {
 
 // inspiration: https://github.com/Saifadin/postonents/blob/master/examples/VerificationEmail.js
 const Template = (props: DataProps) => {
-  const verifyUrl = `${appEnvs.adminService.DOMAIN}/verify-reg-token/${props.verifyEmailToken}`
+  const verifyUrl = `${appEnvs.adminService.URL}/verify-reg-token/${props.verifyEmailToken}`
   return (
     <PostonentsProvider>
       <Email title={`Verification email for ${props.toEmail}`}>

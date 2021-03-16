@@ -29,13 +29,28 @@ temp/*
 
 # dotenv environment variables file(s)
 .env
+.env.*
 
 #Build generated
 dist/
+dist-minified/
 build/
 
 # Serverless generated files
 .serverless/
+lambda-output.zip
+
+# terraform stuffs
+/api-gtw-lambda/.terraform
+/api-gtw-lambda/**/*.lock.hcl
+/api-gtw-lambda/**/*.plan
+/api-gtw-lambda/**/*.tfvars
+# ???
+/api-gtw-lambda/**/*.tfstate
+/api-gtw-lambda/**/*.tfstate.backup
+
+init-terraform-backend/.*
+init-terraform-backend/terraform.*
 
 ### SublimeText ###
 # cache files for sublime text

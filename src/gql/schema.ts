@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { GraphQLObjectType, GraphQLSchema } from 'graphql'
+import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
 import { userLoginMutation } from './User/userLoginMutation'
 import { userQueryFields } from './User/QueryUser'
 import { userRegistrationMutation } from './User/userRegistrationMutation'
 import { verifyUserEmailMutation } from './User/verifyUserEmailMutation'
+import packageJson from '../../package.json'
 
 const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -11,6 +11,10 @@ const schema = new GraphQLSchema({
     // @ts-ignore
     fields: () => ({
       ...userQueryFields(),
+      appVersion: {
+        type: GraphQLString,
+        resolve: () => packageJson.version,
+      },
     }),
   }),
   mutation: new GraphQLObjectType({

@@ -15,7 +15,8 @@ services:
       # exclude folder from volume https://stackoverflow.com/questions/29181032/add-a-volume-to-docker-but-exclude-a-sub-folder
       # - /app/node_modules
 
-    env_file: .env
+    # Do we need it?
+    # env_file: .env
 
     environment:
       # Do I need this?
@@ -34,47 +35,3 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=new_dev_db
-# version: '3'
-# services:
-#   postgres:
-#     image: postgres
-#     environment:
-#       POSTGRES_DB: keycloak
-#       POSTGRES_USER: keycloak
-#       POSTGRES_PASSWORD: password
-#   keycloak:
-#     image: quay.io/keycloak/keycloak:latest
-#     environment:
-#       DB_VENDOR: POSTGRES
-#       DB_ADDR: postgres
-#       DB_DATABASE: keycloak
-#       DB_USER: keycloak
-#       DB_SCHEMA: public
-#       DB_PASSWORD: password
-#       KEYCLOAK_USER: admin
-#       KEYCLOAK_PASSWORD: Pa55w0rd
-#       # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
-#       #JDBC_PARAMS: "ssl=true"
-#     ports:
-#       - 8080:8080
-#     depends_on:
-#       - postgres
-
-# # https://github.com/keycloak/keycloak-containers/blob/master/docker-compose-examples/keycloak-postgres.yml
-# keycloak:
-#   image: quay.io/keycloak/keycloak:latest
-#   environment:
-#     DB_VENDOR: POSTGRES
-#     DB_ADDR: postgres
-#     DB_DATABASE: new_dev_db
-#     DB_USER: root
-#     DB_SCHEMA: public
-#     DB_PASSWORD: root
-#     KEYCLOAK_USER: admin
-#     KEYCLOAK_PASSWORD: Pa55w0rd
-#     # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
-#     # JDBC_PARAMS: "ssl=true"
-#   ports:
-#     - 8080:8080
-#   depends_on:
-#     - db
