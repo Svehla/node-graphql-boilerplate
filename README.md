@@ -22,19 +22,20 @@ and basic configurations for nodejs backend based on these technologies:
   - add multiple deployment environments (test|prod|test|etc...)
   - terraformed infrastructure
 
-## TODO:
-- save terraform files somewhere
-- pm production setup
-- tests
-- check the keycloak support
-- apollo tracking does not work after webpack build
-- add FB oAuth2
+## TODO: 
 - AWS
+  - S3 cloud-front Route53 public domain setup
+  - extract TF backend state into s3 + add dynamo locking
+  - test AWS SES
+  - add more lambdas + dynamo support
   - what about serverless RDS?
   - add xray AWS lambda tracing
-  - S3 cloud-front Route53 public domain setup
-  - test AWS SES
-  - extract TF backend state into s3 + add dynamo locking
+- apollo tracking does not work after webpack build
+- add FB oAuth2
+- tests
+- sql migrations
+- check the keycloak support
+- add pgadmin into docker-compose
 
 ## Requirements
 - nodejs14+
@@ -42,6 +43,8 @@ and basic configurations for nodejs backend based on these technologies:
 - docker-compose
 
 ## Configuration
+
+Setup RDS (or whatever you want) by hand (RDS setup is not included in the .tf files)
 
 Copy `.env.example` file into `.env` and setup your local variables.
 

@@ -9,6 +9,6 @@ variable "aws_secret_key" {
 }
 
 variable "prefix" {
-  description = "This is the environment where your webapp is deployed. qa, prod, or dev"
+  description = "This is the environment where your webapp is deployed. production, or development"
   type        = string
 }

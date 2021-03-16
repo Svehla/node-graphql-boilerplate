@@ -19,7 +19,8 @@ data "archive_file" "lambda_zip" {
 provider "aws" {
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
-  region     = "eu-central-1"
+  # TODO: extract into reusable data
+  region = "eu-central-1"
 }
 
 resource "aws_lambda_function" "example" {
