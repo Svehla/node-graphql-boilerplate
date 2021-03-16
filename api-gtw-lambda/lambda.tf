@@ -38,28 +38,33 @@ resource "aws_lambda_function" "example" {
   role = aws_iam_role.lambda_exec.arn
 }
 
+
+data "aws_iam_policy_document" "AWSLambdaTrustPolicy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+  }
+}
+
 # IAM role which dictates what other AWS services the Lambda function
 # may access.
 resource "aws_iam_role" "lambda_exec" {
   name = "${var.prefix}_serverless_example_lambda"
 
   # TODO: add proper permisssions to write into cloudWatch
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
+  assume_role_policy = data.aws_iam_policy_document.AWSLambdaTrustPolicy.json
 }
-EOF
+
+
+resource "aws_iam_role_policy_attachment" "terraform_lambda_policy" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
+
 
 
 resource "aws_api_gateway_resource" "proxy" {
