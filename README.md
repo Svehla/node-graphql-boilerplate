@@ -55,6 +55,16 @@ Database docker container environments are setted in the `/docker-compose.yml`.
 ## setup terraform:
 
 ```sh
+cd init-terraform-backend
+
+terraform init
+terraform apply
+
+cd ..
+cd api-gtw-lambda
+
+terraform init
+
 terraform workspace new production
 terraform workspace new development  
 ```

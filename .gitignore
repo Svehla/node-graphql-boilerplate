@@ -49,6 +49,8 @@ lambda-output.zip
 /api-gtw-lambda/**/*.tfstate
 /api-gtw-lambda/**/*.tfstate.backup
 
+init-terraform-backend/.*
+init-terraform-backend/terraform.*
 
 ### SublimeText ###
 # cache files for sublime text
