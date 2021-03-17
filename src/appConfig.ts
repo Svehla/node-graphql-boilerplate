@@ -5,6 +5,8 @@ import {
 } from './libs/config/configEnvParsers'
 import { validateConfig } from './libs/config/validateConfig'
 
+const urlPattern = '(http|https)://*.' as const
+
 export const appEnvs = validateConfig({
   PORT: getNumberFromEnvParser('PORT'),
   ENVIRONMENT: getStringEnumFromEnvParser('ENVIRONMENT', ['production', 'test', 'dev'] as const),
@@ -19,11 +21,11 @@ export const appEnvs = validateConfig({
   },
 
   adminService: {
-    URL: getStringFromEnvParser('ADMIN_SERVICE_URL'),
+    URL: getStringFromEnvParser('ADMIN_SERVICE_URL', { pattern: urlPattern }),
   },
 
   frontOffice: {
-    URL: getStringFromEnvParser('FRONT_OFFICE_URL'),
+    URL: getStringFromEnvParser('FRONT_OFFICE_URL', { pattern: urlPattern }),
   },
 
   auth: {

@@ -18,18 +18,21 @@ export const getNumberFromEnvParser = (envName: string) => () => {
   return parsedInt
 }
 
-const defaultTransformFn = (value: string) => value
-
 export const getStringFromEnvParser = (
   envName: string,
-  transform = defaultTransformFn,
-  allowEmptyString = false
+  { allowEmptyString = false, pattern = undefined as string | undefined } = {}
 ) => () => {
   const envValue = process.env[envName]?.trim()
   if (envValue === undefined || (!allowEmptyString && envValue.length === 0)) {
     throw new ValidationError('Value is not set or it is empty string', envName)
   }
-  return transform(envValue)
+  if (pattern) {
+    const validator = new RegExp(pattern)
+    if (validator.test(envValue) === false) {
+      throw new ValidationError('Value does not match the regex pattern', envName)
+    }
+  }
+  return envValue
 }
 
 export const getStringEnumFromEnvParser = <T extends string>(

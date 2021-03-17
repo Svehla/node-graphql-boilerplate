@@ -8,7 +8,6 @@ interface RawValidatedConfig {
   [Key: string]: RawValidatedConfig | ReturnType<EnvParserGetter>
 }
 
-// crafted with love by Jakub Svehla
 type AppConfig<C> = C extends (...args: any[]) => infer Res
   ? Res
   : C extends Record<any, any>
