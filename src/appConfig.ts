@@ -2,8 +2,8 @@ import {
   getNumberFromEnvParser,
   getStringEnumFromEnvParser,
   getStringFromEnvParser,
-} from './libs/config/configEnvParsers'
-import { validateConfig } from './libs/config/validateConfig'
+  validateConfig,
+} from 'typed-env-parser'
 
 const urlPattern = '(http|https)://*.' as const
 
@@ -40,11 +40,11 @@ export const appEnvs = validateConfig({
   },
 
   aws: {
+    REGION: 'eu-central-1',
     ACCESS_KEY_ID: getStringFromEnvParser('AWS_ACCESS_KEY_ID'),
     SECRET_ACCESS_KEY: getStringFromEnvParser('AWS_SECRET_ACCESS_KEY'),
     ses: {
       API_VERSION: '2010-12-01',
-      REGION: 'eu-central-1',
     },
   },
 

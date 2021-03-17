@@ -9,7 +9,7 @@ const nodemailerTransporter = sendRealMail
   ? nodemailer.createTransport({
       SES: new aws.SES({
         apiVersion: appEnvs.aws.ses.API_VERSION,
-        region: appEnvs.aws.ses.REGION,
+        region: appEnvs.aws.REGION,
       }),
     })
   : nodemailer.createTransport({
