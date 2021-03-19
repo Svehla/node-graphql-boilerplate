@@ -21,7 +21,7 @@ export const appEnvs = validateConfig({
     PORT: 5432,
   },
 
-  allowedCorsOriginsUrls: getListFromEnvParser('ENABLE_CORS_URLS', String),
+  allowedCorsOriginsUrls: getListFromEnvParser('ALLOWED_CORS_ORIGINS_URLS', String),
 
   adminService: {
     URL: getStringFromEnvParser('ADMIN_SERVICE_URL', { pattern: urlPattern }),
