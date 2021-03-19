@@ -68,7 +68,7 @@ export const userLoginMutation = () =>
       const userPayload = {
         id: user.id.toString(),
         email: user.email,
-        login_type: AuthJWTUserLoginType.Custom,
+        loginType: AuthJWTUserLoginType.Custom,
       } as DecodedJWTSchemaType
 
       return {

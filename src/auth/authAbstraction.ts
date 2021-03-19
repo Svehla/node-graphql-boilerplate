@@ -7,7 +7,7 @@ export const DecodedJWTSchema = yup.object().shape({
   email: yup.string().required(),
   id: yup.string().required(),
   // TODO: add union UserLoginType
-  login_type: yup
+  loginType: yup
     .string()
     .oneOf([AuthJWTUserLoginType.Custom, AuthJWTUserLoginType.Google])
     .required(),

@@ -64,7 +64,7 @@ export const initGoogleAuthStrategy = (app: Express) => {
     try {
       if (req.query.error) {
         // The user did not give us permission.
-        return res.redirect('/google-login-error')
+        return res.redirect(appConfig.google.errorLoginRedirectURL)
       }
       const code = req.query.code
 
@@ -94,20 +94,21 @@ export const initGoogleAuthStrategy = (app: Express) => {
 
       const token = jwt.sign(
         {
-          login_type: UserLoginType.Google,
+          loginType: UserLoginType.Google,
           id: user.id,
           email: user.email,
         },
         appEnvs.auth.JWT_SECRET
       )
 
+      // TODO: make cookie cross domain
       res.cookie(appConfig.authCookieName, token, {
         maxAge: 1000 * 60 * 60 * 24 * 30,
         httpOnly: true,
         secure: false,
       })
 
-      res.redirect('/')
+      res.redirect(appConfig.google.successLoginRedirectURL)
     } catch (err) {
       console.error(err)
       res.status(500).send(err)
@@ -137,7 +138,7 @@ export const parseGoogleAuthCookieMiddleware = async (
     return
   }
 
-  if (decodedJWT.login_type !== UserLoginType.Google) {
+  if (decodedJWT.loginType !== UserLoginType.Google) {
     next()
     return
   }

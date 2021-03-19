@@ -1,5 +1,5 @@
-import { getListFromEnvParser } from './utils/arrValidator'
 import {
+  getListFromEnvParser,
   getNumberFromEnvParser,
   getStringEnumFromEnvParser,
   getStringFromEnvParser,
@@ -68,6 +68,8 @@ export const appConfig = {
     authCallbackPath: googleAuthCallbackPath,
     authCallbackURL: `${appEnvs.adminService.URL}${googleAuthCallbackPath}` as const,
     loginURL: `${appEnvs.adminService.URL}${googleAuthLoginPath}` as const,
+    successLoginRedirectURL: `${appEnvs.frontOffice.URL}/success-login`,
+    errorLoginRedirectURL: `${appEnvs.frontOffice.URL}/error-login`,
   },
   authCookieName: 'my-custom-auth-cookie' as const,
 }
