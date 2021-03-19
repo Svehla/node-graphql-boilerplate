@@ -1,3 +1,4 @@
+import { getListFromEnvParser } from './utils/arrValidator'
 import {
   getNumberFromEnvParser,
   getStringEnumFromEnvParser,
@@ -19,6 +20,8 @@ export const appEnvs = validateConfig({
     PASSWORD: getStringFromEnvParser('POSTGRES_PASSWORD'),
     PORT: 5432,
   },
+
+  allowedCorsOriginsUrls: getListFromEnvParser('ENABLE_CORS_URLS', String),
 
   adminService: {
     URL: getStringFromEnvParser('ADMIN_SERVICE_URL', { pattern: urlPattern }),

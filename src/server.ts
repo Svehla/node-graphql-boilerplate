@@ -12,6 +12,10 @@ import express from 'express'
 import graphqlPlayground from 'graphql-playground-middleware-express'
 import schema from './gql/schema'
 
+// TODO: ts-node-dev sometimes throw error:
+// Error: write EPIPE
+// > https://github.com/wclr/ts-node-dev/issues/148
+
 process.on('uncaughtException', err => {
   console.error(err)
 })
@@ -32,7 +36,14 @@ const getApp = async () => {
 
   app.use(cookieParser())
 
-  app.use(cors({ origin: appEnvs.frontOffice.URL }))
+  app.use(
+    cors((req, callback) => {
+      callback(null, {
+        credentials: true,
+        origin: appEnvs.allowedCorsOriginsUrls.includes(req.header('Origin') ?? ''),
+      })
+    })
+  )
 
   initGoogleAuthStrategy(app)
   // TODO: just POC for Rest-api GQL proxy - kinda shitty code

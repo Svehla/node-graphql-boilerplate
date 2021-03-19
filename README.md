@@ -1,7 +1,6 @@
 # node-graphql-boilerplate
 
-
-This repository contains my best practices, libraries setups, boilerplate examples 
+This repository contains my best practices, libraries setups, boilerplate examples
 and basic configurations for nodejs backend based on these technologies:
 
 - Code
@@ -10,26 +9,28 @@ and basic configurations for nodejs backend based on these technologies:
   - custom Graphql Typescript framework
   - Type-orm
   - environment variable parsing
-  - sending emails via *ethereal* or *AWS SES*
+  - sending emails via _ethereal_ or _AWS SES_
 - Security
   - oAuth2 (google authorization)
   - local bearer authorization
 - Database
   - Postgres
-- *devops*
+- _devops_
   - Docker
   - AWS serverless monorepo deployment
   - add multiple deployment environments (test|prod|test|etc...)
   - terraformed infrastructure
   - extract TF backend state into s3 + add dynamo locking
 
-## TODO: 
+## TODO:
+
 - AWS
   - S3 cloud-front Route53 public domain setup
   - test AWS SES
   - add more lambdas + dynamo (no-sql) support
   - what about serverless RDS?
   - add xray AWS lambda tracing
+- Add RDS setup/EC2 puppet postgres config
 - apollo tracking does not work after webpack build
 - add FB oAuth2
 - tests
@@ -38,6 +39,7 @@ and basic configurations for nodejs backend based on these technologies:
 - add pgadmin into docker-compose
 
 ## Requirements
+
 - nodejs14+
 - docker
 - docker-compose
@@ -66,7 +68,7 @@ cd api-gtw-lambda
 terraform init
 
 terraform workspace new production
-terraform workspace new development  
+terraform workspace new development
 ```
 
 ## Installation
@@ -74,12 +76,13 @@ terraform workspace new development
 All npm scripts are available also with the `docker:` prefix to call them directly in the running container
 
 ### with docker
+
 1. run `npm install`
 2. run `npm run docker:db:hard-init` - to setup database into init state
-3. run `npm run docker:dev`  - to start app and database
-
+3. run `npm run docker:dev` - to start app and database
 
 ### without docker
+
 1. run `npm install`
 2. run `npm run db:hard-init` - to setup database into init state
 3. run `npm run dev` - to start app and database
