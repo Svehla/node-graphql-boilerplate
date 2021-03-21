@@ -2,7 +2,6 @@
 variable "project" {
   description = "The name of the project"
   type        = string
-  default     = "dailyfaily"
 }
 
 # TODO: rename to env?
@@ -22,5 +21,4 @@ variable "region" {
 
 variable "domain" {
   description = "domain"
-  default     = ""
 }
