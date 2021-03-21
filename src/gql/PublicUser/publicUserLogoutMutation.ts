@@ -9,7 +9,6 @@ export const publicUserLogoutMutation = () =>
       type: gtGraphQLString,
     },
     async (_args, ctx) => {
-      //
       ;(ctx.res as Response).clearCookie(appConfig.authCookieName, {
         httpOnly: true,
         secure: true,
