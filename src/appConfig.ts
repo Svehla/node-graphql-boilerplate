@@ -1,4 +1,5 @@
 import {
+  getListFromEnvParser,
   getNumberFromEnvParser,
   getStringEnumFromEnvParser,
   getStringFromEnvParser,
@@ -19,6 +20,8 @@ export const appEnvs = validateConfig({
     PASSWORD: getStringFromEnvParser('POSTGRES_PASSWORD'),
     PORT: 5432,
   },
+
+  allowedCorsOriginsUrls: getListFromEnvParser('ALLOWED_CORS_ORIGINS_URLS', String),
 
   adminService: {
     URL: getStringFromEnvParser('ADMIN_SERVICE_URL', { pattern: urlPattern }),
@@ -65,6 +68,8 @@ export const appConfig = {
     authCallbackPath: googleAuthCallbackPath,
     authCallbackURL: `${appEnvs.adminService.URL}${googleAuthCallbackPath}` as const,
     loginURL: `${appEnvs.adminService.URL}${googleAuthLoginPath}` as const,
+    successLoginRedirectPath: `/success-login`,
+    errorLoginRedirectPath: `/error-login`,
   },
   authCookieName: 'my-custom-auth-cookie' as const,
 }
