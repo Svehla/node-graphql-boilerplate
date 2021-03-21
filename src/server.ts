@@ -40,7 +40,7 @@ const getApp = async () => {
     cors((req, callback) => {
       callback(null, {
         credentials: true,
-        origin: appEnvs.allowedCorsOriginsUrls.includes(req.header('Origin') ?? ''),
+        origin: appEnvs.allowedOriginsUrls.includes(req.header('Origin') ?? ''),
       })
     })
   )

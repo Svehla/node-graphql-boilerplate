@@ -1,13 +1,3 @@
-# inspiration:
-# > https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway?in=terraform/aws
-
-terraform {
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-    }
-  }
-}
 
 
 data "archive_file" "lambda_zip" {
@@ -16,12 +6,6 @@ data "archive_file" "lambda_zip" {
   output_path = "../lambda-output.zip"
 }
 
-provider "aws" {
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
-  # TODO: extract into reusable data
-  region = "eu-central-1"
-}
 
 resource "aws_lambda_function" "example" {
   filename         = "../lambda-output.zip"

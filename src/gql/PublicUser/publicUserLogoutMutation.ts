@@ -12,6 +12,7 @@ export const publicUserLogoutMutation = () =>
       ;(ctx.res as Response).clearCookie(appConfig.authCookieName, {
         httpOnly: true,
         secure: true,
+        // we want to support CORS requests to login
         sameSite: 'none',
       })
 
