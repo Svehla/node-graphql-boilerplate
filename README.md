@@ -86,3 +86,9 @@ All npm scripts are available also with the `docker:` prefix to call them direct
 1. run `npm install`
 2. run `npm run db:hard-init` - to setup database into init state
 3. run `npm run dev` - to start app and database
+
+## Helper script
+
+```bash
+kill $(lsof -ti:2020)
+```

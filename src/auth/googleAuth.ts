@@ -7,6 +7,7 @@ import { appConfig, appEnvs } from '../appConfig'
 import { getConnection, getRepository } from 'typeorm'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
+import urljoin from 'url-join'
 
 // Inspiration
 // > https://tomanagle.medium.com/google-oauth-with-node-js-4bff90180fe6
@@ -17,10 +18,11 @@ const oAuth2Client = new OAuth2Client(
   appConfig.google.authCallbackURL
 )
 
-const getGoogleAuthURL = () => {
+const getGoogleAuthURL = (refererCallbackDomain: string) => {
   return oAuth2Client.generateAuthUrl({
     access_type: 'offline',
     prompt: 'consent',
+    state: JSON.stringify({ refererCallbackDomain }),
     scope: [
       'https://www.googleapis.com/auth/userinfo.profile',
       'https://www.googleapis.com/auth/userinfo.email',
@@ -54,17 +56,30 @@ async function getGoogleUser(tokens: Credentials) {
     throw new Error(err.message)
   }
 }
-
 export const initGoogleAuthStrategy = (app: Express) => {
-  app.get(appConfig.google.authLoginPath, (_req, res) => {
-    res.redirect(getGoogleAuthURL())
+  app.get(appConfig.google.authLoginPath, (req, res) => {
+    const referer = req.get('referer')
+    if (!referer) {
+      res.status(400).send('callback URI referer is not setted')
+      return
+    }
+    res.redirect(getGoogleAuthURL(referer))
   })
 
   app.get(appConfig.google.authCallbackPath, async (req, res) => {
     try {
+      const state = JSON.parse((req.query.state as string) ?? '{}') as {
+        refererCallbackDomain?: string
+      }
+      const refererCallbackDomain = state.refererCallbackDomain
+      if (!refererCallbackDomain) {
+        res.status(400).send('callback URI state is not setted')
+        return
+      }
+
       if (req.query.error) {
         // The user did not give us permission.
-        return res.redirect(appConfig.google.errorLoginRedirectURL)
+        return res.redirect(urljoin(refererCallbackDomain, appConfig.google.errorLoginRedirectPath))
       }
       const code = req.query.code
 
@@ -101,14 +116,13 @@ export const initGoogleAuthStrategy = (app: Express) => {
         appEnvs.auth.JWT_SECRET
       )
 
-      // TODO: make cookie cross domain
       res.cookie(appConfig.authCookieName, token, {
         maxAge: 1000 * 60 * 60 * 24 * 30,
         httpOnly: true,
-        secure: false,
+        secure: true,
+        sameSite: 'none',
       })
-
-      res.redirect(appConfig.google.successLoginRedirectURL)
+      res.redirect(urljoin(refererCallbackDomain, appConfig.google.successLoginRedirectPath))
     } catch (err) {
       console.error(err)
       res.status(500).send(err)

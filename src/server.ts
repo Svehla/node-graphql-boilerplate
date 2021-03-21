@@ -63,9 +63,10 @@ const getApp = async () => {
   app.use(
     '/graphql',
     [customBearerAuth, parseGoogleAuthCookieMiddleware],
-    graphqlHTTP(req => ({
+    graphqlHTTP((req, res) => ({
       schema,
       context: {
+        res,
         req,
       },
     }))

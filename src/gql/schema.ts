@@ -1,4 +1,5 @@
 import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
+import { publicUserLogoutMutation } from './PublicUser/publicUserLogoutMutation'
 import { publicUserQueryFields } from './PublicUser/QueryPublicUser'
 import { userLoginMutation } from './User/userLoginMutation'
 import { userQueryFields } from './User/QueryUser'
@@ -26,6 +27,7 @@ const schema = new GraphQLSchema({
       userLogin: userLoginMutation(),
       userRegistrationMutation: userRegistrationMutation(),
       verifyUserEmailMutation: verifyUserEmailMutation(),
+      publicUserLogoutMutation: publicUserLogoutMutation(),
     }),
   }),
 })
