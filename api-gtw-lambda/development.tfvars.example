@@ -1,3 +1,0 @@
-aws_access_key         = "xxx"
-aws_secret_key         = "yyy"
-prefix                 = "development"

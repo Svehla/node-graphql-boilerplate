@@ -63,7 +63,7 @@ terraform init
 terraform apply
 
 cd ..
-cd api-gtw-lambda
+cd terraform
 
 terraform init
 

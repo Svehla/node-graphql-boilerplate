@@ -12,4 +12,19 @@ terraform {
     dynamodb_table = "terraform-up-and-running-locks"
     encrypt        = true
   }
+
+  required_version = "v0.14.8"
 }
+
+provider "aws" {
+  profile = "default"
+  region  = var.region
+}
+
+locals {
+  tags = merge(var.tags, {
+    project = var.project
+    env     = var.prefix
+  })
+}
+

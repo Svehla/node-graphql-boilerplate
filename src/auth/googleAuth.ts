@@ -59,6 +59,7 @@ async function getGoogleUser(tokens: Credentials) {
 export const initGoogleAuthStrategy = (app: Express) => {
   app.get(appConfig.google.authLoginPath, (req, res) => {
     const referer = req.get('referer')
+    // whitelist referer from cors values...
     if (!referer) {
       res.status(400).send('callback URI referer is not setted')
       return
@@ -66,6 +67,7 @@ export const initGoogleAuthStrategy = (app: Express) => {
     res.redirect(getGoogleAuthURL(referer))
   })
 
+  // TODO: POST???
   app.get(appConfig.google.authCallbackPath, async (req, res) => {
     try {
       const state = JSON.parse((req.query.state as string) ?? '{}') as {
@@ -117,9 +119,11 @@ export const initGoogleAuthStrategy = (app: Express) => {
       )
 
       res.cookie(appConfig.authCookieName, token, {
-        maxAge: 1000 * 60 * 60 * 24 * 30,
+        // TODO: how large should be expiration?
+        maxAge: 1000 * 60 * 60 * 12 * 30,
         httpOnly: true,
         secure: true,
+        // we want to support CORS requests to login
         sameSite: 'none',
       })
       res.redirect(urljoin(refererCallbackDomain, appConfig.google.successLoginRedirectPath))
