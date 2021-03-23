@@ -24,7 +24,9 @@ and basic configurations for nodejs backend based on these technologies:
 
 ## TODO:
 
-- Create custom ID type
+- Add notifications table
+- Create custom GQL ID type
+- Add cursor pagination
 - AWS
   - test AWS SES
   - add more lambdas + dynamo (no-sql) support
