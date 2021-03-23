@@ -1,4 +1,8 @@
 import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
+import { addCommentMutation } from './Comment/addCommentMutation'
+import { addPostMutation } from './Post/addPostMutation'
+import { addPostReactionMutation } from './PostReaction/addPostReactionMutation'
+import { postQueryFields } from './PostReaction/QueryPost'
 import { publicUserLogoutMutation } from './PublicUser/publicUserLogoutMutation'
 import { publicUserQueryFields } from './PublicUser/QueryPublicUser'
 import { userLoginMutation } from './User/userLoginMutation'
@@ -14,6 +18,7 @@ const schema = new GraphQLSchema({
     fields: () => ({
       ...userQueryFields(),
       ...publicUserQueryFields(),
+      ...postQueryFields(),
       appVersion: {
         type: GraphQLString,
         resolve: () => packageJson.version,
@@ -28,6 +33,9 @@ const schema = new GraphQLSchema({
       userRegistrationMutation: userRegistrationMutation(),
       verifyUserEmailMutation: verifyUserEmailMutation(),
       publicUserLogoutMutation: publicUserLogoutMutation(),
+      addPostMutation: addPostMutation(),
+      addCommentMutation: addCommentMutation(),
+      addPostReactionMutation: addPostReactionMutation(),
     }),
   }),
 })

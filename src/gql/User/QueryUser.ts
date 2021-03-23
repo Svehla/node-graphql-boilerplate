@@ -9,12 +9,8 @@ export const userQueryFields = () =>
   graphqlSubQueryType(
     {
       users: {
-        args: {
-          pagination: {
-            type: listPaginationArgs('usersQuery'),
-          },
-        },
-        type: wrapPaginationList('users', gtGraphQLNonNull(GqlUser)),
+        args: listPaginationArgs('query_users'),
+        type: wrapPaginationList('query_users', gtGraphQLNonNull(GqlUser)),
       },
     },
     {

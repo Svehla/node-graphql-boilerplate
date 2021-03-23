@@ -58,13 +58,19 @@ async function getGoogleUser(tokens: Credentials) {
 }
 export const initGoogleAuthStrategy = (app: Express) => {
   app.get(appConfig.google.authLoginPath, (req, res) => {
-    const referer = req.get('referer')
-    // whitelist referer from cors values...
-    if (!referer) {
+    const cbHost = req.get('referer') ?? `${req.protocol}://${req.get('host')}`
+
+    // TODO: add whitelist referer from cors values...
+    if (!cbHost) {
       res.status(400).send('callback URI referer is not setted')
       return
     }
-    res.redirect(getGoogleAuthURL(referer))
+    // cors does not work there coz this is GET request
+    if (!appEnvs.allowedOriginsUrls.includes(cbHost)) {
+      res.status(400).send(`callback host ${cbHost} is not supported`)
+      return
+    }
+    res.redirect(getGoogleAuthURL(cbHost))
   })
 
   // TODO: POST???

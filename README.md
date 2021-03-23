@@ -24,8 +24,8 @@ and basic configurations for nodejs backend based on these technologies:
 
 ## TODO:
 
+- Create custom ID type
 - AWS
-  - S3 cloud-front Route53 public domain setup
   - test AWS SES
   - add more lambdas + dynamo (no-sql) support
   - what about serverless RDS?

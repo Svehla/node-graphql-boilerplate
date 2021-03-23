@@ -1,14 +1,15 @@
 import { GqlComment } from '../Comment/GqlComment'
-import { GqlUser } from '../User/GqlUser'
+import { GqlPostReaction } from '../PostReaction/GqlPostReaction'
+import { GqlPublicUser } from '../PublicUser/GqlPublicUser'
+import { entities } from '../../database/entities'
+import { getRepository } from 'typeorm'
 import {
-  circularDependencyTsHack,
   graphQLObjectType,
   gtGraphQLID,
   gtGraphQLNonNull,
   gtGraphQLString,
+  lazyCircularDependencyTsHack,
 } from '../../libs/gqlLib/typedGqlTypes'
-import { entities } from '../../database/entities'
-import { getRepository } from 'typeorm'
 import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
 
 export const GqlPost = graphQLObjectType(
@@ -17,9 +18,6 @@ export const GqlPost = graphQLObjectType(
     fields: () => ({
       id: {
         type: gtGraphQLNonNull(gtGraphQLID),
-      },
-      rawId: {
-        type: gtGraphQLID,
       },
       name: {
         type: gtGraphQLString,
@@ -31,23 +29,21 @@ export const GqlPost = graphQLObjectType(
         type: gtGraphQLID,
       },
       author: {
-        type: circularDependencyTsHack(() => GqlUser),
+        type: lazyCircularDependencyTsHack(() => GqlPublicUser),
       },
       comments: {
-        args: {
-          pagination: {
-            type: listPaginationArgs('post_comments'),
-          },
-        },
+        args: listPaginationArgs('post_comments'),
         type: wrapPaginationList('post_comments', GqlComment),
+      },
+      reactions: {
+        args: listPaginationArgs('post_reactions'),
+        type: wrapPaginationList('post_reactions', gtGraphQLNonNull(GqlPostReaction)),
       },
     }),
   },
   {
-    id: p => `Post:${p.id}`,
-    rawId: p => p.id,
     author: async p => {
-      const repository = getRepository(entities.User)
+      const repository = getRepository(entities.PublicUser)
 
       const user = await repository.findOne({
         where: {
@@ -57,6 +53,7 @@ export const GqlPost = graphQLObjectType(
 
       return user
     },
+
     comments: async (_p, args) => {
       const repository = getRepository(entities.Comment)
 
@@ -68,6 +65,20 @@ export const GqlPost = graphQLObjectType(
       return {
         count,
         items: comments,
+      }
+    },
+
+    reactions: async (_p, args) => {
+      const repository = getRepository(entities.PostReaction)
+
+      const [postReactions, count] = await repository.findAndCount({
+        skip: args.pagination.offset,
+        take: args.pagination.limit,
+      })
+
+      return {
+        count,
+        items: postReactions,
       }
     },
   }

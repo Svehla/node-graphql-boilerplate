@@ -54,7 +54,4 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date
-
-  // @OneToMany(() => Post, post => post.author)
-  // author: User
 }

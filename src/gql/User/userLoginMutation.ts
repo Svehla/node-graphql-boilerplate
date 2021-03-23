@@ -9,34 +9,25 @@ import {
   gqlMutation,
   graphQLObjectType,
   gtGraphQLEmail,
-  gtGraphQLInputObjectType,
   gtGraphQLNonNull,
   gtGraphQLPassword,
   gtGraphQLString,
 } from '../../libs/gqlLib/typedGqlTypes'
+import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 export const userLoginMutation = () =>
   gqlMutation(
     {
-      args: {
-        input: {
-          type: gtGraphQLNonNull(
-            gtGraphQLInputObjectType({
-              name: 'user_login_mutation_input',
-              fields: () => ({
-                email: {
-                  type: gtGraphQLNonNull(gtGraphQLEmail),
-                },
-                password: {
-                  type: gtGraphQLNonNull(gtGraphQLPassword(6, 50)),
-                },
-              }),
-            })
-          ),
+      args: gqlMutationInputArg('user_login_mutation_input', {
+        email: {
+          type: gtGraphQLNonNull(gtGraphQLEmail),
         },
-      },
+        password: {
+          type: gtGraphQLNonNull(gtGraphQLPassword(6, 50)),
+        },
+      }),
       type: graphQLObjectType({
         name: 'user_login_output',
         fields: () => ({

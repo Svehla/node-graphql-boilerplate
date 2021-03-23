@@ -4,6 +4,7 @@ import { notNullable } from '../../utils/typeGuards'
 
 type AuthConfig = {
   onlyLogged?: boolean
+  onlyLoggedPublic?: boolean
   allowUserRoles?: UserRole[]
   deniedRoles?: UserRole[]
 }
@@ -21,6 +22,7 @@ export const authGqlQueryDecorator = (config: AuthConfig) => <Args, T>(
   return fn(args, context)
 }
 
+// TODO: add properly typed context
 // mutation resolver hav the same API as the query resolvers
 export const authGqlMutationDecorator = authGqlQueryDecorator
 
@@ -28,6 +30,11 @@ const checkUserAccessOrError = (config: AuthConfig, gqlContext: any) => {
   const user = gqlContext.req.user
   const publicUser = gqlContext.req.publicUser
 
+  if (config.onlyLoggedPublic) {
+    if (!notNullable(publicUser)) {
+      throw new UserHaveToBeLoggedError()
+    }
+  }
   if (config.onlyLogged) {
     if (!notNullable(user) && !notNullable(publicUser)) {
       throw new UserHaveToBeLoggedError()

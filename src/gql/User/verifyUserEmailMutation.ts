@@ -4,28 +4,19 @@ import {
   gqlMutation,
   graphQLObjectType,
   gtGraphQLBoolean,
-  gtGraphQLInputObjectType,
   gtGraphQLNonNull,
   gtGraphQLString,
 } from '../../libs/gqlLib/typedGqlTypes'
+import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const verifyUserEmailMutation = () =>
   gqlMutation(
     {
-      args: {
-        input: {
-          type: gtGraphQLNonNull(
-            gtGraphQLInputObjectType({
-              name: 'Verify_user_input_mutation',
-              fields: () => ({
-                verifyToken: {
-                  type: gtGraphQLNonNull(gtGraphQLString),
-                },
-              }),
-            })
-          ),
+      args: gqlMutationInputArg('Verify_user_input_mutation', {
+        verifyToken: {
+          type: gtGraphQLNonNull(gtGraphQLString),
         },
-      },
+      }),
       type: graphQLObjectType({
         name: 'verify_user_email_output',
         fields: () => ({

@@ -11,13 +11,20 @@ import {
   GraphQLScalarType,
   GraphQLString,
 } from 'graphql'
-import { GraphQLEmail, GraphQLPassword } from 'graphql-custom-types'
+import { GraphQLEmail, GraphQLLimitedString, GraphQLPassword } from 'graphql-custom-types'
 
 // Custom types
 export const gtGraphQLEmail = (GraphQLEmail as any) as string | undefined | null
 
 export const gtGraphQLPassword = (...args: ConstructorParameters<typeof GraphQLPassword>) =>
+  // TODO: | null | undefined?
   (new GraphQLPassword(...args) as any) as string
+
+export const gtGraphQLLimitedString = (
+  ...args: ConstructorParameters<typeof GraphQLLimitedString>
+) =>
+  // TODO: | null | undefined?
+  (new GraphQLLimitedString(...args) as any) as string
 
 // TODO: add context as global interface to keep update it by anyone?
 
@@ -168,7 +175,7 @@ export const gqlMutation = <
 }
 
 // is used to be resolved by `ReturnTypeIfFn<...>` generic
-export const circularDependencyTsHack = <T>(arg: T): T => {
+export const lazyCircularDependencyTsHack = <T>(arg: T): T => {
   const shittyCode = arg as any
   return shittyCode()
 }

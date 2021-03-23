@@ -46,11 +46,7 @@ export const GqlUser = graphQLObjectType(
         type: gtGraphQLBoolean,
       },
       posts: {
-        args: {
-          pagination: {
-            type: listPaginationArgs('user_posts_args'),
-          },
-        },
+        args: listPaginationArgs('user_posts_args'),
         type: wrapPaginationList('user_posts', gtGraphQLNonNull(GqlPost)),
       },
     }),
