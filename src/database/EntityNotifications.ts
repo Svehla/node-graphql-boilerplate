@@ -1,22 +1,12 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  // JoinColumn,
-  // OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm'
-// import { User } from './EntityUser'
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 @Entity('notifications')
 export class Notification {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
-  // public user id
   @Column()
-  receiverId: number
+  receiverId: string
 
   @Column({ default: false })
   read: boolean

@@ -26,7 +26,7 @@ export const customBearerAuth = async (req: AuthRequest, res: Response, next: Ne
 
   const token = regExParsedToken?.[1]
 
-  let userId: number
+  let userId: string
 
   try {
     const decodedJWT = DecodedJWTSchema.validateSync(jwt.verify(token, appEnvs.auth.JWT_SECRET))

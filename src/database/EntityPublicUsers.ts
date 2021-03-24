@@ -12,17 +12,23 @@ export enum UserLoginType {
 
 @Entity('public_users')
 export class PublicUser {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
   @Column()
   email: string
+
+  @Column({ nullable: true })
+  bio: string
 
   @Column({
     type: 'enum',
     enum: UserLoginType,
   })
   loginType: UserLoginType
+
+  @Column({ unique: true })
+  nickName: string
 
   @Column({ unique: true })
   externalServiceId: string

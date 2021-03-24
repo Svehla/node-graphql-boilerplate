@@ -27,10 +27,10 @@ const postMessages = [
 
 // images are used from: https://randomuser.me/photos
 export const postsMockData = [
-  ...Array(60)
-    .fill(0)
-    .map((_, i) => ({
-      authorId: i,
-      text: postMessages[i],
-    })),
+  // ...Array(60)
+  //   .fill(0)
+  //   .map((_, i) => ({
+  //     authorId: i,
+  //     text: postMessages[i],
+  //   })),
 ]

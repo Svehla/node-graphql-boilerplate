@@ -2,7 +2,7 @@ import { GqlUser } from './GqlUser'
 import { authGqlQueryDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
-import { graphqlSubQueryType, gtGraphQLNonNull } from '../../libs/gqlLib/typedGqlTypes'
+import { graphqlSubQueryType } from '../../libs/gqlLib/typedGqlTypes'
 import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
 
 export const userQueryFields = () =>
@@ -10,7 +10,7 @@ export const userQueryFields = () =>
     {
       users: {
         args: listPaginationArgs('query_users'),
-        type: wrapPaginationList('query_users', gtGraphQLNonNull(GqlUser)),
+        type: wrapPaginationList('query_users', GqlUser),
       },
     },
     {

@@ -5,7 +5,7 @@ import { getRepository } from 'typeorm'
 import {
   gqlMutation,
   graphQLObjectType,
-  gtGraphQLInt,
+  gtGraphQLID,
   gtGraphQLLimitedString,
   gtGraphQLNonNull,
 } from '../../libs/gqlLib/typedGqlTypes'
@@ -19,9 +19,7 @@ export const addCommentMutation = () =>
           type: gtGraphQLLimitedString(3, 10000),
         },
         postId: {
-          // should gql id be string? or number?
-          // TODO: create custom ID type?
-          type: gtGraphQLNonNull(gtGraphQLInt),
+          type: gtGraphQLNonNull(gtGraphQLID),
         },
       }),
       type: graphQLObjectType({

@@ -37,7 +37,7 @@ export const GqlPost = graphQLObjectType(
       },
       reactions: {
         args: listPaginationArgs('post_reactions'),
-        type: wrapPaginationList('post_reactions', gtGraphQLNonNull(GqlPostReaction)),
+        type: wrapPaginationList('post_reactions', GqlPostReaction),
       },
     }),
   },

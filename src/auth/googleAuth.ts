@@ -7,7 +7,6 @@ import { appConfig, appEnvs } from '../appConfig'
 import { getConnection, getRepository } from 'typeorm'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
-import url from 'url'
 import urljoin from 'url-join'
 
 // Inspiration
@@ -113,6 +112,8 @@ export const initGoogleAuthStrategy = (app: Express) => {
           loginType: UserLoginType.Google,
           profileImg: user.picture,
           refreshToken: tokens.refresh_token ?? undefined,
+          nickName: Math.random().toString().slice(2),
+          bio: '404',
         })
         .orUpdate({
           conflict_target: ['externalServiceId'],

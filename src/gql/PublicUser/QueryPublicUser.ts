@@ -5,7 +5,8 @@ import { getRepository } from 'typeorm'
 import {
   graphqlSubQueryType,
   gtGraphQLBoolean,
-  gtGraphQLInt,
+  gtGraphQLID,
+  gtGraphQLNonNull,
 } from '../../libs/gqlLib/typedGqlTypes'
 
 export const publicUserQueryFields = () =>
@@ -17,7 +18,7 @@ export const publicUserQueryFields = () =>
       publicUser: {
         args: {
           id: {
-            type: gtGraphQLInt,
+            type: gtGraphQLNonNull(gtGraphQLID),
           },
         },
         type: GqlPublicUser,

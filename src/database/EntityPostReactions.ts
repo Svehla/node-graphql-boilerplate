@@ -9,14 +9,14 @@ export enum PostReactionType {
 
 @Entity('post_reactions')
 export class PostReaction {
-  @PrimaryGeneratedColumn()
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
+
+  @Column()
+  authorId: string
 
   @Column({})
-  authorId: number
-
-  @Column({})
-  postId: number
+  postId: string
 
   @Column({
     type: 'enum',

@@ -1,7 +1,9 @@
 import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
 import { addCommentMutation } from './Comment/addCommentMutation'
+import { addFollowPublicUser } from './Follower/addFollowPublicUser'
 import { addPostMutation } from './Post/addPostMutation'
 import { addPostReactionMutation } from './PostReaction/addPostReactionMutation'
+import { deleteFollowPublicUser } from './Follower/deleteFollowPublicUser'
 import { postQueryFields } from './PostReaction/QueryPost'
 import { publicUserLogoutMutation } from './PublicUser/publicUserLogoutMutation'
 import { publicUserQueryFields } from './PublicUser/QueryPublicUser'
@@ -36,6 +38,8 @@ const schema = new GraphQLSchema({
       addPostMutation: addPostMutation(),
       addCommentMutation: addCommentMutation(),
       addPostReactionMutation: addPostReactionMutation(),
+      addFollowPublicUser: addFollowPublicUser(),
+      deleteFollowPublicUser: deleteFollowPublicUser(),
     }),
   }),
 })

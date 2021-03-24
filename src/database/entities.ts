@@ -1,4 +1,5 @@
 import { Comment } from './EntityComments'
+import { Followers } from './EntityFollowers'
 import { Notification } from './EntityNotifications'
 import { Post } from './EntityPosts'
 import { PostReaction } from './EntityPostReactions'
@@ -12,4 +13,5 @@ export const entities = {
   PublicUser,
   PostReaction,
   Notification,
+  Followers,
 }

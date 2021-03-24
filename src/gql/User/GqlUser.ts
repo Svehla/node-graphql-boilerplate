@@ -47,7 +47,7 @@ export const GqlUser = graphQLObjectType(
       },
       posts: {
         args: listPaginationArgs('user_posts_args'),
-        type: wrapPaginationList('user_posts', gtGraphQLNonNull(GqlPost)),
+        type: wrapPaginationList('user_posts', GqlPost),
       },
     }),
   },

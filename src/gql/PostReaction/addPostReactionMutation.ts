@@ -6,7 +6,7 @@ import { getRepository } from 'typeorm'
 import {
   gqlMutation,
   graphQLObjectType,
-  gtGraphQLInt,
+  gtGraphQLID,
   gtGraphQLLimitedString,
   gtGraphQLNonNull,
 } from '../../libs/gqlLib/typedGqlTypes'
@@ -20,7 +20,7 @@ export const addPostReactionMutation = () =>
           type: gtGraphQLLimitedString(3, 10000),
         },
         postId: {
-          type: gtGraphQLNonNull(gtGraphQLInt),
+          type: gtGraphQLNonNull(gtGraphQLID),
         },
         reactionType: {
           type: gtGraphQLNonNull(GqlReactionType),

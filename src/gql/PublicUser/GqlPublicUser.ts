@@ -2,7 +2,7 @@ import { GqlNotification } from '../Notification/GqlNotification'
 import { GqlPost } from '../Post/GqlPost'
 import { GqlPostReaction } from '../PostReaction/GqlPostReaction'
 import { UserLoginType } from '../../database/EntityPublicUsers'
-import { authGqlMutationDecorator, authGqlTypeDecorator } from '../gqlUtils/gqlAuth'
+import { authGqlTypeDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
@@ -11,6 +11,7 @@ import {
   gtGraphQLID,
   gtGraphQLNonNull,
   gtGraphQLString,
+  lazyCircularDependencyTsHack,
 } from '../../libs/gqlLib/typedGqlTypes'
 import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
 
@@ -30,7 +31,7 @@ export const GqlPublicUser = graphQLObjectType(
       nickName: {
         type: gtGraphQLString,
       },
-      email: {
+      bio: {
         type: gtGraphQLString,
       },
       loginType: {
@@ -45,11 +46,25 @@ export const GqlPublicUser = graphQLObjectType(
       },
       reactions: {
         args: listPaginationArgs('PublicUser_reactions'),
-        type: wrapPaginationList('PublicUser_reactions', gtGraphQLNonNull(GqlPostReaction)),
+        type: wrapPaginationList('PublicUser_reactions', GqlPostReaction),
       },
       notifications: {
         args: listPaginationArgs('PublicUser_notification_args'),
-        type: wrapPaginationList('PublicUser_notification', gtGraphQLNonNull(GqlNotification)),
+        type: wrapPaginationList('PublicUser_notification', GqlNotification),
+      },
+      followers: {
+        args: listPaginationArgs('PublicUser_followers_args'),
+        type: wrapPaginationList(
+          'PublicUser_followers',
+          lazyCircularDependencyTsHack(() => GqlPublicUser)
+        ),
+      },
+      following: {
+        args: listPaginationArgs('PublicUser_following_args'),
+        type: wrapPaginationList(
+          'PublicUser_following',
+          lazyCircularDependencyTsHack(() => GqlPublicUser)
+        ),
       },
     }),
   },
@@ -104,5 +119,52 @@ export const GqlPublicUser = graphQLObjectType(
         items: notifications,
       }
     }),
+
+    followers: async (parent, args) => {
+      const repository = getRepository(entities.Followers)
+
+      const [followers, count] = await repository.findAndCount({
+        skip: args.pagination.offset,
+        take: args.pagination.limit,
+        where: {
+          followingId: parseFloat(parent.id!),
+        },
+      })
+
+      // TODO: add sql join
+      const followersUsers = followers.map(i =>
+        puRepository.findOne({ where: { id: i.followingId } })
+      )
+
+      const puRepository = getRepository(entities.Followers)
+      return {
+        count,
+        items: followersUsers,
+      }
+    },
+
+    following: async (parent, args) => {
+      const repository = getRepository(entities.Followers)
+
+      const [followers, count] = await repository.findAndCount({
+        skip: args.pagination.offset,
+        take: args.pagination.limit,
+        where: {
+          followerId: parseInt(parent.id!),
+        },
+      })
+
+      const puRepository = getRepository(entities.Followers)
+
+      // TODO: add SQL Join
+      const followingUsers = followers.map(i =>
+        puRepository.findOne({ where: { id: i.followerId } })
+      )
+
+      return {
+        count,
+        items: followingUsers,
+      }
+    },
   }
 )

@@ -1,18 +1,15 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
-@Entity('comments')
-export class Comment {
+@Entity('followers')
+export class Followers {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
   @Column()
-  authorId: string
+  followerId: string
 
   @Column()
-  postId: string
-
-  @Column()
-  text: string
+  followingId: string
 
   @CreateDateColumn()
   createdAt: Date
