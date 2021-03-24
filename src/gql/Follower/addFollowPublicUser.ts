@@ -56,13 +56,6 @@ export const addFollowPublicUser = () =>
 
       const createdFollow = await getRepository(entities.Followers).save(newFollowing)
 
-      // const notification = new entities.Notification()
-      // notification.receiverId = ctx.req.publicUser.id
-      // notification.message = 'someone new started to follow you'
-      // notification.urlPath = `/profile/${post.id}/followers/`
-      // const notificationRepository = getRepository(entities.Notification)
-      // await notificationRepository.save(notification)
-
       return {
         createdFollow,
       }

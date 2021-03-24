@@ -1,103 +1,156 @@
-# Write your query or mutation here
-query appVersion {
-  appVersion
-}
-# Write your query or mutation here
-mutation AddPostMutation {
-  addPostMutation(input: { text: "ahoj jak se máš3 " }) {
-    post {
+mutation UpdateBio {
+  updateNickNameMutation(input: { newNickName: "xxxx" }) {
+    updatedUser {
       id
-      text
+      nickName
     }
   }
 }
 
-mutation AddCommentMutation {
-  addCommentMutation(input: { postId: 76, text: "lol rofl omg" }) {
-    comment {
-      id
-      text
-    }
+mutation AddFollowSomeone {
+  addFollowPublicUser(input: { followerId: 1 }) {
+    startsFollow
   }
 }
 
-mutation AddPostReactionMutation {
-  addPostReactionMutation(input: { postId: 76, reactionType: Reaction3 }) {
-    postReaction {
-      id
-      reactionType
-    }
+mutation RemoveFollowSomeone {
+  addFollowPublicUser(input: { followerId: 1 }) {
+    startsFollow
   }
 }
 
-query GetViewer {
+query viewer {
   publicUserViewer {
     id
-    email
-    profileImg
-  }
-}
 
-query PostById {
-  post(id: "76") {
-    id
-    text
-    author {
-      email
-      id
-      profileImg
-    }
-    reactions(pagination: { limit: 100, offset: 0 }) {
+    followers(pagination: { limit: 100, offset: 0 }) {
       count
       items {
-        id
-        reactionType
-      }
-    }
-    comments(pagination: { limit: 100, offset: 0 }) {
-      count
-      items {
-        id
-        text
-        author {
-          id
-          profileImg
-          email
-        }
-      }
-    }
-  }
-}
-
-query posts {
-  posts(pagination: { limit: 3, offset: 0 }) {
-    items {
-      id
-      text
-      author {
-        email
         id
         profileImg
       }
-      reactions(pagination: { limit: 100, offset: 0 }) {
-        count
-        items {
-          id
-          reactionType
-        }
+    }
+
+    following(pagination: { limit: 100, offset: 0 }) {
+      count
+      items {
+        id
+        profileImg
       }
-      comments(pagination: { limit: 100, offset: 0 }) {
-        count
-        items {
-          id
-          text
-          author {
-            id
-            profileImg
-            email
-          }
-        }
+    }
+
+    notifications(pagination: { limit: 100, offset: 0 }) {
+      items {
+        id
       }
     }
   }
 }
+
+# # Write your query or mutation here
+# mutation AddPostMutation {
+#   addPostMutation(input: { text: "ahoj jak se máš3 " }) {
+#     post {
+#       id
+#       text
+#     }
+#   }
+# }
+
+# mutation AddCommentMutation {
+#   addCommentMutation(input: { postId: 76, text: "lol rofl omg" }) {
+#     comment {
+#       id
+#       text
+#     }
+#   }
+# }
+
+# mutation AddPostReactionMutation {
+#   addPostReactionMutation(input: { postId: 76, reactionType: Reaction3 }) {
+#     postReaction {
+#       id
+#       reactionType
+#     }
+#   }
+# }
+
+# query UserById {
+#   publicUser(id: 1) {
+#     id
+#     email
+#     profileImg
+#   }
+
+#   posts(pagination: { limit: 100, offset: 0 }) {
+#     count
+#     items {
+#       id
+#       text
+#     }
+#   }
+# }
+
+# query PostById {
+#   post(id: "76") {
+#     id
+#     text
+#     author {
+#       email
+#       id
+#       profileImg
+#     }
+#     reactions(pagination: { limit: 100, offset: 0 }) {
+#       count
+#       items {
+#         id
+#         reactionType
+#       }
+#     }
+#     comments(pagination: { limit: 100, offset: 0 }) {
+#       count
+#       items {
+#         id
+#         text
+#         author {
+#           id
+#           profileImg
+#           email
+#         }
+#       }
+#     }
+#   }
+# }
+
+# query posts {
+#   posts(pagination: { limit: 3, offset: 0 }) {
+#     items {
+#       id
+#       text
+#       author {
+#         email
+#         id
+#         profileImg
+#       }
+#       reactions(pagination: { limit: 100, offset: 0 }) {
+#         count
+#         items {
+#           id
+#           reactionType
+#         }
+#       }
+#       comments(pagination: { limit: 100, offset: 0 }) {
+#         count
+#         items {
+#           id
+#           text
+#           author {
+#             id
+#             profileImg
+#             email
+#           }
+#         }
+#       }
+#     }
+#   }
+# }

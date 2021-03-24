@@ -7,6 +7,7 @@ import { deleteFollowPublicUser } from './Follower/deleteFollowPublicUser'
 import { postQueryFields } from './PostReaction/QueryPost'
 import { publicUserLogoutMutation } from './PublicUser/publicUserLogoutMutation'
 import { publicUserQueryFields } from './PublicUser/QueryPublicUser'
+import { updateNickNameMutation } from './PublicUser/updateNickNameMutation'
 import { userLoginMutation } from './User/userLoginMutation'
 import { userQueryFields } from './User/QueryUser'
 import { userRegistrationMutation } from './User/userRegistrationMutation'
@@ -40,6 +41,7 @@ const schema = new GraphQLSchema({
       addPostReactionMutation: addPostReactionMutation(),
       addFollowPublicUser: addFollowPublicUser(),
       deleteFollowPublicUser: deleteFollowPublicUser(),
+      updateNickNameMutation: updateNickNameMutation(),
     }),
   }),
 })
