@@ -25,6 +25,7 @@ and basic configurations for nodejs backend based on these technologies:
 ## TODO:
 
 - Add notifications table
+- Add DF Posts Categories
 - Create custom GQL ID type
 - Add cursor pagination
 - AWS

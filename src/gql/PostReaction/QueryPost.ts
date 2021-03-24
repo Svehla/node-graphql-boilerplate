@@ -27,6 +27,9 @@ export const postQueryFields = () =>
         const [users, count] = await repository.findAndCount({
           skip: args.pagination.offset,
           take: args.pagination.limit,
+          order: {
+            createdAt: 'DESC',
+          },
         })
 
         return {

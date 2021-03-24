@@ -68,7 +68,7 @@ export const appConfig = {
     authCallbackPath: googleAuthCallbackPath,
     authCallbackURL: `${appEnvs.adminService.URL}${googleAuthCallbackPath}` as const,
     loginURL: `${appEnvs.adminService.URL}${googleAuthLoginPath}` as const,
-    successLoginRedirectPath: `/success-login`,
+    successLoginRedirectPath: `/`,
     errorLoginRedirectPath: `/error-login`,
   },
   authCookieName: 'my-custom-auth-cookie' as const,

@@ -54,12 +54,18 @@ export const GqlPost = graphQLObjectType(
       return user
     },
 
-    comments: async (_p, args) => {
+    comments: async (parent, args) => {
       const repository = getRepository(entities.Comment)
 
       const [comments, count] = await repository.findAndCount({
         skip: args.pagination.offset,
         take: args.pagination.limit,
+        where: {
+          postId: parent.id,
+        },
+        order: {
+          createdAt: 'DESC',
+        },
       })
 
       return {
@@ -68,12 +74,18 @@ export const GqlPost = graphQLObjectType(
       }
     },
 
-    reactions: async (_p, args) => {
+    reactions: async (parent, args) => {
       const repository = getRepository(entities.PostReaction)
 
       const [postReactions, count] = await repository.findAndCount({
         skip: args.pagination.offset,
         take: args.pagination.limit,
+        where: {
+          postId: parent.id,
+        },
+        order: {
+          createdAt: 'DESC',
+        },
       })
 
       return {

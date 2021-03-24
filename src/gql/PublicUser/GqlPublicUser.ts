@@ -25,6 +25,9 @@ export const GqlPublicUser = graphQLObjectType(
       id: {
         type: gtGraphQLNonNull(gtGraphQLID),
       },
+      nickName: {
+        type: gtGraphQLString,
+      },
       email: {
         type: gtGraphQLString,
       },
@@ -45,12 +48,15 @@ export const GqlPublicUser = graphQLObjectType(
     }),
   },
   {
-    posts: async (_parent, args) => {
+    posts: async (parent, args) => {
       const repository = getRepository(entities.Post)
 
       const [posts, count] = await repository.findAndCount({
         skip: args.pagination.offset,
         take: args.pagination.limit,
+        where: {
+          authorId: parent.id,
+        },
       })
 
       return {
@@ -59,17 +65,20 @@ export const GqlPublicUser = graphQLObjectType(
       }
     },
 
-    reactions: async (_parent, args) => {
-      const repository = getRepository(entities.User)
+    reactions: async (parent, args) => {
+      const repository = getRepository(entities.PostReaction)
 
-      const [users, count] = await repository.findAndCount({
+      const [reactions, count] = await repository.findAndCount({
         skip: args.pagination.offset,
         take: args.pagination.limit,
+        where: {
+          authorId: parent.id,
+        },
       })
 
       return {
         count,
-        items: users,
+        items: reactions,
       }
     },
   }
