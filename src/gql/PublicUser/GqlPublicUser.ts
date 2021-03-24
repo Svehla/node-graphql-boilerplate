@@ -76,7 +76,7 @@ export const GqlPublicUser = graphQLObjectType(
         skip: args.pagination.offset,
         take: args.pagination.limit,
         where: {
-          authorId: parseInt(parent.id!, 10),
+          authorId: parent.id!,
         },
       })
 
@@ -93,7 +93,7 @@ export const GqlPublicUser = graphQLObjectType(
         skip: args.pagination.offset,
         take: args.pagination.limit,
         where: {
-          authorId: parseInt(parent.id!, 10),
+          authorId: parent.id!,
         },
       })
 
@@ -110,7 +110,7 @@ export const GqlPublicUser = graphQLObjectType(
         skip: args.pagination.offset,
         take: args.pagination.limit,
         where: {
-          receiverId: parseInt(parent.id!, 10),
+          receiverId: parent.id,
         },
       })
 
@@ -127,7 +127,7 @@ export const GqlPublicUser = graphQLObjectType(
         skip: args.pagination.offset,
         take: args.pagination.limit,
         where: {
-          followingId: parseFloat(parent.id!),
+          followingId: parent.id!,
         },
       })
 
@@ -150,7 +150,7 @@ export const GqlPublicUser = graphQLObjectType(
         skip: args.pagination.offset,
         take: args.pagination.limit,
         where: {
-          followerId: parseInt(parent.id!),
+          followerId: parent.id!,
         },
       })
 

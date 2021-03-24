@@ -60,7 +60,7 @@ export const GqlUser = graphQLObjectType(
           skip: args.pagination.offset,
           take: args.pagination.limit,
           where: {
-            authorId: parseInt(p.id!, 10),
+            authorId: p.id,
           },
         })
 
