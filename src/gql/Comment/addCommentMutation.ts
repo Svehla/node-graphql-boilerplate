@@ -41,14 +41,22 @@ export const addCommentMutation = () =>
         throw new Error('post does not exist')
       }
 
-      const commentRepository = getRepository(entities.Comment)
       const comment = new entities.Comment()
 
       comment.authorId = ctx.req.publicUser.id
       comment.text = args.input.text
       comment.postId = args.input.postId
 
-      await commentRepository.save(comment)
+      const commentRepository = getRepository(entities.Comment)
+      const createdComment = await commentRepository.save(comment)
+      const notification = new entities.Notification()
+
+      notification.receiverId = ctx.req.publicUser.id
+      notification.message = 'someone commented your post'
+      notification.urlPath = `/posts/${createdComment.id}`
+
+      const notificationRepository = getRepository(entities.Notification)
+      await notificationRepository.save(notification)
 
       return {
         comment,

@@ -42,13 +42,13 @@ const checkUserAccessOrError = (config: AuthConfig, gqlContext: any) => {
   }
   if (Array.isArray(config.allowUserRoles)) {
     // @ts-ignore
-    if (!config.allowUserRoles.includes(user.role)) {
+    if (!config.allowUserRoles.includes(user?.role)) {
       throw new UserHasNoPermissions()
     }
   }
   if (Array.isArray(config.deniedRoles)) {
     // @ts-ignore
-    if (config.deniedRoles.includes(user.role)) {
+    if (config.deniedRoles.includes(user?.role)) {
       throw new UserHasNoPermissions()
     }
   }

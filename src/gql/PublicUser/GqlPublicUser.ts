@@ -1,6 +1,8 @@
+import { GqlNotification } from '../Notification/GqlNotification'
 import { GqlPost } from '../Post/GqlPost'
 import { GqlPostReaction } from '../PostReaction/GqlPostReaction'
 import { UserLoginType } from '../../database/EntityPublicUsers'
+import { authGqlMutationDecorator, authGqlTypeDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
@@ -45,6 +47,10 @@ export const GqlPublicUser = graphQLObjectType(
         args: listPaginationArgs('PublicUser_reactions'),
         type: wrapPaginationList('PublicUser_reactions', gtGraphQLNonNull(GqlPostReaction)),
       },
+      notifications: {
+        args: listPaginationArgs('PublicUser_notification_args'),
+        type: wrapPaginationList('PublicUser_notification', gtGraphQLNonNull(GqlNotification)),
+      },
     }),
   },
   {
@@ -55,7 +61,7 @@ export const GqlPublicUser = graphQLObjectType(
         skip: args.pagination.offset,
         take: args.pagination.limit,
         where: {
-          authorId: parent.id,
+          authorId: parseInt(parent.id!, 10),
         },
       })
 
@@ -72,7 +78,7 @@ export const GqlPublicUser = graphQLObjectType(
         skip: args.pagination.offset,
         take: args.pagination.limit,
         where: {
-          authorId: parent.id,
+          authorId: parseInt(parent.id!, 10),
         },
       })
 
@@ -81,5 +87,22 @@ export const GqlPublicUser = graphQLObjectType(
         items: reactions,
       }
     },
+
+    notifications: authGqlTypeDecorator({ onlyLoggedPublic: true })(async (parent, args) => {
+      const repository = getRepository(entities.Notification)
+
+      const [notifications, count] = await repository.findAndCount({
+        skip: args.pagination.offset,
+        take: args.pagination.limit,
+        where: {
+          receiverId: parseInt(parent.id!, 10),
+        },
+      })
+
+      return {
+        count,
+        items: notifications,
+      }
+    }),
   }
 )

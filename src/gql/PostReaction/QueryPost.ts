@@ -1,7 +1,11 @@
 import { GqlPost } from '../Post/GqlPost'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
-import { graphqlSubQueryType, gtGraphQLID, gtGraphQLNonNull } from '../../libs/gqlLib/typedGqlTypes'
+import {
+  graphqlSubQueryType,
+  gtGraphQLInt,
+  gtGraphQLNonNull,
+} from '../../libs/gqlLib/typedGqlTypes'
 import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
 
 export const postQueryFields = () =>
@@ -10,23 +14,30 @@ export const postQueryFields = () =>
       post: {
         args: {
           id: {
-            type: gtGraphQLNonNull(gtGraphQLID),
+            type: gtGraphQLNonNull(gtGraphQLInt),
           },
         },
         type: GqlPost,
       },
       posts: {
-        args: listPaginationArgs('query_posts'),
+        args: {
+          ...listPaginationArgs('query_posts'),
+          authorId: {
+            type: gtGraphQLInt,
+          },
+        },
         type: wrapPaginationList('query_posts', gtGraphQLNonNull(GqlPost)),
       },
     },
     {
       posts: async args => {
         const repository = getRepository(entities.Post)
-
-        const [users, count] = await repository.findAndCount({
+        const [posts, count] = await repository.findAndCount({
           skip: args.pagination.offset,
           take: args.pagination.limit,
+          where: {
+            ...(args.authorId ? { authorId: args.authorId } : {}),
+          },
           order: {
             createdAt: 'DESC',
           },
@@ -34,7 +45,7 @@ export const postQueryFields = () =>
 
         return {
           count,
-          items: users,
+          items: posts,
         }
       },
 

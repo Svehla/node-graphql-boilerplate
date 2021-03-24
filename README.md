@@ -24,6 +24,7 @@ and basic configurations for nodejs backend based on these technologies:
 
 ## TODO:
 
+- Add followers
 - Add notifications table
 - Add DF Posts Categories
 - Create custom GQL ID type
