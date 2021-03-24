@@ -53,7 +53,7 @@ export const addCommentMutation = () =>
 
       notification.receiverId = ctx.req.publicUser.id
       notification.message = 'someone commented your post'
-      notification.urlPath = `/posts/${createdComment.id}`
+      notification.urlPath = `/posts/${post.id}?commentId=${createdComment.id}`
 
       const notificationRepository = getRepository(entities.Notification)
       await notificationRepository.save(notification)
