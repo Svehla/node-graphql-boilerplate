@@ -44,6 +44,15 @@ export const addPostReactionMutation = () =>
       }
 
       const postReactionRepository = getRepository(entities.PostReaction)
+
+      const alreadyCreatedReaction = await postReactionRepository.findOne({
+        where: { postId: post.id },
+      })
+
+      if (alreadyCreatedReaction) {
+        await getRepository(entities.PostReaction).delete(alreadyCreatedReaction.id)
+      }
+
       const postReaction = new entities.PostReaction()
 
       postReaction.authorId = ctx.req.publicUser.id
