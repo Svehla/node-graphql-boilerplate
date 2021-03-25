@@ -2,11 +2,11 @@ import { User } from '../../database/EntityUser'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLBoolean,
-  gtGraphQLNonNull,
-  gtGraphQLString,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLBoolean,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const verifyUserEmailMutation = () =>
@@ -14,14 +14,14 @@ export const verifyUserEmailMutation = () =>
     {
       args: gqlMutationInputArg('Verify_user_input_mutation', {
         verifyToken: {
-          type: gtGraphQLNonNull(gtGraphQLString),
+          type: tgGraphQLNonNull(tgGraphQLString),
         },
       }),
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'verify_user_email_output',
         fields: () => ({
           isTokenVerified: {
-            type: gtGraphQLBoolean,
+            type: tgGraphQLBoolean,
           },
         }),
       }),

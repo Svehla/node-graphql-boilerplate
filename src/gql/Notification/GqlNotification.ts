@@ -1,31 +1,31 @@
 import {
-  graphQLObjectType,
-  gtGraphQLBoolean,
-  gtGraphQLNonNull,
-} from '../../libs/gqlLib/typedGqlTypes'
-import { gtGraphQLID, gtGraphQLString } from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLBoolean,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+} from '../../libs/typedGraphQL/typedGqlTypes'
+import { tgGraphQLID, tgGraphQLString } from '../../libs/typedGraphQL/typedGqlTypes'
 
-export const GqlNotification = graphQLObjectType({
+export const GqlNotification = tgGraphQLObjectType({
   name: 'Notification',
   fields: () => ({
     id: {
-      type: gtGraphQLNonNull(gtGraphQLID),
+      type: tgGraphQLNonNull(tgGraphQLID),
     },
     // TODO: add better data structure
     message: {
-      type: gtGraphQLString,
+      type: tgGraphQLString,
     },
     urlPath: {
-      type: gtGraphQLString,
+      type: tgGraphQLString,
     },
     read: {
-      type: gtGraphQLBoolean,
+      type: tgGraphQLBoolean,
     },
     createdAt: {
-      type: gtGraphQLString,
+      type: tgGraphQLString,
     },
     updatedAt: {
-      type: gtGraphQLString,
+      type: tgGraphQLString,
     },
   }),
 })

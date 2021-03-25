@@ -4,9 +4,9 @@ import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLLimitedString,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLLimitedString,
+  tgGraphQLObjectType,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const addPostMutation = () =>
@@ -14,10 +14,10 @@ export const addPostMutation = () =>
     {
       args: gqlMutationInputArg('addPostMutation_args', {
         text: {
-          type: gtGraphQLLimitedString(10, 10000),
+          type: tgGraphQLLimitedString(10, 10000),
         },
       }),
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'addPostMutation_type',
         fields: () => ({
           post: {

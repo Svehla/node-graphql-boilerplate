@@ -4,27 +4,27 @@ import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
   graphqlSubQueryType,
-  gtGraphQLBoolean,
-  gtGraphQLID,
-  gtGraphQLNonNull,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLBoolean,
+  tgGraphQLID,
+  tgGraphQLNonNull,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 
 export const publicUserQueryFields = () =>
   graphqlSubQueryType(
     {
-      publicUserViewer: {
+      viewer: {
         type: GqlPublicUser,
       },
       publicUser: {
         args: {
           id: {
-            type: gtGraphQLNonNull(gtGraphQLID),
+            type: tgGraphQLNonNull(tgGraphQLID),
           },
         },
         type: GqlPublicUser,
       },
-      isPublicUserLoggedIn: {
-        type: gtGraphQLBoolean,
+      isViewerLoggedIn: {
+        type: tgGraphQLBoolean,
       },
     },
     {
@@ -40,12 +40,12 @@ export const publicUserQueryFields = () =>
         return publicUser
       },
 
-      publicUserViewer: authGqlQueryDecorator({ onlyLogged: true })(async (_args, ctx) => {
+      viewer: authGqlQueryDecorator({ onlyLogged: true })(async (_args, ctx) => {
         const publicUser = ctx.req.publicUser
         return publicUser
       }),
 
-      isPublicUserLoggedIn: (_args, ctx) => {
+      isViewerLoggedIn: (_args, ctx) => {
         const publicUser = ctx.req.publicUser
         return Boolean(publicUser)
       },

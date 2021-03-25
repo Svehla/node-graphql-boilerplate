@@ -3,11 +3,11 @@ import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLBoolean,
-  gtGraphQLInt,
-  gtGraphQLNonNull,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLBoolean,
+  tgGraphQLInt,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const deleteFollowPublicUser = () =>
@@ -15,14 +15,14 @@ export const deleteFollowPublicUser = () =>
     {
       args: gqlMutationInputArg('deleteFollowPublicUser_input', {
         followerId: {
-          type: gtGraphQLNonNull(gtGraphQLInt),
+          type: tgGraphQLNonNull(tgGraphQLInt),
         },
       }),
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'deleteFollowPublicUser_type',
         fields: () => ({
           stopsFollow: {
-            type: gtGraphQLBoolean,
+            type: tgGraphQLBoolean,
           },
         }),
       }),

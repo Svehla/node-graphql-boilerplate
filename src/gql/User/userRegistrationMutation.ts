@@ -5,12 +5,12 @@ import { emails } from '../../emails'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLEmail,
-  gtGraphQLNonNull,
-  gtGraphQLPassword,
-  gtGraphQLString,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLEmail,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+  tgGraphQLPassword,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -20,20 +20,20 @@ export const userRegistrationMutation = () =>
     {
       args: gqlMutationInputArg('user_registration_mutation_input', {
         email: {
-          type: gtGraphQLNonNull(gtGraphQLEmail),
+          type: tgGraphQLNonNull(tgGraphQLEmail),
         },
         password: {
-          type: gtGraphQLNonNull(gtGraphQLPassword(3, 20)),
+          type: tgGraphQLNonNull(tgGraphQLPassword(3, 20)),
         },
       }),
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'user_registration_output',
         fields: () => ({
           user: {
             type: GqlUser,
           },
           token: {
-            type: gtGraphQLString,
+            type: tgGraphQLString,
           },
         }),
       }),

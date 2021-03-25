@@ -2,30 +2,30 @@ import { GqlPublicUser } from '../PublicUser/GqlPublicUser'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
-  graphQLObjectType,
-  gtGraphQLNonNull,
   lazyCircularDependencyTsHack,
-} from '../../libs/gqlLib/typedGqlTypes'
-import { gtGraphQLID, gtGraphQLString } from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+} from '../../libs/typedGraphQL/typedGqlTypes'
+import { tgGraphQLID, tgGraphQLString } from '../../libs/typedGraphQL/typedGqlTypes'
 
-export const GqlComment = graphQLObjectType(
+export const GqlComment = tgGraphQLObjectType(
   {
     name: 'Comment',
     fields: () => ({
       id: {
-        type: gtGraphQLNonNull(gtGraphQLID),
+        type: tgGraphQLNonNull(tgGraphQLID),
       },
       text: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       authorId: {
-        type: gtGraphQLID,
+        type: tgGraphQLID,
       },
       createdAt: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       updatedAt: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       author: {
         type: lazyCircularDependencyTsHack(() => GqlPublicUser),

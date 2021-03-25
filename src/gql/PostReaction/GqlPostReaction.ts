@@ -3,13 +3,13 @@ import { PostReactionType } from '../../database/EntityPostReactions'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
-  graphQLObjectType,
   graphQLSimpleEnum,
-  gtGraphQLID,
-  gtGraphQLNonNull,
-  gtGraphQLString,
   lazyCircularDependencyTsHack,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLID,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 
 export const GqlReactionType = (graphQLSimpleEnum(
   'ReactionTypeEnum',
@@ -17,18 +17,18 @@ export const GqlReactionType = (graphQLSimpleEnum(
   Object.fromEntries(Object.values(PostReactionType).map(i => [i, i]))
 ) as any) as PostReactionType
 
-export const GqlPostReaction = graphQLObjectType(
+export const GqlPostReaction = tgGraphQLObjectType(
   {
     name: 'PostReaction',
     fields: () => ({
       id: {
-        type: gtGraphQLNonNull(gtGraphQLID),
+        type: tgGraphQLNonNull(tgGraphQLID),
       },
       reactionType: {
         type: GqlReactionType,
       },
       publicUserId: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       author: {
         type: lazyCircularDependencyTsHack(() => GqlPublicUser),

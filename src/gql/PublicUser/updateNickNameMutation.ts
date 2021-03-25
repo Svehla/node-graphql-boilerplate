@@ -4,9 +4,9 @@ import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLLimitedString,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLLimitedString,
+  tgGraphQLObjectType,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const updateNickNameMutation = () =>
@@ -14,10 +14,10 @@ export const updateNickNameMutation = () =>
     {
       args: gqlMutationInputArg('updateNickNameMutation_input', {
         newNickName: {
-          type: gtGraphQLLimitedString(3, 50),
+          type: tgGraphQLLimitedString(3, 50),
         },
       }),
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'updateNickNameMutation_type',
         fields: () => ({
           updatedUser: {

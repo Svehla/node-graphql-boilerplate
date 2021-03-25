@@ -1,8 +1,12 @@
 import { GqlPost } from '../Post/GqlPost'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
-import { graphqlSubQueryType, gtGraphQLID, gtGraphQLNonNull } from '../../libs/gqlLib/typedGqlTypes'
-import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
+import {
+  graphqlSubQueryType,
+  tgGraphQLID,
+  tgGraphQLNonNull,
+} from '../../libs/typedGraphQL/typedGqlTypes'
+import { offsetPaginationArgs, offsetPaginationList } from '../gqlUtils/gqlOffsetPagination'
 
 export const postQueryFields = () =>
   graphqlSubQueryType(
@@ -10,19 +14,19 @@ export const postQueryFields = () =>
       post: {
         args: {
           id: {
-            type: gtGraphQLNonNull(gtGraphQLID),
+            type: tgGraphQLNonNull(tgGraphQLID),
           },
         },
         type: GqlPost,
       },
       posts: {
         args: {
-          ...listPaginationArgs('query_posts'),
+          ...offsetPaginationArgs('query_posts'),
           authorId: {
-            type: gtGraphQLID,
+            type: tgGraphQLID,
           },
         },
-        type: wrapPaginationList('query_posts', GqlPost),
+        type: offsetPaginationList('query_posts', GqlPost),
       },
     },
     {

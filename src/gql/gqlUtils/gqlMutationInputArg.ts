@@ -1,12 +1,12 @@
-import { gtGraphQLInputObjectType, gtGraphQLNonNull } from '../../libs/gqlLib/typedGqlTypes'
+import { tgGraphQLInputObjectType, tgGraphQLNonNull } from '../../libs/typedGraphQL/typedGqlTypes'
 
 export const gqlMutationInputArg = <T extends Record<string, { type: any }>>(
   name: string,
   fields: T
 ) => ({
   input: {
-    type: gtGraphQLNonNull(
-      gtGraphQLInputObjectType({
+    type: tgGraphQLNonNull(
+      tgGraphQLInputObjectType({
         name: `${name}_input_arg`,
         fields: () => fields,
       })

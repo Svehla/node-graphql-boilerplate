@@ -1,19 +1,21 @@
 import { GqlNotification } from '../Notification/GqlNotification'
 import { GqlPost } from '../Post/GqlPost'
 import { GqlPostReaction } from '../PostReaction/GqlPostReaction'
+import { MoreThan } from 'typeorm'
 import { UserLoginType } from '../../database/EntityPublicUsers'
 import { authGqlTypeDecorator } from '../gqlUtils/gqlAuth'
+import { cursorPaginationArgs, cursorPaginationList } from '../gqlUtils/gqlCursorPagination'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
-  graphQLObjectType,
   graphQLSimpleEnum,
-  gtGraphQLID,
-  gtGraphQLNonNull,
-  gtGraphQLString,
   lazyCircularDependencyTsHack,
-} from '../../libs/gqlLib/typedGqlTypes'
-import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
+  tgGraphQLID,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/typedGqlTypes'
+import { offsetPaginationArgs, offsetPaginationList } from '../gqlUtils/gqlOffsetPagination'
 
 const GqlUserLoginType = graphQLSimpleEnum(
   'PublicUserLoginTypeEnum',
@@ -21,47 +23,47 @@ const GqlUserLoginType = graphQLSimpleEnum(
   Object.fromEntries(Object.values(UserLoginType).map(i => [i, i]))
 )
 
-export const GqlPublicUser = graphQLObjectType(
+export const GqlPublicUser = tgGraphQLObjectType(
   {
     name: 'PublicUser',
     fields: () => ({
       id: {
-        type: gtGraphQLNonNull(gtGraphQLID),
+        type: tgGraphQLNonNull(tgGraphQLID),
       },
       nickName: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       bio: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       loginType: {
         type: GqlUserLoginType,
       },
       profileImg: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       posts: {
-        args: listPaginationArgs('PublicUser_posts'),
-        type: wrapPaginationList('PublicUser_posts', GqlPost),
+        args: cursorPaginationArgs(),
+        type: cursorPaginationList('PublicUser_posts', GqlPost),
       },
       reactions: {
-        args: listPaginationArgs('PublicUser_reactions'),
-        type: wrapPaginationList('PublicUser_reactions', GqlPostReaction),
+        args: offsetPaginationArgs('PublicUser_reactions'),
+        type: offsetPaginationList('PublicUser_reactions', GqlPostReaction),
       },
       notifications: {
-        args: listPaginationArgs('PublicUser_notification_args'),
-        type: wrapPaginationList('PublicUser_notification', GqlNotification),
+        args: offsetPaginationArgs('PublicUser_notification_args'),
+        type: offsetPaginationList('PublicUser_notification', GqlNotification),
       },
       followers: {
-        args: listPaginationArgs('PublicUser_followers_args'),
-        type: wrapPaginationList(
+        args: offsetPaginationArgs('PublicUser_followers_args'),
+        type: offsetPaginationList(
           'PublicUser_followers',
           lazyCircularDependencyTsHack(() => GqlPublicUser)
         ),
       },
       following: {
-        args: listPaginationArgs('PublicUser_following_args'),
-        type: wrapPaginationList(
+        args: offsetPaginationArgs('PublicUser_following_args'),
+        type: offsetPaginationList(
           'PublicUser_following',
           lazyCircularDependencyTsHack(() => GqlPublicUser)
         ),
@@ -72,17 +74,58 @@ export const GqlPublicUser = graphQLObjectType(
     posts: async (parent, args) => {
       const repository = getRepository(entities.Post)
 
-      const [posts, count] = await repository.findAndCount({
-        skip: args.pagination.offset,
-        take: args.pagination.limit,
-        where: {
-          authorId: parent.id!,
-        },
-      })
+      let afterNodeDate = undefined as Date | undefined
+
+      if (args.after) {
+        // TODO: add opaque abstraction??? :thinking-face:
+        const afterItem = await repository.findOne({ where: { id: args.after } })
+        // JS Date vs Postgres Date round shit behavior
+        afterItem!.createdAt.setMilliseconds(afterItem!.createdAt.getMilliseconds() + 100)
+
+        afterNodeDate = afterItem?.createdAt
+      }
+
+      const [count, posts] = await Promise.all([
+        // extract count into custom resolver???
+        repository.count(),
+        repository.find({
+          skip: 0,
+          take: args.first,
+
+          ...(afterNodeDate
+            ? {
+                where: {
+                  createdAt: MoreThan(afterNodeDate),
+                },
+              }
+            : {}),
+        }),
+      ])
+
+      let hasNextPage = false
+
+      if (Array.isArray(posts) && posts.length > 0) {
+        const lastSearchedPost = posts[posts.length - 1]
+        // JS Date vs Postgres Date round shit behavior
+        lastSearchedPost.createdAt.setMilliseconds(
+          lastSearchedPost.createdAt.getMilliseconds() + 100
+        )
+        const restItemsCount = await repository.count({
+          where: { createdAt: MoreThan(lastSearchedPost.createdAt) },
+        })
+
+        hasNextPage = restItemsCount > 0
+      }
 
       return {
-        count,
-        items: posts,
+        pageInfo: {
+          totalCount: count,
+          hasNextPage,
+        },
+        edges: posts.map(i => ({
+          cursor: i.id,
+          node: i,
+        })),
       }
     },
 

@@ -2,15 +2,15 @@ import { GqlUser } from './GqlUser'
 import { authGqlQueryDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
-import { graphqlSubQueryType } from '../../libs/gqlLib/typedGqlTypes'
-import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
+import { graphqlSubQueryType } from '../../libs/typedGraphQL/typedGqlTypes'
+import { offsetPaginationArgs, offsetPaginationList } from '../gqlUtils/gqlOffsetPagination'
 
 export const userQueryFields = () =>
   graphqlSubQueryType(
     {
       users: {
-        args: listPaginationArgs('query_users'),
-        type: wrapPaginationList('query_users', GqlUser),
+        args: offsetPaginationArgs('query_users'),
+        type: offsetPaginationList('query_users', GqlUser),
       },
     },
     {

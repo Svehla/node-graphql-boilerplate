@@ -4,9 +4,9 @@ import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLLimitedString,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLLimitedString,
+  tgGraphQLObjectType,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const updateBioMutation = () =>
@@ -14,10 +14,10 @@ export const updateBioMutation = () =>
     {
       args: gqlMutationInputArg('updateBioMutation_input', {
         newBio: {
-          type: gtGraphQLLimitedString(3, 50),
+          type: tgGraphQLLimitedString(3, 50),
         },
       }),
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'updateBioMutation_type',
         fields: () => ({
           updatedUser: {

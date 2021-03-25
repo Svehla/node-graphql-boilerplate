@@ -4,40 +4,44 @@ import { GqlPublicUser } from '../PublicUser/GqlPublicUser'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
-  graphQLObjectType,
-  gtGraphQLID,
-  gtGraphQLNonNull,
-  gtGraphQLString,
   lazyCircularDependencyTsHack,
-} from '../../libs/gqlLib/typedGqlTypes'
-import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
+  tgGraphQLDateTime,
+  tgGraphQLID,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/typedGqlTypes'
+import { offsetPaginationArgs, offsetPaginationList } from '../gqlUtils/gqlOffsetPagination'
 
-export const GqlPost = graphQLObjectType(
+export const GqlPost = tgGraphQLObjectType(
   {
     name: 'Post',
     fields: () => ({
       id: {
-        type: gtGraphQLNonNull(gtGraphQLID),
+        type: tgGraphQLNonNull(tgGraphQLID),
       },
       name: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       text: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       authorId: {
-        type: gtGraphQLID,
+        type: tgGraphQLID,
       },
       author: {
         type: lazyCircularDependencyTsHack(() => GqlPublicUser),
       },
       comments: {
-        args: listPaginationArgs('post_comments'),
-        type: wrapPaginationList('post_comments', GqlComment),
+        args: offsetPaginationArgs('post_comments'),
+        type: offsetPaginationList('post_comments', GqlComment),
       },
       reactions: {
-        args: listPaginationArgs('post_reactions'),
-        type: wrapPaginationList('post_reactions', GqlPostReaction),
+        args: offsetPaginationArgs('post_reactions'),
+        type: offsetPaginationList('post_reactions', GqlPostReaction),
+      },
+      createdAt: {
+        type: tgGraphQLDateTime,
       },
     }),
   },

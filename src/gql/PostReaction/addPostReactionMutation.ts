@@ -5,11 +5,11 @@ import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLID,
-  gtGraphQLLimitedString,
-  gtGraphQLNonNull,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLID,
+  tgGraphQLLimitedString,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const addPostReactionMutation = () =>
@@ -17,16 +17,16 @@ export const addPostReactionMutation = () =>
     {
       args: gqlMutationInputArg('addPostReactionMutation_args', {
         text: {
-          type: gtGraphQLLimitedString(3, 10000),
+          type: tgGraphQLLimitedString(3, 10000),
         },
         postId: {
-          type: gtGraphQLNonNull(gtGraphQLID),
+          type: tgGraphQLNonNull(tgGraphQLID),
         },
         reactionType: {
-          type: gtGraphQLNonNull(GqlReactionType),
+          type: tgGraphQLNonNull(GqlReactionType),
         },
       }),
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'addPostReactionMutation_type',
         fields: () => ({
           postReaction: {

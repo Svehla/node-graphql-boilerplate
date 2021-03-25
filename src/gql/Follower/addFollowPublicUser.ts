@@ -3,11 +3,11 @@ import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLBoolean,
-  gtGraphQLID,
-  gtGraphQLNonNull,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLBoolean,
+  tgGraphQLID,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const addFollowPublicUser = () =>
@@ -15,14 +15,14 @@ export const addFollowPublicUser = () =>
     {
       args: gqlMutationInputArg('addFollowPublicUser_input', {
         followerId: {
-          type: gtGraphQLNonNull(gtGraphQLID),
+          type: tgGraphQLNonNull(tgGraphQLID),
         },
       }),
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'addFollowPublicUser_type',
         fields: () => ({
           startsFollow: {
-            type: gtGraphQLBoolean,
+            type: tgGraphQLBoolean,
           },
         }),
       }),

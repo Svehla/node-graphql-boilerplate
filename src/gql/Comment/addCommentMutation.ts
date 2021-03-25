@@ -4,11 +4,11 @@ import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLID,
-  gtGraphQLLimitedString,
-  gtGraphQLNonNull,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLID,
+  tgGraphQLLimitedString,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+} from '../../libs/typedGraphQL/typedGqlTypes'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const addCommentMutation = () =>
@@ -16,13 +16,13 @@ export const addCommentMutation = () =>
     {
       args: gqlMutationInputArg('addCommentMutation_args', {
         text: {
-          type: gtGraphQLLimitedString(3, 10000),
+          type: tgGraphQLLimitedString(3, 10000),
         },
         postId: {
-          type: gtGraphQLNonNull(gtGraphQLID),
+          type: tgGraphQLNonNull(tgGraphQLID),
         },
       }),
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'addCommentMutation_type',
         fields: () => ({
           comment: {
