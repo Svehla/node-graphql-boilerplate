@@ -1,20 +1,27 @@
 import { GqlNotification } from '../Notification/GqlNotification'
 import { GqlPost } from '../Post/GqlPost'
 import { GqlPostReaction } from '../PostReaction/GqlPostReaction'
+import { LessThanDate, MoreThanDate } from '../../database/utils'
 import { MoreThan } from 'typeorm'
 import { UserLoginType } from '../../database/EntityPublicUsers'
 import { authGqlTypeDecorator } from '../gqlUtils/gqlAuth'
-import { cursorPaginationArgs, cursorPaginationList } from '../gqlUtils/gqlCursorPagination'
+import {
+  cursorPaginationArgs,
+  cursorPaginationList,
+  getSelectAllDataWithCursorByCreatedAt,
+} from '../gqlUtils/gqlCursorPagination'
 import { entities } from '../../database/entities'
+import { format } from 'date-fns'
 import { getRepository } from 'typeorm'
 import {
   graphQLSimpleEnum,
   lazyCircularDependencyTsHack,
   tgGraphQLID,
+  tgGraphQLInt,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
   tgGraphQLString,
-} from '../../libs/typedGraphQL/typedGqlTypes'
+} from '../../libs/typedGraphQL/index'
 import { offsetPaginationArgs, offsetPaginationList } from '../gqlUtils/gqlOffsetPagination'
 
 const GqlUserLoginType = graphQLSimpleEnum(
@@ -28,6 +35,7 @@ export const GqlPublicUser = tgGraphQLObjectType(
     name: 'PublicUser',
     fields: () => ({
       id: {
+        // use UUID data type?
         type: tgGraphQLNonNull(tgGraphQLID),
       },
       nickName: {
@@ -41,6 +49,9 @@ export const GqlPublicUser = tgGraphQLObjectType(
       },
       profileImg: {
         type: tgGraphQLString,
+      },
+      totalPostsCount: {
+        type: tgGraphQLInt,
       },
       posts: {
         args: cursorPaginationArgs(),
@@ -71,62 +82,15 @@ export const GqlPublicUser = tgGraphQLObjectType(
     }),
   },
   {
-    posts: async (parent, args) => {
-      const repository = getRepository(entities.Post)
-
-      let afterNodeDate = undefined as Date | undefined
-
-      if (args.after) {
-        // TODO: add opaque abstraction??? :thinking-face:
-        const afterItem = await repository.findOne({ where: { id: args.after } })
-        // JS Date vs Postgres Date round shit behavior
-        afterItem!.createdAt.setMilliseconds(afterItem!.createdAt.getMilliseconds() + 100)
-
-        afterNodeDate = afterItem?.createdAt
-      }
-
-      const [count, posts] = await Promise.all([
-        // extract count into custom resolver???
-        repository.count(),
-        repository.find({
-          skip: 0,
-          take: args.first,
-
-          ...(afterNodeDate
-            ? {
-                where: {
-                  createdAt: MoreThan(afterNodeDate),
-                },
-              }
-            : {}),
-        }),
-      ])
-
-      let hasNextPage = false
-
-      if (Array.isArray(posts) && posts.length > 0) {
-        const lastSearchedPost = posts[posts.length - 1]
-        // JS Date vs Postgres Date round shit behavior
-        lastSearchedPost.createdAt.setMilliseconds(
-          lastSearchedPost.createdAt.getMilliseconds() + 100
-        )
-        const restItemsCount = await repository.count({
-          where: { createdAt: MoreThan(lastSearchedPost.createdAt) },
-        })
-
-        hasNextPage = restItemsCount > 0
-      }
-
-      return {
-        pageInfo: {
-          totalCount: count,
-          hasNextPage,
+    totalPostsCount: async parent => {
+      return getRepository(entities.Post).count({
+        where: {
+          authorId: parent.id!,
         },
-        edges: posts.map(i => ({
-          cursor: i.id,
-          node: i,
-        })),
-      }
+      })
+    },
+    posts: async (parent, args) => {
+      return getSelectAllDataWithCursorByCreatedAt(entities.Post, args)
     },
 
     reactions: async (parent, args) => {

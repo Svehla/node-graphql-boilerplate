@@ -4,7 +4,7 @@ import {
   tgGraphQLList,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
-} from '../../libs/typedGraphQL/typedGqlTypes'
+} from '../../libs/typedGraphQL/index'
 
 export const offsetPaginationArgs = (name: string) => ({
   pagination: {

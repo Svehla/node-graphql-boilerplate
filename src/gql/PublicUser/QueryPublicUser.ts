@@ -7,7 +7,7 @@ import {
   tgGraphQLBoolean,
   tgGraphQLID,
   tgGraphQLNonNull,
-} from '../../libs/typedGraphQL/typedGqlTypes'
+} from '../../libs/typedGraphQL/index'
 
 export const publicUserQueryFields = () =>
   graphqlSubQueryType(

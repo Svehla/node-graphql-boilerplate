@@ -10,7 +10,7 @@ import {
   tgGraphQLObjectType,
   tgGraphQLPassword,
   tgGraphQLString,
-} from '../../libs/typedGraphQL/typedGqlTypes'
+} from '../../libs/typedGraphQL/index'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'

@@ -1,4 +1,4 @@
-import { tgGraphQLInputObjectType, tgGraphQLNonNull } from '../../libs/typedGraphQL/typedGqlTypes'
+import { tgGraphQLInputObjectType, tgGraphQLNonNull } from '../../libs/typedGraphQL/index'
 
 export const gqlMutationInputArg = <T extends Record<string, { type: any }>>(
   name: string,

@@ -9,7 +9,7 @@ import {
   tgGraphQLNonNull,
   tgGraphQLObjectType,
   tgGraphQLString,
-} from '../../libs/typedGraphQL/typedGqlTypes'
+} from '../../libs/typedGraphQL/index'
 
 export const GqlReactionType = (graphQLSimpleEnum(
   'ReactionTypeEnum',

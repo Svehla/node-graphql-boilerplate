@@ -8,7 +8,7 @@ import {
   tgGraphQLLimitedString,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
-} from '../../libs/typedGraphQL/typedGqlTypes'
+} from '../../libs/typedGraphQL/index'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const addCommentMutation = () =>

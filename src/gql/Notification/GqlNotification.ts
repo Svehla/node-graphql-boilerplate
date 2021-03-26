@@ -2,8 +2,8 @@ import {
   tgGraphQLBoolean,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
-} from '../../libs/typedGraphQL/typedGqlTypes'
-import { tgGraphQLID, tgGraphQLString } from '../../libs/typedGraphQL/typedGqlTypes'
+} from '../../libs/typedGraphQL/index'
+import { tgGraphQLID, tgGraphQLString } from '../../libs/typedGraphQL/index'
 
 export const GqlNotification = tgGraphQLObjectType({
   name: 'Notification',

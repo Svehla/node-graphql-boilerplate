@@ -7,7 +7,7 @@ import {
   tgGraphQLNonNull,
   tgGraphQLObjectType,
   tgGraphQLString,
-} from '../../libs/typedGraphQL/typedGqlTypes'
+} from '../../libs/typedGraphQL/index'
 // import { entities } from '../../database/entities'
 // import { getRepository } from 'typeorm'
 

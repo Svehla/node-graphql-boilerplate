@@ -1,12 +1,12 @@
 import { GqlPost } from '../Post/GqlPost'
+import {
+  cursorPaginationArgs,
+  cursorPaginationList,
+  getSelectAllDataWithCursorByCreatedAt,
+} from '../gqlUtils/gqlCursorPagination'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
-import {
-  graphqlSubQueryType,
-  tgGraphQLID,
-  tgGraphQLNonNull,
-} from '../../libs/typedGraphQL/typedGqlTypes'
-import { offsetPaginationArgs, offsetPaginationList } from '../gqlUtils/gqlOffsetPagination'
+import { graphqlSubQueryType, tgGraphQLID, tgGraphQLNonNull } from '../../libs/typedGraphQL/index'
 
 export const postQueryFields = () =>
   graphqlSubQueryType(
@@ -21,32 +21,23 @@ export const postQueryFields = () =>
       },
       posts: {
         args: {
-          ...offsetPaginationArgs('query_posts'),
-          authorId: {
-            type: tgGraphQLID,
-          },
+          ...cursorPaginationArgs(),
+          // ...offsetPaginationArgs('query_posts'),
+          // TODO: remove author ID param
+          // authorId: {
+          //   type: tgGraphQLID,
+          // },
         },
-        type: offsetPaginationList('query_posts', GqlPost),
+        type: cursorPaginationList('query_posts', GqlPost),
       },
     },
     {
       posts: async args => {
-        const repository = getRepository(entities.Post)
-        const [posts, count] = await repository.findAndCount({
-          skip: args.pagination.offset,
-          take: args.pagination.limit,
-          where: {
-            ...(args.authorId ? { authorId: args.authorId } : {}),
-          },
-          order: {
-            createdAt: 'DESC',
-          },
+        return getSelectAllDataWithCursorByCreatedAt(entities.Post, args, {
+          // where: {
+          //   ...(args.authorId ? { authorId: args.authorId } : {}),
+          // },
         })
-
-        return {
-          count,
-          items: posts,
-        }
       },
 
       post: async args => {

@@ -6,7 +6,7 @@ import {
   tgGraphQLNonNull,
   tgGraphQLObjectType,
   tgGraphQLString,
-} from '../../libs/typedGraphQL/typedGqlTypes'
+} from '../../libs/typedGraphQL/index'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
 export const verifyUserEmailMutation = () =>

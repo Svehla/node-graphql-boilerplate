@@ -16,11 +16,13 @@ import {
   GraphQLEmail,
   GraphQLLimitedString,
   GraphQLPassword,
+  GraphQLUUID,
 } from 'graphql-custom-types'
 
 // Custom types
 export const tgGraphQLEmail = (GraphQLEmail as any) as string | undefined | null
 export const tgGraphQLDateTime = (GraphQLDateTime as any) as string | undefined | null
+export const tgGraphQLUUID = (GraphQLUUID as any) as string | undefined | null
 
 // TODO: GraphQL UUID vs ID type
 

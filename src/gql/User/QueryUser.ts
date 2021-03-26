@@ -2,7 +2,7 @@ import { GqlUser } from './GqlUser'
 import { authGqlQueryDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
-import { graphqlSubQueryType } from '../../libs/typedGraphQL/typedGqlTypes'
+import { graphqlSubQueryType } from '../../libs/typedGraphQL/index'
 import { offsetPaginationArgs, offsetPaginationList } from '../gqlUtils/gqlOffsetPagination'
 
 export const userQueryFields = () =>

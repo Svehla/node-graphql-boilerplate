@@ -10,7 +10,7 @@ import {
   tgGraphQLNonNull,
   tgGraphQLObjectType,
   tgGraphQLString,
-} from '../../libs/typedGraphQL/typedGqlTypes'
+} from '../../libs/typedGraphQL/index'
 import { offsetPaginationArgs, offsetPaginationList } from '../gqlUtils/gqlOffsetPagination'
 
 export const GqlPost = tgGraphQLObjectType(
