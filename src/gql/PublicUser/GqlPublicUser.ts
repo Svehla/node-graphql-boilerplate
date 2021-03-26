@@ -57,6 +57,9 @@ export const GqlPublicUser = tgGraphQLObjectType(
         args: cursorPaginationArgs(),
         type: cursorPaginationList('PublicUser_reactions', GqlPostReaction),
       },
+      notificationsCount: {
+        type: tgGraphQLInt,
+      },
       notifications: {
         args: cursorPaginationArgs(),
         type: cursorPaginationList('PublicUser_notification', GqlNotification),
@@ -106,6 +109,14 @@ export const GqlPublicUser = tgGraphQLObjectType(
       return getSelectAllDataWithCursorByCreatedAt(entities.Notification, args, {
         where: {
           receiverId: parent.id!,
+        },
+      })
+    }),
+
+    notificationsCount: authGqlTypeDecorator({ onlyLoggedPublic: true })(async parent => {
+      return getRepository(entities.Post).count({
+        where: {
+          authorId: parent.id!,
         },
       })
     }),
