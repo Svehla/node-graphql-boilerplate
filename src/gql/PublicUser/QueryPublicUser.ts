@@ -29,15 +29,11 @@ export const publicUserQueryFields = () =>
     },
     {
       publicUser: async args => {
-        const repository = getRepository(entities.PublicUser)
-
-        const publicUser = await repository.findOne({
+        return getRepository(entities.PublicUser).findOne({
           where: {
             id: args.id,
           },
         })
-
-        return publicUser
       },
 
       viewer: authGqlQueryDecorator({ onlyLogged: true })(async (_args, ctx) => {

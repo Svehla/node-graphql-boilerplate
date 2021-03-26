@@ -22,11 +22,10 @@ export const postQueryFields = () =>
       posts: {
         args: {
           ...cursorPaginationArgs(),
-          // ...offsetPaginationArgs('query_posts'),
           // TODO: remove author ID param
-          // authorId: {
-          //   type: tgGraphQLID,
-          // },
+          authorId: {
+            type: tgGraphQLID,
+          },
         },
         type: cursorPaginationList('query_posts', GqlPost),
       },
@@ -34,22 +33,18 @@ export const postQueryFields = () =>
     {
       posts: async args => {
         return getSelectAllDataWithCursorByCreatedAt(entities.Post, args, {
-          // where: {
-          //   ...(args.authorId ? { authorId: args.authorId } : {}),
-          // },
+          where: {
+            ...(args.authorId ? { authorId: args.authorId } : {}),
+          },
         })
       },
 
       post: async args => {
-        const repository = getRepository(entities.Post)
-
-        const post = await repository.findOne({
+        return getRepository(entities.Post).findOne({
           where: {
             id: args.id,
           },
         })
-
-        return post
       },
     }
   )

@@ -111,7 +111,7 @@ export const getSelectAllDataWithCursorByCreatedAt = async (
     skip: 0,
     take,
     where: {
-      ...extraWhere,
+      ...extraWhere?.where,
 
       ...(afterNodeDate
         ? { createdAt: LessThan(afterNodeDate) } //.toISOString()),

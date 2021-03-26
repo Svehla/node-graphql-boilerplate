@@ -27,11 +27,13 @@ export const updateBioMutation = () =>
       }),
     },
     authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
-      const publicUser = await getRepository(entities.PublicUser).findOne(ctx.req.publicUser.id)
+      const publicUserRepository = getRepository(entities.PublicUser)
+
+      const publicUser = await publicUserRepository.findOne(ctx.req.publicUser.id)
 
       publicUser!.bio = args.input.newBio
 
-      const updatedUser = await getRepository(entities.PublicUser).save(publicUser!)
+      const updatedUser = await publicUserRepository.save(publicUser!)
 
       return {
         updatedUser,

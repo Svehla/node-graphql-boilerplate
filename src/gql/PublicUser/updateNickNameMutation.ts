@@ -27,11 +27,13 @@ export const updateNickNameMutation = () =>
       }),
     },
     authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
-      const publicUser = await getRepository(entities.PublicUser).findOne(ctx.req.publicUser.id)
+      const publicUserRepository = getRepository(entities.PublicUser)
+
+      const publicUser = await publicUserRepository.findOne(ctx.req.publicUser.id)
 
       publicUser!.nickName = args.input.newNickName
 
-      const updatedUser = await getRepository(entities.PublicUser).save(publicUser!)
+      const updatedUser = await publicUserRepository.save(publicUser!)
 
       return {
         updatedUser,
