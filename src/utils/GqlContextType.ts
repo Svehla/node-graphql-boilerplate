@@ -1,6 +1,6 @@
 import { AuthRequest } from '../auth/authAbstraction'
 import { Response } from 'express'
-import { getDataLoaders } from '../dataLoader/dataLoaderMiddleware'
+import { getDataLoaders } from './dataLoaderCache'
 
 export interface GqlContext {
   req: AuthRequest
