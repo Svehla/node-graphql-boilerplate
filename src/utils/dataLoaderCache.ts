@@ -14,7 +14,5 @@ const getUsers = async (ids: string[]) => {
 }
 
 export const getDataLoaders = () => ({
-  user: new DataLoader((ids: any) => getUsers(ids), {
-    cache: true,
-  }),
+  user: new DataLoader((ids: any) => getUsers(ids)),
 })

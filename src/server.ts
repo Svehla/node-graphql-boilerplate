@@ -54,7 +54,7 @@ const getApp = async () => {
     '/playground',
     graphqlPlayground({
       endpoint: '/graphql',
-      // @ts-expect-error: missing Partial<> generic in the playground static types
+      // @ts-expect-error: missing Partial<Settings> generic in the playground static types
       settings: {
         'request.credentials': 'include',
       },
@@ -75,13 +75,18 @@ const getApp = async () => {
   )
 
   /*
-  // TODO: does not work after webpack bundle source code 
-
+  // TODO: does not work after webpack bundle source code
   app.use('/graphql', customBearerAuth)
   app.use('/graphql', parseGoogleAuthCookieMiddleware)
-
-  const server = new ApolloServer({ schema, tracing: true, context: ({ req }) => ({ req }) })
-
+  const server = new ApolloServer({
+    schema,
+    tracing: true,
+    context: ({ res, req }) => ({
+      res,
+      req,
+      dataLoaders: getDataLoaders(),
+    }),
+  })
   server.applyMiddleware({
     app,
     path: '/graphql',
