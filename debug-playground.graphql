@@ -38,6 +38,245 @@ query viewer {
         profileImg
       }
     }
+    query
+    testxxx {
+      dynamoItems {
+        id
+        name
+        authorId
+      }
+    }
+
+    mutation
+    createDynamoItem {
+      addDynamoItemMutation(input: { name: "luke3" }) {
+        dynamoItem {
+          id
+          name
+          authorId
+        }
+      }
+    }
+
+    query
+    getPosts {
+      posts(first: 3, after: "dcf2f1d6-9d0a-4db9-955c-8d45c75994df") {
+        pageInfo {
+          hasNextPage
+        }
+        edges {
+          cursor
+          node {
+            id
+            text
+          }
+        }
+      }
+    }
+
+    query
+    viewer {
+      isViewerLoggedIn
+
+      viewer {
+        id
+
+        totalPostsCount
+
+        posts(first: 10, after: "dcb6e96d-3278-47d4-86be-57aa3d671ed3") {
+          pageInfo {
+            hasNextPage
+          }
+          edges {
+            cursor
+            node {
+              id
+              text
+              createdAt
+            }
+          }
+        }
+
+        followers(first: 10) {
+          pageInfo {
+            hasNextPage
+          }
+          edges {
+            node {
+              id
+              profileImg
+            }
+          }
+        }
+
+        following(first: 10) {
+          pageInfo {
+            hasNextPage
+          }
+          edges {
+            node {
+              id
+              profileImg
+            }
+          }
+        }
+
+        notifications(first: 10) {
+          pageInfo {
+            hasNextPage
+          }
+          edges {
+            node {
+              id
+            }
+          }
+        }
+      }
+    }
+    mutation
+    addReaction {
+      addPostReactionMutation(
+        input: { postId: "425b382c-6ab2-41ef-a7e4-e28e214652df", reactionType: Reaction3 }
+      ) {
+        postReaction {
+          id
+          author {
+            id
+            profileImg
+            nickName
+          }
+        }
+      }
+    }
+    mutation
+    UpdateBio {
+      updateNickNameMutation(input: { newNickName: "xxxx" }) {
+        updatedUser {
+          id
+          nickName
+        }
+      }
+    }
+    mutation
+    AddFollowSomeone {
+      addFollowPublicUser(input: { followerId: 1 }) {
+        startsFollow
+      }
+    }
+    mutation
+    RemoveFollowSomeone {
+      addFollowPublicUser(input: { followerId: 1 }) {
+        startsFollow
+      }
+    }
+
+    # # Write your query or mutation here
+    # mutation AddPostMutation {
+    #   addPostMutation(input: { text: "ahoj jak se máš3 " }) {
+    #     post {
+    #       id
+    #       text
+    #     }
+    #   }
+    # }
+
+    # mutation AddCommentMutation {
+    #   addCommentMutation(input: { postId: 76, text: "lol rofl omg" }) {
+    #     comment {
+    #       id
+    #       text
+    #     }
+    #   }
+    # }
+
+    # mutation AddPostReactionMutation {
+    #   addPostReactionMutation(input: { postId: 76, reactionType: Reaction3 }) {
+    #     postReaction {
+    #       id
+    #       reactionType
+    #     }
+    #   }
+    # }
+
+    # query UserById {
+    #   publicUser(id: 1) {
+    #     id
+    #     email
+    #     profileImg
+    #   }
+
+    #   posts(pagination: { limit: 100, offset: 0 }) {
+    #     count
+    #     items {
+    #       id
+    #       text
+    #     }
+    #   }
+    # }
+
+    # query PostById {
+    #   post(id: "76") {
+    #     id
+    #     text
+    #     author {
+    #       email
+    #       id
+    #       profileImg
+    #     }
+    #     reactions(pagination: { limit: 100, offset: 0 }) {
+    #       count
+    #       items {
+    #         id
+    #         reactionType
+    #       }
+    #     }
+    #     comments(pagination: { limit: 100, offset: 0 }) {
+    #       count
+    #       items {
+    #         id
+    #         text
+    #         author {
+    #           id
+    #           profileImg
+    #           email
+    #         }
+    #       }
+    #     }
+    #   }
+    # }
+
+    # query posts {
+    #   posts(pagination: { limit: 3, offset: 0 }) {
+    #     items {
+    #       id
+    #       text
+    #       author {
+    #         email
+    #         id
+    #         profileImg
+    #       }
+    #       reactions(pagination: { limit: 100, offset: 0 }) {
+    #         count
+    #         items {
+    #           id
+    #           reactionType
+    #         }
+    #       }
+    #       comments(pagination: { limit: 100, offset: 0 }) {
+    #         count
+    #         items {
+    #           id
+    #           text
+    #           author {
+    #             id
+    #             profileImg
+    #             email
+    #           }
+    #         }
+    #       }
+    #     }
+    #   }
+    # }
 
     notifications(pagination: { limit: 100, offset: 0 }) {
       items {

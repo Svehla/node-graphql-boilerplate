@@ -1,9 +1,11 @@
 import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
 import { addCommentMutation } from './Comment/addCommentMutation'
+import { addDynamoItemMutation } from './dynamoItem/addDynamoItemMutation'
 import { addFollowPublicUser } from './Follower/addFollowPublicUser'
 import { addPostMutation } from './Post/addPostMutation'
 import { addPostReactionMutation } from './PostReaction/addPostReactionMutation'
 import { deleteFollowPublicUser } from './Follower/deleteFollowPublicUser'
+import { getQueryDynamoItem } from './dynamoItem/QueryDynamoItem'
 import { postQueryFields } from './PostReaction/QueryPost'
 import { publicUserLogoutMutation } from './PublicUser/publicUserLogoutMutation'
 import { publicUserQueryFields } from './PublicUser/QueryPublicUser'
@@ -22,6 +24,7 @@ const schema = new GraphQLSchema({
       ...userQueryFields(),
       ...publicUserQueryFields(),
       ...postQueryFields(),
+      ...getQueryDynamoItem(),
       appVersion: {
         type: GraphQLString,
         resolve: () => packageJson.version,
@@ -42,6 +45,7 @@ const schema = new GraphQLSchema({
       addFollowPublicUser: addFollowPublicUser(),
       deleteFollowPublicUser: deleteFollowPublicUser(),
       updateNickNameMutation: updateNickNameMutation(),
+      addDynamoItemMutation: addDynamoItemMutation(),
     }),
   }),
 })

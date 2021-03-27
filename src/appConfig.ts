@@ -46,8 +46,15 @@ export const appEnvs = validateConfig({
     REGION: 'eu-central-1',
     ACCESS_KEY_ID: getStringFromEnvParser('AWS_ACCESS_KEY_ID'),
     SECRET_ACCESS_KEY: getStringFromEnvParser('AWS_SECRET_ACCESS_KEY'),
+
     ses: {
       API_VERSION: '2010-12-01',
+    },
+
+    dynamoDB: {
+      API_VERSION: '2012-08-10',
+      endpoint: getStringFromEnvParser('AWS_DYNAMO_LOG_TABLE_NAME'),
+      tableName: getStringFromEnvParser('AWS_DYNAMO_LOG_TABLE_NAME'),
     },
   },
 
