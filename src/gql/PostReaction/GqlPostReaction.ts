@@ -1,7 +1,5 @@
 import { GqlPublicUser } from '../PublicUser/GqlPublicUser'
 import { PostReactionType } from '../../database/EntityPostReactions'
-import { entities } from '../../database/entities'
-import { getRepository } from 'typeorm'
 import {
   graphQLSimpleEnum,
   lazyCircularDependencyTsHack,
@@ -27,7 +25,7 @@ export const GqlPostReaction = tgGraphQLObjectType(
       reactionType: {
         type: GqlReactionType,
       },
-      publicUserId: {
+      authorId: {
         type: tgGraphQLString,
       },
       author: {
@@ -36,16 +34,8 @@ export const GqlPostReaction = tgGraphQLObjectType(
     }),
   },
   {
-    author: async parent => {
-      const repository = getRepository(entities.PublicUser)
-
-      if (!parent.publicUserId) {
-        return null
-      }
-
-      const publicUser = await repository.findOne(parent.publicUserId)
-
-      return publicUser
+    author: async (p, _a, c) => {
+      return c.dataLoaders.user.load(p.authorId)
     },
   }
 )

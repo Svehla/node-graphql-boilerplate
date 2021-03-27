@@ -1,8 +1,10 @@
 import './emails/index'
 // import { ApolloServer } from 'apollo-server-express'
+import { GqlContext } from './utils/GqlContextType'
 import { appEnvs } from './appConfig'
 import { customBearerAuth } from './auth/customBearerAuth'
 import { dbConnection } from './database/dbCore'
+import { getDataLoaders } from './dataLoader/dataLoaderMiddleware'
 import { graphqlHTTP } from 'express-graphql'
 import { initGoogleAuthStrategy, parseGoogleAuthCookieMiddleware } from './auth/googleAuth'
 import { verifyEmailRestGqlProxy } from './gql/User/verifyEmailRestGqlProxy'
@@ -11,7 +13,6 @@ import cors from 'cors'
 import express from 'express'
 import graphqlPlayground from 'graphql-playground-middleware-express'
 import schema from './gql/schema'
-
 // TODO: ts-node-dev sometimes throw error:
 // Error: write EPIPE
 // > https://github.com/wclr/ts-node-dev/issues/148
@@ -68,7 +69,8 @@ const getApp = async () => {
       context: {
         res,
         req,
-      },
+        dataLoaders: getDataLoaders(),
+      } as GqlContext,
     }))
   )
 

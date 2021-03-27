@@ -12,6 +12,7 @@ import {
   lazyCircularDependencyTsHack,
   tgGraphQLDateTime,
   tgGraphQLID,
+  tgGraphQLInt,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
   tgGraphQLString,
@@ -36,6 +37,9 @@ export const GqlPost = tgGraphQLObjectType(
       author: {
         type: lazyCircularDependencyTsHack(() => GqlPublicUser),
       },
+      commentsCount: {
+        type: tgGraphQLInt,
+      },
       comments: {
         args: cursorPaginationArgs(),
         type: cursorPaginationList('post_comments', GqlComment),
@@ -50,10 +54,14 @@ export const GqlPost = tgGraphQLObjectType(
     }),
   },
   {
-    author: async p => {
-      return getRepository(entities.PublicUser).findOne({
+    author: async (p, _a, c) => {
+      return c.dataLoaders.user.load(p.authorId)
+    },
+
+    commentsCount: parent => {
+      return getRepository(entities.Comment).count({
         where: {
-          id: p.authorId,
+          postId: parent.id!,
         },
       })
     },

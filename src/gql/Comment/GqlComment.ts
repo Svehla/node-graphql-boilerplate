@@ -33,16 +33,9 @@ export const GqlComment = tgGraphQLObjectType(
     }),
   },
   {
-    author: async p => {
-      const repository = getRepository(entities.PublicUser)
-
-      const user = await repository.findOne({
-        where: {
-          id: p.authorId,
-        },
-      })
-
-      return user
+    author: async (p, _a, c) => {
+      const userById = c.dataLoaders.user.load(p.authorId)
+      return userById
     },
   }
 )

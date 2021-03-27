@@ -19,6 +19,14 @@ import {
   GraphQLUUID,
 } from 'graphql-custom-types'
 
+import { GqlContext as GqlC } from '../../utils/GqlContextType'
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// TODO:
+// > move context type definition out of library
+// > https://www.typescriptlang.org/docs/handbook/declaration-merging.html
+type GqlContext = GqlC
+
 // Custom types
 export const tgGraphQLEmail = (GraphQLEmail as any) as string | undefined | null
 export const tgGraphQLDateTime = (GraphQLDateTime as any) as string | undefined | null
@@ -35,8 +43,6 @@ export const tgGraphQLLimitedString = (
 ) =>
   // TODO: | null | undefined?
   (new GraphQLLimitedString(...args) as any) as string
-
-// TODO: add context as global interface to keep update it by anyone?
 
 // i decide to use `gt` prefix => gt === graphqlType
 export const tgGraphQLInt = (GraphQLInt as any) as number | undefined | null
@@ -74,7 +80,7 @@ export const graphqlSubQueryType = <Fields extends Record<string, { type: any; a
       args: {
         [ArgKey in keyof Fields[FieldKey]['args']]: Fields[FieldKey]['args'][ArgKey]['type']
       },
-      context: any
+      context: GqlContext
     ) => MaybePromise<any>
     // ) => MaybePromise<Fields[FieldKey]['type']>
   }
@@ -111,7 +117,7 @@ export const tgGraphQLObjectType = <Fields extends Record<string, { type: any; a
           Fields[FieldKey]['args'][ArgKey]['type']
         >
       },
-      context: any
+      context: GqlContext
     ) => MaybePromise<any>
     // ) => MaybePromise<HackToOmitFnCircularDepType<Fields[FieldKey]['type']>>
   },
@@ -175,7 +181,7 @@ export const gqlMutation = <
   config: Config,
   resolve: (
     args: { [ArgKey in keyof Config['args']]: Config['args'][ArgKey]['type'] },
-    context: any
+    context: GqlContext
   ) => Promise<any>
   // ) => Promise<Config['type']>
 ) => {

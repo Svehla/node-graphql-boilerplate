@@ -15,6 +15,7 @@ export const getQueryDynamoItem = () =>
         const docClient = new AWS.DynamoDB.DocumentClient()
 
         const data = await docClient
+          // TODO: add scan with pagination example
           .scan({
             TableName: dynamoDBConf.aws_table_name,
           })
