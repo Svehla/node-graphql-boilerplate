@@ -2,14 +2,15 @@ import {
   tgGraphQLBoolean,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
+  tgGraphQLUUID,
 } from '../../libs/typedGraphQL/index'
-import { tgGraphQLID, tgGraphQLString } from '../../libs/typedGraphQL/index'
+import { tgGraphQLString } from '../../libs/typedGraphQL/index'
 
 export const GqlNotification = tgGraphQLObjectType({
   name: 'Notification',
   fields: () => ({
     id: {
-      type: tgGraphQLNonNull(tgGraphQLID),
+      type: tgGraphQLNonNull(tgGraphQLUUID),
     },
     // TODO: add better data structure
     message: {

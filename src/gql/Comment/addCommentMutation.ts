@@ -4,10 +4,10 @@ import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  tgGraphQLID,
   tgGraphQLLimitedString,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
+  tgGraphQLUUID,
 } from '../../libs/typedGraphQL/index'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
@@ -19,7 +19,7 @@ export const addCommentMutation = () =>
           type: tgGraphQLLimitedString(3, 10000),
         },
         postId: {
-          type: tgGraphQLNonNull(tgGraphQLID),
+          type: tgGraphQLNonNull(tgGraphQLUUID),
         },
       }),
       type: tgGraphQLObjectType({
@@ -31,7 +31,7 @@ export const addCommentMutation = () =>
         }),
       }),
     },
-    authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
+    authGqlMutationDecorator({ onlyLoggedUser: true })(async (args, ctx) => {
       const postRepository = getRepository(entities.Post)
       const post = await postRepository.findOne({ id: args.input.postId })
 
@@ -41,7 +41,7 @@ export const addCommentMutation = () =>
 
       const comment = new entities.Comment()
 
-      comment.authorId = ctx.req.publicUser.id
+      comment.authorId = ctx.req.user.id
       comment.text = args.input.text
       comment.postId = args.input.postId
 
@@ -49,7 +49,7 @@ export const addCommentMutation = () =>
       const createdComment = await commentRepository.save(comment)
       const notification = new entities.Notification()
 
-      notification.receiverId = ctx.req.publicUser.id
+      notification.receiverId = ctx.req.user.id
       notification.message = 'someone commented your post'
       notification.urlPath = `/posts/${post.id}?commentId=${createdComment.id}`
 

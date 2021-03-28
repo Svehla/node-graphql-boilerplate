@@ -1,6 +1,7 @@
+import { GqlCategory } from '../Category/GqlCategory'
 import { GqlComment } from '../Comment/GqlComment'
 import { GqlPostReaction } from '../PostReaction/GqlPostReaction'
-import { GqlPublicUser } from '../PublicUser/GqlPublicUser'
+import { GqlUser } from '../User/GqlUser'
 import {
   cursorPaginationArgs,
   cursorPaginationList,
@@ -11,11 +12,11 @@ import { getRepository } from 'typeorm'
 import {
   lazyCircularDependencyTsHack,
   tgGraphQLDateTime,
-  tgGraphQLID,
   tgGraphQLInt,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
   tgGraphQLString,
+  tgGraphQLUUID,
 } from '../../libs/typedGraphQL/index'
 
 export const GqlPost = tgGraphQLObjectType(
@@ -23,7 +24,7 @@ export const GqlPost = tgGraphQLObjectType(
     name: 'Post',
     fields: () => ({
       id: {
-        type: tgGraphQLNonNull(tgGraphQLID),
+        type: tgGraphQLNonNull(tgGraphQLUUID),
       },
       name: {
         type: tgGraphQLString,
@@ -32,10 +33,10 @@ export const GqlPost = tgGraphQLObjectType(
         type: tgGraphQLString,
       },
       authorId: {
-        type: tgGraphQLID,
+        type: tgGraphQLUUID,
       },
       author: {
-        type: lazyCircularDependencyTsHack(() => GqlPublicUser),
+        type: lazyCircularDependencyTsHack(() => GqlUser),
       },
       commentsCount: {
         type: tgGraphQLInt,
@@ -51,6 +52,10 @@ export const GqlPost = tgGraphQLObjectType(
       createdAt: {
         type: tgGraphQLDateTime,
       },
+      categories: {
+        args: cursorPaginationArgs(),
+        type: cursorPaginationList('post_categories', GqlCategory),
+      },
     }),
   },
   {
@@ -58,26 +63,34 @@ export const GqlPost = tgGraphQLObjectType(
       return c.dataLoaders.user.load(p.authorId)
     },
 
-    commentsCount: parent => {
+    commentsCount: p => {
       return getRepository(entities.Comment).count({
         where: {
-          postId: parent.id!,
+          postId: p.id!,
         },
       })
     },
 
-    comments: async (parent, args) => {
-      return getSelectAllDataWithCursorByCreatedAt(entities.Comment, args, {
+    comments: async (p, a) => {
+      return getSelectAllDataWithCursorByCreatedAt(entities.Comment, a, {
         where: {
-          postId: parent.id,
+          postId: p.id,
         },
       })
     },
 
-    reactions: async (parent, args) => {
-      return getSelectAllDataWithCursorByCreatedAt(entities.PostReaction, args, {
+    reactions: async (p, a) => {
+      return getSelectAllDataWithCursorByCreatedAt(entities.PostReaction, a, {
         where: {
-          postId: parent.id,
+          postId: p.id,
+        },
+      })
+    },
+
+    categories: async (p, a) => {
+      return getSelectAllDataWithCursorByCreatedAt(entities.Category, a, {
+        where: {
+          postId: p.id,
         },
       })
     },

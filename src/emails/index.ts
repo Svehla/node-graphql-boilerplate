@@ -1,5 +1,1 @@
-import { sendVerifyEmail } from './templates/emailVerifyRegistration'
-
-export const emails = {
-  sendVerifyEmail,
-}
+export const emails = {}

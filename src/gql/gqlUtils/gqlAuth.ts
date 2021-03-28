@@ -1,12 +1,10 @@
-import { UserHasNoPermissions, UserHaveToBeLoggedError } from '../gqlSharedErrors/auth'
-import { UserRole } from '../../database/EntityUser'
+import { GqlContext } from '../../utils/GqlContextType'
+import { UserHaveToBeLoggedError } from '../gqlSharedErrors/auth'
 import { notNullable } from '../../utils/typeGuards'
 
 type AuthConfig = {
   onlyLogged?: boolean
-  onlyLoggedPublic?: boolean
-  allowUserRoles?: UserRole[]
-  deniedRoles?: UserRole[]
+  onlyLoggedUser?: boolean
 }
 export const authGqlTypeDecorator = (config: AuthConfig) => <Parent, Args, T>(
   fn: (p: Parent, args: Args, context: any) => T
@@ -26,30 +24,17 @@ export const authGqlQueryDecorator = (config: AuthConfig) => <Args, T>(
 // mutation resolver hav the same API as the query resolvers
 export const authGqlMutationDecorator = authGqlQueryDecorator
 
-const checkUserAccessOrError = (config: AuthConfig, gqlContext: any) => {
+const checkUserAccessOrError = (config: AuthConfig, gqlContext: GqlContext) => {
   const user = gqlContext.req.user
-  const publicUser = gqlContext.req.publicUser
 
-  if (config.onlyLoggedPublic) {
-    if (!notNullable(publicUser)) {
+  if (config.onlyLoggedUser) {
+    if (!notNullable(user)) {
       throw new UserHaveToBeLoggedError()
     }
   }
   if (config.onlyLogged) {
-    if (!notNullable(user) && !notNullable(publicUser)) {
+    if (!notNullable(user)) {
       throw new UserHaveToBeLoggedError()
-    }
-  }
-  if (Array.isArray(config.allowUserRoles)) {
-    // @ts-ignore
-    if (!config.allowUserRoles.includes(user?.role)) {
-      throw new UserHasNoPermissions()
-    }
-  }
-  if (Array.isArray(config.deniedRoles)) {
-    // @ts-ignore
-    if (config.deniedRoles.includes(user?.role)) {
-      throw new UserHasNoPermissions()
     }
   }
 

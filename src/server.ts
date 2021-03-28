@@ -2,12 +2,10 @@ import './emails/index'
 // import { ApolloServer } from 'apollo-server-express'
 import { GqlContext } from './utils/GqlContextType'
 import { appEnvs } from './appConfig'
-import { customBearerAuth } from './auth/customBearerAuth'
 import { dbConnection } from './database/dbCore'
 import { getDataLoaders } from './utils/dataLoaderCache'
 import { graphqlHTTP } from 'express-graphql'
 import { initGoogleAuthStrategy, parseGoogleAuthCookieMiddleware } from './auth/googleAuth'
-import { verifyEmailRestGqlProxy } from './gql/User/verifyEmailRestGqlProxy'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
@@ -48,7 +46,6 @@ const getApp = async () => {
 
   initGoogleAuthStrategy(app)
   // TODO: just POC for Rest-api GQL proxy - kinda shitty code
-  app.get('/verify-reg-token/:token', verifyEmailRestGqlProxy)
 
   app.get(
     '/playground',
@@ -63,7 +60,7 @@ const getApp = async () => {
 
   app.use(
     '/graphql',
-    [customBearerAuth, parseGoogleAuthCookieMiddleware],
+    [parseGoogleAuthCookieMiddleware],
     graphqlHTTP((req, res) => ({
       schema,
       context: {
@@ -76,7 +73,6 @@ const getApp = async () => {
 
   /*
   // TODO: does not work after webpack bundle source code
-  app.use('/graphql', customBearerAuth)
   app.use('/graphql', parseGoogleAuthCookieMiddleware)
   const server = new ApolloServer({
     schema,

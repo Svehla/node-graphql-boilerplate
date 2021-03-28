@@ -29,8 +29,8 @@ export const addDynamoItemMutation = () =>
       }),
     },
 
-    authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
-      const publicUser = ctx.req.publicUser
+    authGqlMutationDecorator({ onlyLoggedUser: true })(async (args, ctx) => {
+      const user = ctx.req.user
 
       const ddb = new AWS.DynamoDB({ apiVersion: appEnvs.aws.dynamoDB.API_VERSION })
 
@@ -38,7 +38,7 @@ export const addDynamoItemMutation = () =>
       const newItem = {
         id: `${Math.random()}`,
         name: args.input.name,
-        authorId: publicUser.id,
+        authorId: user.id,
       }
 
       await ddb

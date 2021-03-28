@@ -4,7 +4,7 @@ import DataLoader from 'dataloader'
 
 // TODO: check if batching works correctly
 const getUsers = async (ids: string[]) => {
-  const foundUsers = await getRepository(entities.PublicUser).find({
+  const foundUsers = await getRepository(entities.User).find({
     where: { id: In(ids) },
     order: { createdAt: 'ASC' },
   })

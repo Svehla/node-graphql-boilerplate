@@ -2,7 +2,7 @@ import { Response } from 'express'
 import { appConfig } from '../../appConfig'
 import { gqlMutation, tgGraphQLString } from '../../libs/typedGraphQL/index'
 
-export const publicUserLogoutMutation = () =>
+export const userLogoutMutation = () =>
   gqlMutation(
     {
       args: {},

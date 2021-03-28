@@ -2,7 +2,7 @@ import { AuthRequest, DecodedJWTSchema } from './authAbstraction'
 import { Credentials, OAuth2Client } from 'google-auth-library'
 import { Express } from 'express'
 import { NextFunction, Response } from 'express'
-import { PublicUser, UserLoginType } from '../database/EntityPublicUsers'
+import { User, UserLoginType } from '../database/EntityUser'
 import { appConfig, appEnvs } from '../appConfig'
 import { getConnection, getRepository } from 'typeorm'
 import axios from 'axios'
@@ -105,7 +105,7 @@ export const initGoogleAuthStrategy = (app: Express) => {
       await getConnection()
         .createQueryBuilder()
         .insert()
-        .into(PublicUser)
+        .into(User)
         .values({
           externalServiceId: user.id,
           email: user.email,
@@ -164,7 +164,7 @@ export const parseGoogleAuthCookieMiddleware = async (
     decodedJWT = DecodedJWTSchema.validateSync(jwt.verify(authCookie, appEnvs.auth.JWT_SECRET))
   } catch (err) {
     res.status(500).send({ error: 'Invalid JWT token format' })
-    req.publicUser = undefined
+    req.user = undefined
     return
   }
 
@@ -174,10 +174,10 @@ export const parseGoogleAuthCookieMiddleware = async (
   }
 
   const id = decodedJWT.id
-  const repository = getRepository(PublicUser)
+  const repository = getRepository(User)
 
   const foundUser = await repository.findOne({ where: { externalServiceId: id } })
 
-  req.publicUser = foundUser
+  req.user = foundUser
   next()
 }

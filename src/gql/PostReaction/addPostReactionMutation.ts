@@ -5,10 +5,10 @@ import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  tgGraphQLID,
   tgGraphQLLimitedString,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
+  tgGraphQLUUID,
 } from '../../libs/typedGraphQL/index'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
@@ -20,7 +20,7 @@ export const addPostReactionMutation = () =>
           type: tgGraphQLLimitedString(3, 10000),
         },
         postId: {
-          type: tgGraphQLNonNull(tgGraphQLID),
+          type: tgGraphQLNonNull(tgGraphQLUUID),
         },
         reactionType: {
           type: tgGraphQLNonNull(GqlReactionType),
@@ -35,7 +35,7 @@ export const addPostReactionMutation = () =>
         }),
       }),
     },
-    authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
+    authGqlMutationDecorator({ onlyLoggedUser: true })(async (args, ctx) => {
       const postRepository = getRepository(entities.Post)
       const post = await postRepository.findOne({ id: args.input.postId })
 
@@ -55,7 +55,7 @@ export const addPostReactionMutation = () =>
 
       const postReaction = new entities.PostReaction()
 
-      postReaction.authorId = ctx.req.publicUser.id
+      postReaction.authorId = ctx.req.user.id
       postReaction.reactionType = args.input.reactionType
       postReaction.postId = args.input.postId
 

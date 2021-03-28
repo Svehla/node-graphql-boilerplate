@@ -1,12 +1,12 @@
-import { GqlPublicUser } from '../PublicUser/GqlPublicUser'
+import { GqlUser } from '../User/GqlUser'
 import { PostReactionType } from '../../database/EntityPostReactions'
 import {
   graphQLSimpleEnum,
   lazyCircularDependencyTsHack,
-  tgGraphQLID,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
   tgGraphQLString,
+  tgGraphQLUUID,
 } from '../../libs/typedGraphQL/index'
 
 export const GqlReactionType = (graphQLSimpleEnum(
@@ -20,7 +20,7 @@ export const GqlPostReaction = tgGraphQLObjectType(
     name: 'PostReaction',
     fields: () => ({
       id: {
-        type: tgGraphQLNonNull(tgGraphQLID),
+        type: tgGraphQLNonNull(tgGraphQLUUID),
       },
       reactionType: {
         type: GqlReactionType,
@@ -29,7 +29,7 @@ export const GqlPostReaction = tgGraphQLObjectType(
         type: tgGraphQLString,
       },
       author: {
-        type: lazyCircularDependencyTsHack(() => GqlPublicUser),
+        type: lazyCircularDependencyTsHack(() => GqlUser),
       },
     }),
   },

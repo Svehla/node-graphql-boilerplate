@@ -1,4 +1,4 @@
-import { GqlPost } from '../Post/GqlPost'
+import { GqlPost } from './GqlPost'
 import {
   cursorPaginationArgs,
   cursorPaginationList,
@@ -6,7 +6,7 @@ import {
 } from '../gqlUtils/gqlCursorPagination'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
-import { graphqlSubQueryType, tgGraphQLID, tgGraphQLNonNull } from '../../libs/typedGraphQL/index'
+import { graphqlSubQueryType, tgGraphQLNonNull, tgGraphQLUUID } from '../../libs/typedGraphQL/index'
 
 export const postQueryFields = () =>
   graphqlSubQueryType(
@@ -14,7 +14,7 @@ export const postQueryFields = () =>
       post: {
         args: {
           id: {
-            type: tgGraphQLNonNull(tgGraphQLID),
+            type: tgGraphQLNonNull(tgGraphQLUUID),
           },
         },
         type: GqlPost,
@@ -24,7 +24,7 @@ export const postQueryFields = () =>
           ...cursorPaginationArgs(),
           // TODO: remove author ID param
           authorId: {
-            type: tgGraphQLID,
+            type: tgGraphQLUUID,
           },
         },
         type: cursorPaginationList('query_posts', GqlPost),

@@ -1,4 +1,4 @@
-import { GqlPublicUser } from './GqlPublicUser'
+import { GqlUser } from './GqlUser'
 import { authGqlMutationDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
@@ -21,19 +21,19 @@ export const updateBioMutation = () =>
         name: 'updateBioMutation_type',
         fields: () => ({
           updatedUser: {
-            type: GqlPublicUser,
+            type: GqlUser,
           },
         }),
       }),
     },
-    authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
-      const publicUserRepository = getRepository(entities.PublicUser)
+    authGqlMutationDecorator({ onlyLoggedUser: true })(async (args, ctx) => {
+      const userRepository = getRepository(entities.User)
 
-      const publicUser = await publicUserRepository.findOne(ctx.req.publicUser.id)
+      const user = await userRepository.findOne(ctx.req.user.id)
 
-      publicUser!.bio = args.input.newBio
+      user!.bio = args.input.newBio
 
-      const updatedUser = await publicUserRepository.save(publicUser!)
+      const updatedUser = await userRepository.save(user!)
 
       return {
         updatedUser,

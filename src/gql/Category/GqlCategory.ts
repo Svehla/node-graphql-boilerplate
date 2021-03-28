@@ -5,18 +5,15 @@ import {
   tgGraphQLUUID,
 } from '../../libs/typedGraphQL/index'
 
-export const GqlDynamoItem = tgGraphQLObjectType(
+export const GqlCategory = tgGraphQLObjectType(
   {
-    name: 'DynamoItem',
+    name: 'Category',
     fields: () => ({
       id: {
         type: tgGraphQLNonNull(tgGraphQLUUID),
       },
       name: {
         type: tgGraphQLString,
-      },
-      authorId: {
-        type: tgGraphQLUUID,
       },
     }),
   },

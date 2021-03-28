@@ -26,13 +26,13 @@ export const addPostMutation = () =>
         }),
       }),
     },
-    authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
+    authGqlMutationDecorator({ onlyLoggedUser: true })(async (args, ctx) => {
       const postRepository = getRepository(entities.Post)
 
       const post = new entities.Post()
 
       post.text = args.input.text
-      post.authorId = ctx.req.publicUser.id
+      post.authorId = ctx.req.user.id
 
       await postRepository.save(post)
 

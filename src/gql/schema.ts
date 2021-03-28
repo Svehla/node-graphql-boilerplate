@@ -1,19 +1,16 @@
 import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
 import { addCommentMutation } from './Comment/addCommentMutation'
 import { addDynamoItemMutation } from './dynamoItem/addDynamoItemMutation'
-import { addFollowPublicUser } from './Follower/addFollowPublicUser'
+import { addFollowUser } from './Follower/addFollowUser'
 import { addPostMutation } from './Post/addPostMutation'
 import { addPostReactionMutation } from './PostReaction/addPostReactionMutation'
-import { deleteFollowPublicUser } from './Follower/deleteFollowPublicUser'
+import { categoryQueryFields } from './Category/QueryCategory'
+import { deleteFollowUser } from './Follower/deleteFollowUser'
 import { getQueryDynamoItem } from './dynamoItem/QueryDynamoItem'
-import { postQueryFields } from './PostReaction/QueryPost'
-import { publicUserLogoutMutation } from './PublicUser/publicUserLogoutMutation'
-import { publicUserQueryFields } from './PublicUser/QueryPublicUser'
-import { updateNickNameMutation } from './PublicUser/updateNickNameMutation'
-import { userLoginMutation } from './User/userLoginMutation'
+import { postQueryFields } from './Post/QueryPost'
+import { updateNickNameMutation } from './User/updateNickNameMutation'
+import { userLogoutMutation } from './User/userLogoutMutation'
 import { userQueryFields } from './User/QueryUser'
-import { userRegistrationMutation } from './User/userRegistrationMutation'
-import { verifyUserEmailMutation } from './User/verifyUserEmailMutation'
 import packageJson from '../../package.json'
 
 const schema = new GraphQLSchema({
@@ -22,9 +19,9 @@ const schema = new GraphQLSchema({
     // @ts-ignore
     fields: () => ({
       ...userQueryFields(),
-      ...publicUserQueryFields(),
       ...postQueryFields(),
       ...getQueryDynamoItem(),
+      ...categoryQueryFields(),
       appVersion: {
         type: GraphQLString,
         resolve: () => packageJson.version,
@@ -35,15 +32,12 @@ const schema = new GraphQLSchema({
     name: 'RootMutationType',
     // @ts-ignore
     fields: () => ({
-      userLogin: userLoginMutation(),
-      userRegistrationMutation: userRegistrationMutation(),
-      verifyUserEmailMutation: verifyUserEmailMutation(),
-      publicUserLogoutMutation: publicUserLogoutMutation(),
+      userLogoutMutation: userLogoutMutation(),
       addPostMutation: addPostMutation(),
       addCommentMutation: addCommentMutation(),
       addPostReactionMutation: addPostReactionMutation(),
-      addFollowPublicUser: addFollowPublicUser(),
-      deleteFollowPublicUser: deleteFollowPublicUser(),
+      addFollowUser: addFollowUser(),
+      deleteFollowUser: deleteFollowUser(),
       updateNickNameMutation: updateNickNameMutation(),
       addDynamoItemMutation: addDynamoItemMutation(),
     }),

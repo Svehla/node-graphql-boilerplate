@@ -4,22 +4,22 @@ import { getRepository } from 'typeorm'
 import {
   gqlMutation,
   tgGraphQLBoolean,
-  tgGraphQLID,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
+  tgGraphQLUUID,
 } from '../../libs/typedGraphQL/index'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
-export const addFollowPublicUser = () =>
+export const addFollowUser = () =>
   gqlMutation(
     {
-      args: gqlMutationInputArg('addFollowPublicUser_input', {
+      args: gqlMutationInputArg('addFollowUser_input', {
         toFollowId: {
-          type: tgGraphQLNonNull(tgGraphQLID),
+          type: tgGraphQLNonNull(tgGraphQLUUID),
         },
       }),
       type: tgGraphQLObjectType({
-        name: 'addFollowPublicUser_type',
+        name: 'addFollowUser_type',
         fields: () => ({
           startsFollow: {
             type: tgGraphQLBoolean,
@@ -27,20 +27,20 @@ export const addFollowPublicUser = () =>
         }),
       }),
     },
-    authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
-      const publicUser = await getRepository(entities.PublicUser).findOne({
+    authGqlMutationDecorator({ onlyLoggedUser: true })(async (args, ctx) => {
+      const user = await getRepository(entities.User).findOne({
         where: {
           id: args.input.toFollowId,
         },
       })
 
-      if (!publicUser) {
+      if (!user) {
         throw new Error('User does not exist')
       }
 
       const followingConnection = await getRepository(entities.Followers).findOne({
         where: {
-          followerId: ctx.req.publicUser.id,
+          followerId: ctx.req.user.id,
           followingId: args.input.toFollowId,
         },
       })
@@ -51,7 +51,7 @@ export const addFollowPublicUser = () =>
 
       const newFollowing = new entities.Followers()
 
-      newFollowing.followerId = ctx.req.publicUser.id
+      newFollowing.followerId = ctx.req.user.id
       newFollowing.followingId = args.input.toFollowId
 
       const createdFollow = await getRepository(entities.Followers).save(newFollowing)

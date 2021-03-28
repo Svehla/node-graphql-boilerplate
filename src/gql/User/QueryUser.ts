@@ -1,31 +1,46 @@
 import { GqlUser } from './GqlUser'
-import { authGqlQueryDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
-import { graphqlSubQueryType } from '../../libs/typedGraphQL/index'
-import { offsetPaginationArgs, offsetPaginationList } from '../gqlUtils/gqlOffsetPagination'
+import {
+  graphqlSubQueryType,
+  tgGraphQLBoolean,
+  tgGraphQLNonNull,
+  tgGraphQLUUID,
+} from '../../libs/typedGraphQL/index'
 
 export const userQueryFields = () =>
   graphqlSubQueryType(
     {
-      users: {
-        args: offsetPaginationArgs('query_users'),
-        type: offsetPaginationList('query_users', GqlUser),
+      viewer: {
+        type: GqlUser,
+      },
+      user: {
+        args: {
+          id: {
+            type: tgGraphQLNonNull(tgGraphQLUUID),
+          },
+        },
+        type: GqlUser,
+      },
+      isViewerLoggedIn: {
+        type: tgGraphQLBoolean,
       },
     },
     {
-      users: authGqlQueryDecorator({ onlyLogged: true })(async args => {
-        const repository = getRepository(entities.User)
-
-        const [users, count] = await repository.findAndCount({
-          skip: args.pagination.offset,
-          take: args.pagination.limit,
+      user: async args => {
+        return getRepository(entities.User).findOne({
+          where: {
+            id: args.id,
+          },
         })
+      },
 
-        return {
-          count,
-          items: users,
-        }
-      }),
+      viewer: async (_args, ctx) => {
+        return ctx.req.user
+      },
+
+      isViewerLoggedIn: (_args, ctx) => {
+        return Boolean(ctx.req.user)
+      },
     }
   )

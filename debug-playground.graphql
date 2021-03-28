@@ -8,13 +8,13 @@ mutation UpdateBio {
 }
 
 mutation AddFollowSomeone {
-  addFollowPublicUser(input: { followerId: 1 }) {
+  addFollowUser(input: { followerId: 1 }) {
     startsFollow
   }
 }
 
 mutation RemoveFollowSomeone {
-  addFollowPublicUser(input: { followerId: 1 }) {
+  addFollowUser(input: { followerId: 1 }) {
     startsFollow
   }
 }
@@ -159,13 +159,13 @@ query viewer {
     }
     mutation
     AddFollowSomeone {
-      addFollowPublicUser(input: { followerId: 1 }) {
+      addFollowUser(input: { followerId: 1 }) {
         startsFollow
       }
     }
     mutation
     RemoveFollowSomeone {
-      addFollowPublicUser(input: { followerId: 1 }) {
+      addFollowUser(input: { followerId: 1 }) {
         startsFollow
       }
     }

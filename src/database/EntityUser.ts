@@ -1,16 +1,13 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  // OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm'
-// import { Post } from './EntityPosts'
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
-export enum UserRole {
-  Admin = 'Admin',
-  Editor = 'Editor',
+export enum AuthJWTUserLoginType {
+  // 'Custom' value is used to refer into different table `user`
+  Custom = 'Custom',
+  Google = 'Google',
+}
+
+export enum UserLoginType {
+  Google = 'Google',
 }
 
 @Entity('users')
@@ -18,36 +15,29 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column({
-    nullable: true,
-  })
+  @Column()
   email: string
 
   @Column({ nullable: true })
-  password: string
-
-  @Column('boolean', { default: false })
-  isEmailVerified = false
-
-  @Column({ nullable: true })
-  verifyEmailToken: string
-
-  @Column({
-    nullable: true,
-  })
-  profileImgUrl: string
-
-  @Column({
-    nullable: true,
-  })
-  age: number
+  bio: string
 
   @Column({
     type: 'enum',
-    enum: UserRole,
-    nullable: true,
+    enum: UserLoginType,
   })
-  role: UserRole
+  loginType: UserLoginType
+
+  @Column({ unique: true })
+  nickName: string
+
+  @Column({ unique: true })
+  externalServiceId: string
+
+  @Column({ nullable: true })
+  profileImg: string
+
+  @Column({ nullable: true })
+  refreshToken: string
 
   @CreateDateColumn()
   createdAt: Date

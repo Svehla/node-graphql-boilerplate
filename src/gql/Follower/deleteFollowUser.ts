@@ -10,16 +10,16 @@ import {
 } from '../../libs/typedGraphQL/index'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
-export const deleteFollowPublicUser = () =>
+export const deleteFollowUser = () =>
   gqlMutation(
     {
-      args: gqlMutationInputArg('deleteFollowPublicUser_input', {
+      args: gqlMutationInputArg('deleteFollowUser_input', {
         followingId: {
           type: tgGraphQLNonNull(tgGraphQLString),
         },
       }),
       type: tgGraphQLObjectType({
-        name: 'deleteFollowPublicUser_type',
+        name: 'deleteFollowUser_type',
         fields: () => ({
           stopsFollow: {
             type: tgGraphQLBoolean,
@@ -27,19 +27,19 @@ export const deleteFollowPublicUser = () =>
         }),
       }),
     },
-    authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
-      const publicUser = await getRepository(entities.PublicUser).findOne({
+    authGqlMutationDecorator({ onlyLoggedUser: true })(async (args, ctx) => {
+      const user = await getRepository(entities.User).findOne({
         where: {
           id: args.input.followingId,
         },
       })
-      if (!publicUser) {
+      if (!user) {
         throw new Error('User does not exist')
       }
 
       const followingConnection = await getRepository(entities.Followers).findOne({
         where: {
-          followerId: ctx.req.publicUser.id,
+          followerId: ctx.req.user.id,
           followingId: args.input.followingId,
         },
       })
