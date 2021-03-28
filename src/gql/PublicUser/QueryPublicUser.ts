@@ -1,5 +1,4 @@
 import { GqlPublicUser } from './GqlPublicUser'
-import { authGqlQueryDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
@@ -36,10 +35,10 @@ export const publicUserQueryFields = () =>
         })
       },
 
-      viewer: authGqlQueryDecorator({ onlyLogged: true })(async (_args, ctx) => {
+      viewer: async (_args, ctx) => {
         const publicUser = ctx.req.publicUser
         return publicUser
-      }),
+      },
 
       isViewerLoggedIn: (_args, ctx) => {
         const publicUser = ctx.req.publicUser

@@ -9,7 +9,7 @@ const getUsers = async (ids: string[]) => {
     order: { createdAt: 'ASC' },
   })
 
-  console.info('call to database! ', ids)
+  // console.info('call to database! ', ids)
   return ids.map(id => foundUsers.find(i => i.id === id))
 }
 

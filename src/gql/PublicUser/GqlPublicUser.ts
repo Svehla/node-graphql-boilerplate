@@ -13,6 +13,7 @@ import { getRepository } from 'typeorm'
 import {
   graphQLSimpleEnum,
   lazyCircularDependencyTsHack,
+  tgGraphQLBoolean,
   tgGraphQLID,
   tgGraphQLInt,
   tgGraphQLNonNull,
@@ -48,6 +49,9 @@ export const GqlPublicUser = tgGraphQLObjectType(
       },
       totalPostsCount: {
         type: tgGraphQLInt,
+      },
+      amIFollowing: {
+        type: tgGraphQLBoolean,
       },
       posts: {
         args: cursorPaginationArgs(),
@@ -89,6 +93,21 @@ export const GqlPublicUser = tgGraphQLObjectType(
       })
     },
 
+    amIFollowing: async (p, a, c) => {
+      // optimization
+      if (c.req.publicUser?.id === p.id) {
+        return false
+      }
+      const count = await getRepository(entities.Followers).count({
+        where: {
+          followerId: c.req.publicUser?.id,
+          followingId: p.id,
+        },
+      })
+
+      return count === 1
+    },
+
     posts: async (parent, args) => {
       return getSelectAllDataWithCursorByCreatedAt(entities.Post, args, {
         where: {
@@ -121,20 +140,46 @@ export const GqlPublicUser = tgGraphQLObjectType(
       })
     }),
 
-    followers: async (parent, args) => {
-      return getSelectAllDataWithCursorByCreatedAt(entities.Followers, args, {
-        where: {
-          followingId: parent.id!,
-        },
-      })
+    followers: async (parent, args, c) => {
+      const followingConnections = await getSelectAllDataWithCursorByCreatedAt(
+        entities.Followers,
+        args,
+        {
+          where: {
+            followingId: parent.id!,
+          },
+        }
+      )
+
+      // hack to omit one table..
+      return {
+        ...followingConnections,
+        edges: followingConnections.edges.map(e => ({
+          ...e,
+          node: c.dataLoaders.user.load(e.node.followerId),
+        })),
+      }
     },
 
-    following: async (parent, args) => {
-      return getSelectAllDataWithCursorByCreatedAt(entities.Followers, args, {
-        where: {
-          followerId: parent.id!,
-        },
-      })
+    following: async (parent, args, c) => {
+      const followingConnections = await getSelectAllDataWithCursorByCreatedAt(
+        entities.Followers,
+        args,
+        {
+          where: {
+            followerId: parent.id!,
+          },
+        }
+      )
+
+      // hack to omit one table...
+      return {
+        ...followingConnections,
+        edges: followingConnections.edges.map(e => ({
+          ...e,
+          node: c.dataLoaders.user.load(e.node.followingId),
+        })),
+      }
     },
   }
 )

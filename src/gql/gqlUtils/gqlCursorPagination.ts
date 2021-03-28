@@ -107,7 +107,7 @@ export const getSelectAllDataWithCursorByCreatedAt = async (
 
   const take = args.first + 1
 
-  const posts: any[] = await repository.find({
+  const items: any[] = await repository.find({
     skip: 0,
     take,
     where: {
@@ -122,13 +122,15 @@ export const getSelectAllDataWithCursorByCreatedAt = async (
     },
   })
 
-  const hasNextPage = posts.length === take
+  const hasNextPage = items.length === take
+
+  const itemsToReturn = items.length > args.first ? removeLastItem(items) : items
 
   return {
     pageInfo: {
       hasNextPage,
     },
-    edges: removeLastItem(posts).map(i => ({
+    edges: itemsToReturn.map(i => ({
       cursor: i.id,
       node: i,
     })),

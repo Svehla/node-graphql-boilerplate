@@ -4,9 +4,9 @@ import { getRepository } from 'typeorm'
 import {
   gqlMutation,
   tgGraphQLBoolean,
-  tgGraphQLInt,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
+  tgGraphQLString,
 } from '../../libs/typedGraphQL/index'
 import { gqlMutationInputArg } from '../gqlUtils/gqlMutationInputArg'
 
@@ -14,8 +14,8 @@ export const deleteFollowPublicUser = () =>
   gqlMutation(
     {
       args: gqlMutationInputArg('deleteFollowPublicUser_input', {
-        followerId: {
-          type: tgGraphQLNonNull(tgGraphQLInt),
+        followingId: {
+          type: tgGraphQLNonNull(tgGraphQLString),
         },
       }),
       type: tgGraphQLObjectType({
@@ -30,7 +30,7 @@ export const deleteFollowPublicUser = () =>
     authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
       const publicUser = await getRepository(entities.PublicUser).findOne({
         where: {
-          id: args.input.followerId,
+          id: args.input.followingId,
         },
       })
       if (!publicUser) {
@@ -40,7 +40,7 @@ export const deleteFollowPublicUser = () =>
       const followingConnection = await getRepository(entities.Followers).findOne({
         where: {
           followerId: ctx.req.publicUser.id,
-          followingId: args.input.followerId,
+          followingId: args.input.followingId,
         },
       })
 

@@ -14,7 +14,7 @@ export const addFollowPublicUser = () =>
   gqlMutation(
     {
       args: gqlMutationInputArg('addFollowPublicUser_input', {
-        followerId: {
+        toFollowId: {
           type: tgGraphQLNonNull(tgGraphQLID),
         },
       }),
@@ -30,7 +30,7 @@ export const addFollowPublicUser = () =>
     authGqlMutationDecorator({ onlyLoggedPublic: true })(async (args, ctx) => {
       const publicUser = await getRepository(entities.PublicUser).findOne({
         where: {
-          id: args.input.followerId,
+          id: args.input.toFollowId,
         },
       })
 
@@ -41,7 +41,7 @@ export const addFollowPublicUser = () =>
       const followingConnection = await getRepository(entities.Followers).findOne({
         where: {
           followerId: ctx.req.publicUser.id,
-          followingId: args.input.followerId,
+          followingId: args.input.toFollowId,
         },
       })
 
@@ -52,7 +52,7 @@ export const addFollowPublicUser = () =>
       const newFollowing = new entities.Followers()
 
       newFollowing.followerId = ctx.req.publicUser.id
-      newFollowing.followingId = args.input.followerId
+      newFollowing.followingId = args.input.toFollowId
 
       const createdFollow = await getRepository(entities.Followers).save(newFollowing)
 
