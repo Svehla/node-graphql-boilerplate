@@ -2,35 +2,35 @@ import { User } from '../../database/EntityUser'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLBoolean,
-  gtGraphQLInputObjectType,
-  gtGraphQLNonNull,
-  gtGraphQLString,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLBoolean,
+  tgGraphQLInputObjectType,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/index'
 
 export const verifyUserEmailMutation = () =>
   gqlMutation(
     {
       args: {
         input: {
-          type: gtGraphQLNonNull(
-            gtGraphQLInputObjectType({
+          type: tgGraphQLNonNull(
+            tgGraphQLInputObjectType({
               name: 'Verify_user_input_mutation',
               fields: () => ({
                 verifyToken: {
-                  type: gtGraphQLNonNull(gtGraphQLString),
+                  type: tgGraphQLNonNull(tgGraphQLString),
                 },
               }),
             })
           ),
         },
       },
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'verify_user_email_output',
         fields: () => ({
           isTokenVerified: {
-            type: gtGraphQLBoolean,
+            type: tgGraphQLBoolean,
           },
         }),
       }),

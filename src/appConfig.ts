@@ -49,6 +49,13 @@ export const appEnvs = validateConfig({
     ses: {
       API_VERSION: '2010-12-01',
     },
+
+
+    dynamoDB: {
+      API_VERSION: '2012-08-10',
+      endpoint: getStringFromEnvParser('AWS_DYNAMO_LOG_TABLE_NAME'),
+      tableName: getStringFromEnvParser('AWS_DYNAMO_LOG_TABLE_NAME'),
+    },
   },
 
   google: {
@@ -68,7 +75,7 @@ export const appConfig = {
     authCallbackPath: googleAuthCallbackPath,
     authCallbackURL: `${appEnvs.adminService.URL}${googleAuthCallbackPath}` as const,
     loginURL: `${appEnvs.adminService.URL}${googleAuthLoginPath}` as const,
-    successLoginRedirectPath: `/success-login`,
+    successLoginRedirectPath: `/`,
     errorLoginRedirectPath: `/error-login`,
   },
   authCookieName: 'my-custom-auth-cookie' as const,

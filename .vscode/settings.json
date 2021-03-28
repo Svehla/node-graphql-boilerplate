@@ -1,0 +1,70 @@
+{
+    "typescript.tsdk": "node_modules/typescript/lib", "eslint.autoFixOnSave": true, "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        {
+            "language": "typescript",
+            "autoFix": true
+        },
+        {
+            "language": "typescriptreact",
+            "autoFix": true
+        }
+    ],
+    "editor.formatOnSave": true,
+    "[javascript]": {
+        "editor.formatOnSave": false
+    },
+    "[javascriptreact]": {
+        "editor.formatOnSave": false
+    },
+    "[typescript]": {
+        "editor.formatOnSave": false
+    },
+    "[typescriptreact]": {
+        "editor.formatOnSave": false
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "cSpell.words": [
+        "Callum",
+        "Connor",
+        "Flatlay",
+        "GQLC",
+        "Grayscale",
+        "Metadatas",
+        "Monotheme",
+        "POSTGRES",
+        "Postonents",
+        "QLUUID",
+        "Reece",
+        "Rhys",
+        "SENDGRID",
+        "dailyfaily",
+        "dataloader",
+        "gomplate",
+        "jwks",
+        "keycloak",
+        "lsof",
+        "megamenu",
+        "noad",
+        "olis",
+        "openid",
+        "ordinated",
+        "pgadmin",
+        "preprod",
+        "proptypes",
+        "resave",
+        "respawn",
+        "sbre",
+        "setted",
+        "tfvars",
+        "transpiling",
+        "typeorm",
+        "uglifyjs",
+        "unaccent",
+        "urljoin",
+        "wifi"
+    ]
+}

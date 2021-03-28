@@ -5,13 +5,13 @@ import { emails } from '../../emails'
 import { getRepository } from 'typeorm'
 import {
   gqlMutation,
-  graphQLObjectType,
-  gtGraphQLEmail,
-  gtGraphQLInputObjectType,
-  gtGraphQLNonNull,
-  gtGraphQLPassword,
-  gtGraphQLString,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLEmail,
+  tgGraphQLInputObjectType,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+  tgGraphQLPassword,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/index'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
@@ -20,29 +20,29 @@ export const userRegistrationMutation = () =>
     {
       args: {
         input: {
-          type: gtGraphQLNonNull(
-            gtGraphQLInputObjectType({
+          type: tgGraphQLNonNull(
+            tgGraphQLInputObjectType({
               name: 'user_registration_mutation_input',
               fields: () => ({
                 email: {
-                  type: gtGraphQLNonNull(gtGraphQLEmail),
+                  type: tgGraphQLNonNull(tgGraphQLEmail),
                 },
                 password: {
-                  type: gtGraphQLNonNull(gtGraphQLPassword(3, 20)),
+                  type: tgGraphQLNonNull(tgGraphQLPassword(3, 20)),
                 },
               }),
             })
           ),
         },
       },
-      type: graphQLObjectType({
+      type: tgGraphQLObjectType({
         name: 'user_registration_output',
         fields: () => ({
           user: {
             type: GqlUser,
           },
           token: {
-            type: gtGraphQLString,
+            type: tgGraphQLString,
           },
         }),
       }),

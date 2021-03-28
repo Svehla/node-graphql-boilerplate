@@ -18,11 +18,11 @@ const oAuth2Client = new OAuth2Client(
   appConfig.google.authCallbackURL
 )
 
-const getGoogleAuthURL = (refererCallbackDomain: string) => {
+const getGoogleAuthURL = (callbackOriginURL: string) => {
   return oAuth2Client.generateAuthUrl({
     access_type: 'offline',
     prompt: 'consent',
-    state: JSON.stringify({ refererCallbackDomain }),
+    state: JSON.stringify({ callbackOriginURL }),
     scope: [
       'https://www.googleapis.com/auth/userinfo.profile',
       'https://www.googleapis.com/auth/userinfo.email',
@@ -56,32 +56,41 @@ async function getGoogleUser(tokens: Credentials) {
     throw new Error(err.message)
   }
 }
+const allowOriginsUrlsHosts = appEnvs.allowedOriginsUrls.map(i => new URL(i)).map(i => i.host)
+
 export const initGoogleAuthStrategy = (app: Express) => {
   app.get(appConfig.google.authLoginPath, (req, res) => {
-    const referer = req.get('referer')
-    // whitelist referer from cors values...
-    if (!referer) {
+    const callbackOriginURL = req.get('referer') ?? `${req.protocol}://${req.get('host')}`
+
+    // TODO: add whitelist referer from cors values...
+    if (!callbackOriginURL) {
       res.status(400).send('callback URI referer is not setted')
       return
     }
-    res.redirect(getGoogleAuthURL(referer))
+    const cbHost = new URL(callbackOriginURL).host
+    // cors does not work there coz this is GET request
+    if (!allowOriginsUrlsHosts.includes(cbHost)) {
+      res.status(400).send(`callback host ${cbHost} is not supported`)
+      return
+    }
+    res.redirect(getGoogleAuthURL(callbackOriginURL))
   })
 
   // TODO: POST???
   app.get(appConfig.google.authCallbackPath, async (req, res) => {
     try {
       const state = JSON.parse((req.query.state as string) ?? '{}') as {
-        refererCallbackDomain?: string
+        callbackOriginURL?: string
       }
-      const refererCallbackDomain = state.refererCallbackDomain
-      if (!refererCallbackDomain) {
+      const callbackOriginURL = state.callbackOriginURL
+      if (!callbackOriginURL) {
         res.status(400).send('callback URI state is not setted')
         return
       }
 
       if (req.query.error) {
         // The user did not give us permission.
-        return res.redirect(urljoin(refererCallbackDomain, appConfig.google.errorLoginRedirectPath))
+        return res.redirect(urljoin(callbackOriginURL, appConfig.google.errorLoginRedirectPath))
       }
       const code = req.query.code
 
@@ -126,7 +135,7 @@ export const initGoogleAuthStrategy = (app: Express) => {
         // we want to support CORS requests to login
         sameSite: 'none',
       })
-      res.redirect(urljoin(refererCallbackDomain, appConfig.google.successLoginRedirectPath))
+      res.redirect(urljoin(callbackOriginURL, appConfig.google.successLoginRedirectPath))
     } catch (err) {
       console.error(err)
       res.status(500).send(err)

@@ -1,6 +1,6 @@
 import { GqlPublicUser } from './GqlPublicUser'
 import { authGqlQueryDecorator } from '../gqlUtils/gqlAuth'
-import { graphqlSubQueryType, gtGraphQLBoolean } from '../../libs/gqlLib/typedGqlTypes'
+import { graphqlSubQueryType, tgGraphQLBoolean } from '../../libs/typedGraphQL/index'
 
 export const publicUserQueryFields = () =>
   graphqlSubQueryType(
@@ -9,7 +9,7 @@ export const publicUserQueryFields = () =>
         type: GqlPublicUser,
       },
       isPublicUserLoggedIn: {
-        type: gtGraphQLBoolean,
+        type: tgGraphQLBoolean,
       },
     },
     {

@@ -24,11 +24,11 @@ and basic configurations for nodejs backend based on these technologies:
 
 ## TODO:
 
+- Add DF Posts Categories?
+- Create custom GQL ID type with `prefix:UUID`
 - AWS
-  - S3 cloud-front Route53 public domain setup
   - test AWS SES
-  - add more lambdas + dynamo (no-sql) support
-  - what about serverless RDS?
+  - add more lambdas + dynamo (no-sql) support -> with practical example...
   - add xray AWS lambda tracing
 - Add RDS setup/EC2 puppet postgres config
 - apollo tracking does not work after webpack build
@@ -36,7 +36,7 @@ and basic configurations for nodejs backend based on these technologies:
 - tests
 - sql migrations
 - check the keycloak support
-- add pgadmin into docker-compose
+- add pgadmin into docker-compose?
 
 ## Requirements
 

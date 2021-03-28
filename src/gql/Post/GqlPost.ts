@@ -1,37 +1,37 @@
 import { GqlComment } from '../Comment/GqlComment'
 import { GqlUser } from '../User/GqlUser'
 import {
-  circularDependencyTsHack,
-  graphQLObjectType,
-  gtGraphQLID,
-  gtGraphQLNonNull,
-  gtGraphQLString,
-} from '../../libs/gqlLib/typedGqlTypes'
+  lazyCircularDependencyTsHack,
+  tgGraphQLObjectType,
+  tgGraphQLID,
+  tgGraphQLNonNull,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/index'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
 
-export const GqlPost = graphQLObjectType(
+export const GqlPost = tgGraphQLObjectType(
   {
     name: 'Post',
     fields: () => ({
       id: {
-        type: gtGraphQLNonNull(gtGraphQLID),
+        type: tgGraphQLNonNull(tgGraphQLID),
       },
       rawId: {
-        type: gtGraphQLID,
+        type: tgGraphQLID,
       },
       name: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       text: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       authorId: {
-        type: gtGraphQLID,
+        type: tgGraphQLID,
       },
       author: {
-        type: circularDependencyTsHack(() => GqlUser),
+        type: lazyCircularDependencyTsHack(() => GqlUser),
       },
       comments: {
         args: {

@@ -1,8 +1,10 @@
 import './emails/index'
 // import { ApolloServer } from 'apollo-server-express'
+import { GqlContext } from './utils/GqlContextType'
 import { appEnvs } from './appConfig'
 import { customBearerAuth } from './auth/customBearerAuth'
 import { dbConnection } from './database/dbCore'
+import { getDataLoaders } from './utils/dataLoaderCache'
 import { graphqlHTTP } from 'express-graphql'
 import { initGoogleAuthStrategy, parseGoogleAuthCookieMiddleware } from './auth/googleAuth'
 import { verifyEmailRestGqlProxy } from './gql/User/verifyEmailRestGqlProxy'
@@ -68,7 +70,8 @@ const getApp = async () => {
       context: {
         res,
         req,
-      },
+        dataLoaders: getDataLoaders(),
+      } as GqlContext,
     }))
   )
 

@@ -1,35 +1,35 @@
 import {
-  graphQLObjectType,
-  gtGraphQLInputObjectType,
-  gtGraphQLInt,
-  gtGraphQLList,
-  gtGraphQLNonNull,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLInputObjectType,
+  tgGraphQLInt,
+  tgGraphQLList,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+} from '../../libs/typedGraphQL/index'
 
 export const listPaginationArgs = (name: string) =>
-  gtGraphQLNonNull(
-    gtGraphQLInputObjectType({
+  tgGraphQLNonNull(
+    tgGraphQLInputObjectType({
       name: `${name}_pagination`,
       fields: () => ({
         offset: {
-          type: gtGraphQLNonNull(gtGraphQLInt),
+          type: tgGraphQLNonNull(tgGraphQLInt),
         },
         limit: {
-          type: gtGraphQLNonNull(gtGraphQLInt),
+          type: tgGraphQLNonNull(tgGraphQLInt),
         },
       }),
     })
   )
 
 export const wrapPaginationList = <T>(name: string, type: T) =>
-  graphQLObjectType({
+  tgGraphQLObjectType({
     name: `connection_${name}`,
     fields: () => ({
       count: {
-        type: gtGraphQLInt,
+        type: tgGraphQLInt,
       },
       items: {
-        type: gtGraphQLList(type),
+        type: tgGraphQLList(type),
       },
     }),
   })

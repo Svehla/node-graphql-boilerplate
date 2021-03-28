@@ -4,14 +4,14 @@ import { authGqlTypeDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
 import {
-  graphQLObjectType,
   graphQLSimpleEnum,
-  gtGraphQLBoolean,
-  gtGraphQLID,
-  gtGraphQLInt,
-  gtGraphQLNonNull,
-  gtGraphQLString,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLBoolean,
+  tgGraphQLID,
+  tgGraphQLInt,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/index'
 import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
 
 const GqlUserRole = graphQLSimpleEnum(
@@ -20,30 +20,30 @@ const GqlUserRole = graphQLSimpleEnum(
   Object.fromEntries(Object.values(UserRole).map(i => [i, i]))
 )
 
-export const GqlUser = graphQLObjectType(
+export const GqlUser = tgGraphQLObjectType(
   {
     name: 'User',
     fields: () => ({
       id: {
-        type: gtGraphQLNonNull(gtGraphQLID),
+        type: tgGraphQLNonNull(tgGraphQLID),
       },
       firstName: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       email: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       age: {
-        type: gtGraphQLInt,
+        type: tgGraphQLInt,
       },
       profileImgUrl: {
-        type: gtGraphQLString,
+        type: tgGraphQLString,
       },
       role: {
         type: GqlUserRole,
       },
       isEmailVerified: {
-        type: gtGraphQLBoolean,
+        type: tgGraphQLBoolean,
       },
       posts: {
         args: {
@@ -51,7 +51,7 @@ export const GqlUser = graphQLObjectType(
             type: listPaginationArgs('user_posts_args'),
           },
         },
-        type: wrapPaginationList('user_posts', gtGraphQLNonNull(GqlPost)),
+        type: wrapPaginationList('user_posts', tgGraphQLNonNull(GqlPost)),
       },
     }),
   },

@@ -11,38 +11,62 @@ import {
   GraphQLScalarType,
   GraphQLString,
 } from 'graphql'
-import { GraphQLEmail, GraphQLPassword } from 'graphql-custom-types'
+import {
+  GraphQLDateTime,
+  GraphQLEmail,
+  GraphQLLimitedString,
+  GraphQLPassword,
+  GraphQLUUID,
+} from 'graphql-custom-types'
+
+import { GqlContext as GqlC } from '../../utils/GqlContextType'
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// TODO:
+// > move context type definition out of library
+// > https://www.typescriptlang.org/docs/handbook/declaration-merging.html
+type GqlContext = GqlC
 
 // Custom types
-export const gtGraphQLEmail = (GraphQLEmail as any) as string | undefined | null
+export const tgGraphQLEmail = (GraphQLEmail as any) as string | undefined | null
+export const tgGraphQLDateTime = (GraphQLDateTime as any) as string | undefined | null
+export const tgGraphQLUUID = (GraphQLUUID as any) as string | undefined | null
 
-export const gtGraphQLPassword = (...args: ConstructorParameters<typeof GraphQLPassword>) =>
+// TODO: GraphQL UUID vs ID type
+
+export const tgGraphQLPassword = (...args: ConstructorParameters<typeof GraphQLPassword>) =>
+  // TODO: | null | undefined?
   (new GraphQLPassword(...args) as any) as string
 
-// TODO: add context as global interface to keep update it by anyone?
+export const tgGraphQLLimitedString = (
+  ...args: ConstructorParameters<typeof GraphQLLimitedString>
+) =>
+  // TODO: | null | undefined?
+  (new GraphQLLimitedString(...args) as any) as string
 
 // i decide to use `gt` prefix => gt === graphqlType
-export const gtGraphQLInt = (GraphQLInt as any) as number | undefined | null
-export const gtGraphQLID = (GraphQLID as any) as string | undefined | null
-export const gtGraphQLString = (GraphQLString as any) as string | undefined | null
-export const gtGraphQLBoolean = (GraphQLBoolean as any) as boolean | undefined | null
-export const gtGraphQLFloat = (GraphQLFloat as any) as number | undefined | null
+export const tgGraphQLInt = (GraphQLInt as any) as number | undefined | null
+export const tgGraphQLID = (GraphQLID as any) as string | undefined | null
+export const tgGraphQLString = (GraphQLString as any) as string | undefined | null
+export const tgGraphQLBoolean = (GraphQLBoolean as any) as boolean | undefined | null
+export const tgGraphQLFloat = (GraphQLFloat as any) as number | undefined | null
 
 type ReturnTypeIfFn<T> = T extends (...args: any[]) => infer Ret ? Ret : T
 
 type MaybePromise<T> = Promise<T> | T
 
-export const gtGraphQLNonNull = <T>(arg: T | null | undefined) =>
+export const tgGraphQLNonNull = <T>(arg: T | null | undefined) =>
   (new GraphQLNonNull(arg as any) as any) as T
 
-export const gtGraphQLList = <T>(arg: T) => (new GraphQLList(arg as any) as any) as T[]
+export const tgGraphQLList = <T>(arg: T) => (new GraphQLList(arg as any) as any) as T[]
 
-export const gtGraphQLScalarType = <T>(
+export const tgGraphQLScalarType = <T>(
   config: ConstructorParameters<typeof GraphQLScalarType>[0]
 ): T =>
   // @ts-expect-error
   new GraphQLScalarType(config)
-export const gtGraphQLInputObjectType = <Fields extends Record<string, { type: any }>>(gqlShape: {
+
+export const tgGraphQLInputObjectType = <Fields extends Record<string, { type: any }>>(gqlShape: {
   name: string
   fields: () => Fields
 }): { [FieldKey in keyof Fields]: ReturnTypeIfFn<Fields[FieldKey]['type']> } | undefined =>
@@ -56,7 +80,7 @@ export const graphqlSubQueryType = <Fields extends Record<string, { type: any; a
       args: {
         [ArgKey in keyof Fields[FieldKey]['args']]: Fields[FieldKey]['args'][ArgKey]['type']
       },
-      context: any
+      context: GqlContext
     ) => MaybePromise<any>
     // ) => MaybePromise<Fields[FieldKey]['type']>
   }
@@ -76,7 +100,7 @@ export const graphqlSubQueryType = <Fields extends Record<string, { type: any; a
 // TODO: check validity of this type
 // type HackToOmitFnCircularDepType<T> = T extends (...args: any[]) => any ? any : T
 
-export const graphQLObjectType = <Fields extends Record<string, { type: any; args?: any }>>(
+export const tgGraphQLObjectType = <Fields extends Record<string, { type: any; args?: any }>>(
   gqlShape: {
     name: string
     interfaces?: any[]
@@ -93,7 +117,7 @@ export const graphQLObjectType = <Fields extends Record<string, { type: any; arg
           Fields[FieldKey]['args'][ArgKey]['type']
         >
       },
-      context: any
+      context: GqlContext
     ) => MaybePromise<any>
     // ) => MaybePromise<HackToOmitFnCircularDepType<Fields[FieldKey]['type']>>
   },
@@ -157,7 +181,7 @@ export const gqlMutation = <
   config: Config,
   resolve: (
     args: { [ArgKey in keyof Config['args']]: Config['args'][ArgKey]['type'] },
-    context: any
+    context: GqlContext
   ) => Promise<any>
   // ) => Promise<Config['type']>
 ) => {
@@ -168,7 +192,7 @@ export const gqlMutation = <
 }
 
 // is used to be resolved by `ReturnTypeIfFn<...>` generic
-export const circularDependencyTsHack = <T>(arg: T): T => {
+export const lazyCircularDependencyTsHack = <T>(arg: T): T => {
   const shittyCode = arg as any
   return shittyCode()
 }

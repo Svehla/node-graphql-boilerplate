@@ -10,8 +10,7 @@ const clientToPostgresDb = knex({
     host: appEnvs.postgres.HOST,
     user: appEnvs.postgres.USER,
     password: appEnvs.postgres.PASSWORD,
-    // do i need to connect directly into `postgres` database?
-    database: 'postgres',
+    database: appEnvs.postgres.DB_NAME,
   },
 })
 

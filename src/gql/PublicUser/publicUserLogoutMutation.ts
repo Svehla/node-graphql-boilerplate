@@ -1,12 +1,12 @@
 import { Response } from 'express'
 import { appConfig } from '../../appConfig'
-import { gqlMutation, gtGraphQLString } from '../../libs/gqlLib/typedGqlTypes'
+import { gqlMutation, tgGraphQLString } from '../../libs/typedGraphQL/index'
 
 export const publicUserLogoutMutation = () =>
   gqlMutation(
     {
       args: {},
-      type: gtGraphQLString,
+      type: tgGraphQLString,
     },
     async (_args, ctx) => {
       ;(ctx.res as Response).clearCookie(appConfig.authCookieName, {

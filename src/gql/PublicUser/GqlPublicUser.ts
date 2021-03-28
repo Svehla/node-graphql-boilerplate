@@ -1,11 +1,11 @@
 import { UserLoginType } from '../../database/EntityPublicUsers'
 import {
-  graphQLObjectType,
+  tgGraphQLObjectType,
   graphQLSimpleEnum,
-  gtGraphQLID,
-  gtGraphQLNonNull,
-  gtGraphQLString,
-} from '../../libs/gqlLib/typedGqlTypes'
+  tgGraphQLID,
+  tgGraphQLNonNull,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/index'
 
 const GqlUserLoginType = graphQLSimpleEnum(
   'PublicUserLoginTypeEnum',
@@ -13,20 +13,20 @@ const GqlUserLoginType = graphQLSimpleEnum(
   Object.fromEntries(Object.values(UserLoginType).map(i => [i, i]))
 )
 
-export const GqlPublicUser = graphQLObjectType({
+export const GqlPublicUser = tgGraphQLObjectType({
   name: 'PublicUser',
   fields: () => ({
     id: {
-      type: gtGraphQLNonNull(gtGraphQLID),
+      type: tgGraphQLNonNull(tgGraphQLID),
     },
     email: {
-      type: gtGraphQLString,
+      type: tgGraphQLString,
     },
     loginType: {
       type: GqlUserLoginType,
     },
     profileImg: {
-      type: gtGraphQLString,
+      type: tgGraphQLString,
     },
   }),
 })
