@@ -7,8 +7,8 @@
   "main": "src/main.ts",
   "scripts": {
     "build:ts-assets": "rm -rf dist-minified && ts-node build-scripts/buildClientAssets",
-    "prepare:development:assets": "npm run build:ts-assets && cp .env.development dist-minified/.env",
-    "prepare:production:assets": "npm run build:ts-assets && cp .env.production dist-minified/.env",
+    "prepare:development:assets": "npm run build:ts-assets && cp .env.development.env dist-minified/.env",
+    "prepare:production:assets": "npm run build:ts-assets && cp .env.production.env dist-minified/.env",
     "terraform:apply:production": "cd terraform && terraform workspace select production && terraform apply -var-file=production.tfvars",
     "terraform:apply:development": "cd terraform && terraform workspace select development && terraform apply -var-file=development.tfvars",
     "deploy:infra:production": "npm run prepare:production:assets && npm run terraform:apply:production",

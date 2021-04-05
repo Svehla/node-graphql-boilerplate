@@ -1,3 +1,4 @@
+import { GqlContext } from '../../utils/GqlContextType'
 import { UserHasNoPermissions, UserHaveToBeLoggedError } from '../gqlSharedErrors/auth'
 import { UserRole } from '../../database/EntityUser'
 import { notNullable } from '../../utils/typeGuards'
@@ -8,15 +9,15 @@ type AuthConfig = {
   deniedRoles?: UserRole[]
 }
 export const authGqlTypeDecorator = (config: AuthConfig) => <Parent, Args, T>(
-  fn: (p: Parent, args: Args, context: any) => T
-) => (p: Parent, args: Args, context: any): T => {
+  fn: (p: Parent, args: Args, context: GqlContext) => T
+) => (p: Parent, args: Args, context: GqlContext): T => {
   checkUserAccessOrError(config, context)
   return fn(p, args, context)
 }
 
 export const authGqlQueryDecorator = (config: AuthConfig) => <Args, T>(
-  fn: (args: Args, context: any) => T
-) => (args: Args, context: any): T => {
+  fn: (args: Args, context: GqlContext) => T
+) => (args: Args, context: GqlContext): T => {
   checkUserAccessOrError(config, context)
   return fn(args, context)
 }
@@ -24,7 +25,7 @@ export const authGqlQueryDecorator = (config: AuthConfig) => <Args, T>(
 // mutation resolver hav the same API as the query resolvers
 export const authGqlMutationDecorator = authGqlQueryDecorator
 
-const checkUserAccessOrError = (config: AuthConfig, gqlContext: any) => {
+const checkUserAccessOrError = (config: AuthConfig, gqlContext: GqlContext) => {
   const user = gqlContext.req.user
   const publicUser = gqlContext.req.publicUser
 

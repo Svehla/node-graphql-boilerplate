@@ -24,6 +24,7 @@ const createDb = async () => {
 
     const databaseName = appEnvs.postgres.DB_NAME
 
+    // TODO: should it be there?
     try {
       await clientToPostgresDb.raw(`DROP DATABASE IF EXISTS ${databaseName};`)
     } catch (e) {
@@ -43,7 +44,7 @@ const createDb = async () => {
     })
 
     clientToDb.connect()
-    await clientToDb.query(`CREATE EXTENSION IF NOT EXISTS unaccent;`)
+    // await clientToDb.query(`CREATE EXTENSION IF NOT EXISTS unaccent;`)
 
     // ----- Drop all tables ------
     await dbConnection
