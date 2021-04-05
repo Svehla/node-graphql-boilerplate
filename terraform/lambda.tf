@@ -1,4 +1,6 @@
 
+# inspiration
+# > https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway?in=terraform/aws
 
 data "archive_file" "lambda_zip" {
   type        = "zip"

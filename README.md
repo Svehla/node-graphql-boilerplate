@@ -92,3 +92,19 @@ All npm scripts are available also with the `docker:` prefix to call them direct
 ```bash
 kill $(lsof -ti:2020)
 ```
+
+## Create database permissions
+
+[add pg user tutorial](https://medium.com/@mohammedhammoud/postgresql-create-user-create-database-grant-privileges-access-aabb2507c0aa)
+
+```sql
+CREATE DATABASE my_app_production
+
+CREATE USER my_app_production_user WITH PASSWORD 'my-secret-password';
+
+GRANT ALL PRIVILEGES ON DATABASE "my_app_production" to my_app_production_user;
+
+-- in scope of newly created db create uuid extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+```

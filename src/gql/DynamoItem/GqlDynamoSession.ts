@@ -4,7 +4,7 @@ export const GqlDynamoItem = tgGraphQLObjectType(
   {
     name: 'DynamoItem',
     fields: () => ({
-      PK: {
+      userId: {
         type: tgGraphQLString,
       },
       SK: {

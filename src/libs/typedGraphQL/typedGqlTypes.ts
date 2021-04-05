@@ -58,7 +58,8 @@ type MaybePromise<T> = Promise<T> | T
 export const tgGraphQLNonNull = <T>(arg: T | null | undefined) =>
   (new GraphQLNonNull(arg as any) as any) as T
 
-export const tgGraphQLList = <T>(arg: T) => (new GraphQLList(arg as any) as any) as T[]
+export const tgGraphQLList = <T>(arg: T) =>
+  (new GraphQLList(arg as any) as any) as T[] | null | undefined
 
 export const tgGraphQLScalarType = <T>(
   config: ConstructorParameters<typeof GraphQLScalarType>[0]

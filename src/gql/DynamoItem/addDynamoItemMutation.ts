@@ -1,7 +1,6 @@
 import { GqlDynamoItem } from './GqlDynamoItem'
 import { appEnvs } from '../../appConfig'
 import { authGqlMutationDecorator } from '../gqlUtils/gqlAuth'
-import { dynamoDBConf } from '../../dynamo/config'
 import {
   gqlMutation,
   tgGraphQLNonNull,
@@ -43,7 +42,7 @@ export const addDynamoItemMutation = () =>
 
       await ddb
         .putItem({
-          TableName: dynamoDBConf.aws_table_name,
+          TableName: appEnvs.aws.dynamoDB.tableName,
           Item: {
             id: { S: newItem.id },
             name: { S: newItem.name },

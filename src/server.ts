@@ -1,3 +1,4 @@
+import './dynamo/config'
 import './emails/index'
 // import { ApolloServer } from 'apollo-server-express'
 import { GqlContext } from './utils/GqlContextType'

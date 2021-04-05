@@ -50,7 +50,6 @@ export const appEnvs = validateConfig({
       API_VERSION: '2010-12-01',
     },
 
-
     dynamoDB: {
       API_VERSION: '2012-08-10',
       endpoint: getStringFromEnvParser('AWS_DYNAMO_LOG_TABLE_NAME'),
