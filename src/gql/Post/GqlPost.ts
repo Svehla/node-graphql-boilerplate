@@ -1,14 +1,14 @@
 import { GqlComment } from '../Comment/GqlComment'
 import { GqlUser } from '../User/GqlUser'
-import {
-  lazyCircularDependencyTsHack,
-  tgGraphQLObjectType,
-  tgGraphQLID,
-  tgGraphQLNonNull,
-  tgGraphQLString,
-} from '../../libs/typedGraphQL/index'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
+import {
+  lazyCircularDependencyTsHack,
+  tgGraphQLID,
+  tgGraphQLNonNull,
+  tgGraphQLObjectType,
+  tgGraphQLString,
+} from '../../libs/typedGraphQL/index'
 import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
 
 export const GqlPost = tgGraphQLObjectType(

@@ -17,7 +17,7 @@ const passwordHash = bcrypt.hashSync('password1', salt)
 
 export const usersMockData = [
   ...Array(0)
-  // ...Array(fakeImages.length)
+    // ...Array(fakeImages.length)
     .fill(0)
     .map((_, index) => ({
       email: `user-${index}@example.com`,

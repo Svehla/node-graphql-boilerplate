@@ -24,13 +24,10 @@ and basic configurations for nodejs backend based on these technologies:
 
 ## TODO:
 
-- Add DF Posts Categories?
 - Create custom GQL ID type with `prefix:UUID`
 - AWS
   - test AWS SES
-  - add more lambdas + dynamo (no-sql) support -> with practical example...
   - add xray AWS lambda tracing
-- Add RDS setup/EC2 puppet postgres config
 - apollo tracking does not work after webpack build
 - add FB oAuth2
 - tests
@@ -108,3 +105,12 @@ GRANT ALL PRIVILEGES ON DATABASE "my_app_production" to my_app_production_user;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 ```
+
+### steps to create this boilerplate into new project
+
+- Create SQL database and get Credentials
+- Create dynamo table
+- Setup .env(development|production) file
+- change AWS S3 Terraform backend
+- Setup tfvars.(production|development) files
+- deploy infrastructure

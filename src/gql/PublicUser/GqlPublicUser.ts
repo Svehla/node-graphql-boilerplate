@@ -1,9 +1,9 @@
 import { UserLoginType } from '../../database/EntityPublicUsers'
 import {
-  tgGraphQLObjectType,
   graphQLSimpleEnum,
   tgGraphQLID,
   tgGraphQLNonNull,
+  tgGraphQLObjectType,
   tgGraphQLString,
 } from '../../libs/typedGraphQL/index'
 

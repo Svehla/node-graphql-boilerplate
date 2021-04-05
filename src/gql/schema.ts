@@ -1,4 +1,5 @@
 import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql'
+import { getQueryDynamoItem } from './DynamoItem/QueryDynamoItem'
 import { publicUserLogoutMutation } from './PublicUser/publicUserLogoutMutation'
 import { publicUserQueryFields } from './PublicUser/QueryPublicUser'
 import { userLoginMutation } from './User/userLoginMutation'
@@ -14,6 +15,7 @@ const schema = new GraphQLSchema({
     fields: () => ({
       ...userQueryFields(),
       ...publicUserQueryFields(),
+      ...getQueryDynamoItem(),
       appVersion: {
         type: GraphQLString,
         resolve: () => packageJson.version,
