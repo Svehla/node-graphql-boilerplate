@@ -53,8 +53,8 @@ export const appEnvs = validateConfig({
 
   aws: {
     REGION: 'eu-central-1',
-    ACCESS_KEY_ID: getStringFromEnvParser('RQB_AWS_ACCESS_KEY_ID'),
-    SECRET_ACCESS_KEY: getStringFromEnvParser('RQB_AWS_SECRET_ACCESS_KEY'),
+    ACCESS_KEY_ID: getStringFromEnvParser('NGB_AWS_ACCESS_KEY_ID'),
+    SECRET_ACCESS_KEY: getStringFromEnvParser('NGB_AWS_SECRET_ACCESS_KEY'),
     ses: {
       API_VERSION: '2010-12-01',
     },

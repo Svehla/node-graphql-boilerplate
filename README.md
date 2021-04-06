@@ -77,9 +77,9 @@ kill $(lsof -ti:2020)
 
 - Create SQL database and get Credentials
 - Create dynamo table
-- Setup .env(development|production) file
+- Setup .env(stage-1|production) file
 - change AWS S3 Terraform backend
-- Setup tfvars.(production|development) files
+- Setup tfvars.(stage-1|production) files
 - deploy infrastructure
 
 ## How to run & reconfigure this fullstack repository
@@ -174,16 +174,11 @@ then set your newly created resources into `/terraform/main` > `terraform` > `ba
 
 #### Setup Terraform variables
 
-```sh
-cd terraform
-cp stage-1.tfvars.example stage-1.tfvars
-cp production.tfvars.example production.tfvars
+Don't forget you have to be logged into AWS CLI from PC which deploy your terraform infrastructure
 
-```
+go to `/terraform` folder and change `globalLocals.tf` variables
 
-Then setup `(production|stage-1).tfvars` files with proper values
-
-Now you should deploy both your environments with just simple
+Now you should deploy both your environments with just simple scripts:
 
 ```sh
 terraform init
@@ -196,4 +191,4 @@ npm run deploy:code:stage-1 # or d:c:s
 
 #### rename deploy scripts
 
-by name of your lambdas change .sh scripts in the `deploy-scripts` folder
+by name of your lambdas change `.sh` scripts in the `deploy-scripts` folder

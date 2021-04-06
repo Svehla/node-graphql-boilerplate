@@ -13,7 +13,7 @@ resource "aws_lambda_function" "be_service" {
   filename         = "../lambda-output.zip"
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
-  function_name = "${var.environment}_${var.project}_be_service"
+  function_name = "${var.project}_${var.environment}_be_service"
 
   # "main" is the filename within the zip file (index.js) and "handler"
   # is the name of the property under which the handler function was
@@ -41,7 +41,7 @@ data "aws_iam_policy_document" "AWSLambdaTrustPolicy" {
 # IAM role which dictates what other AWS services the Lambda function
 # may access.
 resource "aws_iam_role" "lambda_exec" {
-  name = "lambda_${var.environment}_${var.project}_be_service"
+  name = "lambda_${var.project}_${var.environment}_be_service"
 
   # TODO: add proper permisssions to write into cloudWatch
   assume_role_policy = data.aws_iam_policy_document.AWSLambdaTrustPolicy.json

@@ -1,5 +1,5 @@
 resource "aws_api_gateway_rest_api" "this" {
-  name        = "${var.environment}_nodeGraphqlBoilerplate"
+  name        = "${var.project}_${var.environment}"
   description = "Terraform Serverless Application Example"
 }
 
@@ -24,7 +24,7 @@ resource "aws_api_gateway_account" "this" {
 }
 
 resource "aws_iam_role" "cloudwatch" {
-  name = "${var.environment}_api_gateway_cloudwatch_global"
+  name = "${var.project}_${var.environment}_api_gateway_cloudwatch_global"
 
   assume_role_policy = <<EOF
 {
