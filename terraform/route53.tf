@@ -6,7 +6,7 @@ data "aws_route53_zone" "this" {
 
 resource "aws_route53_record" "this" {
   zone_id = data.aws_route53_zone.this.zone_id
-  name    = "${var.prefix}.api.${var.domain}"
+  name    = "${var.url_prefix}.api.${var.domain}"
   type    = "A"
 
   alias {

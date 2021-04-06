@@ -1,10 +1,10 @@
 
 resource "aws_acm_certificate" "api_gateway" {
-  domain_name       = "${var.prefix}.api.${var.domain}"
+  domain_name       = "${var.url_prefix}.api.${var.domain}"
   validation_method = "DNS"
 
   tags = merge(local.tags, {
-    Name = "api-${var.prefix}-${var.project}"
+    Name = "api-${var.url_prefix}-${var.project}"
   })
 
   lifecycle {

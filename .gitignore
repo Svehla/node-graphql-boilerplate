@@ -30,6 +30,7 @@ temp/*
 # dotenv environment variables file(s)
 .env
 .env.*
+!.env.example.env
 
 #Build generated
 dist/
@@ -44,7 +45,7 @@ lambda-output.zip
 /terraform/.terraform
 /terraform/**/*.lock.hcl
 /terraform/**/*.plan
-/terraform/**/*.tfvars
+# /terraform/**/*.tfvars
 # ???
 /terraform/**/*.tfstate
 /terraform/**/*.tfstate.backup

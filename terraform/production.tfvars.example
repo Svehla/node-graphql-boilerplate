@@ -1,4 +1,0 @@
-prefix = "development"
-region = "eu-central-1"
-domain =  "dailyfaily.com"
-project = "graphql-boilerplate"

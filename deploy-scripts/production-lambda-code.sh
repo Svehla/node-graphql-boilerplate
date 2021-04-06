@@ -3,7 +3,7 @@
 zip -r -j lambda-output.zip dist-minified/index.js dist-minified/.env
 
 aws lambda update-function-code \
-    --function-name production_graphql-boilerplate_be_service \
+    --function-name production_node-graphql-boilerplate_be_service \
     --region eu-central-1 \
     --zip-file fileb://lambda-output.zip
 

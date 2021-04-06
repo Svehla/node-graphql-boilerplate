@@ -4,11 +4,23 @@ variable "project" {
   type        = string
 }
 
-# TODO: rename to env?
-variable "prefix" {
-  description = "This is the environment where your webapp is deployed. production, or development"
+variable "environment" {
+  description = "This is the environment subdomain where your webapp is deployed. production, or stage-1 or whatever"
   type        = string
 }
+variable "url_prefix" {
+  description = "This is the environment subdomain where your webapp is deployed. production, or stage-1 or whatever"
+  type        = string
+}
+# TODO: add more modules
+# variable "stage_1_prefix" {
+#   description = "This is the environment where your webapp is deployed. production, or stage-1 or whatever"
+#   type        = string
+# }
+# variable "production_prefix" {
+#   description = "This is the environment where your webapp is deployed. production, or stage-1 or whatever"
+#   type        = string
+# }
 
 variable "tags" {
   type    = map(string)

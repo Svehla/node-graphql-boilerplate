@@ -5,11 +5,11 @@
 terraform {
   backend "s3" {
     # Replace this with your bucket name!
-    bucket = "serverless-example-terraform-up-and-running-state"
+    bucket = "node-graphql-boilerplate-terraform-up-and-running-state"
     key    = "global/s3/terraform.tfstate"
     region = "eu-central-1"
     # Replace this with your DynamoDB table name!
-    dynamodb_table = "terraform-up-and-running-locks"
+    dynamodb_table = "node-graphql-boilerplate-terraform-up-and-running-locks"
     encrypt        = true
   }
 
@@ -24,7 +24,7 @@ provider "aws" {
 locals {
   tags = merge(var.tags, {
     project = var.project
-    env     = var.prefix
+    env     = var.environment
   })
 }
 

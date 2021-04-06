@@ -13,7 +13,7 @@ export const dbConnection = createConnection({
   entities: Object.values(entities),
 
   // TODO: how to live with synchronize? TODO: add env?
-  synchronize: appEnvs.ENVIRONMENT === 'dev' && appEnvs.NODE_ENV === 'development',
+  synchronize: appEnvs.postgres.TYPEORM_SYNCHRONIZE,
 }).catch(error => {
   console.error(`can't connect to the database`)
   console.error(error)
