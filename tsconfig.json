@@ -28,5 +28,8 @@
   "include": [
     "./index.d.ts",
     "**/*.ts"
+  ],
+  "exclude": [
+    "__todo_tests"
   ]
 }
