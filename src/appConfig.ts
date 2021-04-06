@@ -1,4 +1,5 @@
 import {
+  getBoolFromEnvParser,
   getListFromEnvParser,
   getNumberFromEnvParser,
   getStringEnumFromEnvParser,
@@ -10,7 +11,14 @@ const urlPattern = '(http|https)://*.' as const
 
 export const appEnvs = validateConfig({
   PORT: getNumberFromEnvParser('PORT'),
-  ENVIRONMENT: getStringEnumFromEnvParser('ENVIRONMENT', ['production', 'test', 'dev'] as const),
+  ENVIRONMENT: getStringEnumFromEnvParser('ENVIRONMENT', [
+    'production',
+    'stage-1',
+    'test',
+    'dev',
+  ] as const),
+
+  // NODE_ENV is just metadata for nodejs to say that build is optimized for running on sone environment
   NODE_ENV: getStringEnumFromEnvParser('NODE_ENV', ['production', 'development', 'test'] as const),
 
   postgres: {
@@ -19,6 +27,7 @@ export const appEnvs = validateConfig({
     DB_NAME: getStringFromEnvParser('POSTGRES_DB_NAME'),
     PASSWORD: getStringFromEnvParser('POSTGRES_PASSWORD'),
     PORT: 5432,
+    TYPEORM_SYNCHRONIZE: getBoolFromEnvParser('POSTGRES_TYPEORM_SYNCHRONIZE'),
   },
 
   allowedOriginsUrls: getListFromEnvParser('ALLOWED_ORIGINS_URLS', String),
@@ -44,8 +53,8 @@ export const appEnvs = validateConfig({
 
   aws: {
     REGION: 'eu-central-1',
-    ACCESS_KEY_ID: getStringFromEnvParser('AWS_ACCESS_KEY_ID'),
-    SECRET_ACCESS_KEY: getStringFromEnvParser('AWS_SECRET_ACCESS_KEY'),
+    ACCESS_KEY_ID: getStringFromEnvParser('NGB_AWS_ACCESS_KEY_ID'),
+    SECRET_ACCESS_KEY: getStringFromEnvParser('NGB_AWS_SECRET_ACCESS_KEY'),
     ses: {
       API_VERSION: '2010-12-01',
     },

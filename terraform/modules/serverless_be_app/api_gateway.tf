@@ -1,10 +1,10 @@
 resource "aws_api_gateway_rest_api" "this" {
-  name        = "${var.prefix}_nodeGraphqlBoilerplate"
+  name        = "${var.project}_${var.environment}"
   description = "Terraform Serverless Application Example"
 }
 
 resource "aws_api_gateway_domain_name" "this" {
-  domain_name = "${var.prefix}.api.${var.domain}"
+  domain_name = "${var.url_prefix}.api.${var.domain}"
 
   regional_certificate_arn = aws_acm_certificate_validation.api_gateway.certificate_arn
 
@@ -24,7 +24,7 @@ resource "aws_api_gateway_account" "this" {
 }
 
 resource "aws_iam_role" "cloudwatch" {
-  name = "${var.prefix}_api_gateway_cloudwatch_global"
+  name = "${var.project}_${var.environment}_api_gateway_cloudwatch_global"
 
   assume_role_policy = <<EOF
 {

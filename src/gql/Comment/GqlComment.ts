@@ -40,6 +40,6 @@ export const GqlComment = tgGraphQLObjectType(
   {
     id: p => `Comment:${p.id}`,
     rawId: p => p.id,
-    author: (p, a, c) => c.dataLoaders.user.load(p.authorId),
+    author: (p, _a, c) => c.dataLoaders.user.load(p.authorId),
   }
 )

@@ -5,11 +5,12 @@
 terraform {
   backend "s3" {
     # Replace this with your bucket name!
-    bucket = "serverless-example-terraform-up-and-running-state"
+    bucket = "node-graphql-boilerplate-terraform-up-and-running-state"
     key    = "global/s3/terraform.tfstate"
+    # TODO: add local.region
     region = "eu-central-1"
     # Replace this with your DynamoDB table name!
-    dynamodb_table = "terraform-up-and-running-locks"
+    dynamodb_table = "node-graphql-boilerplate-terraform-up-and-running-locks"
     encrypt        = true
   }
 
@@ -18,13 +19,29 @@ terraform {
 
 provider "aws" {
   profile = "default"
-  region  = var.region
+  region  = local.region
 }
 
-locals {
-  tags = merge(var.tags, {
-    project = var.project
-    env     = var.prefix
-  })
+module "serverless_be_app__production" {
+  source = "./modules/serverless_be_app"
+
+  environment = "production"
+  url_prefix  = "ngb-production"
+
+  region  = local.region
+  domain  = local.domain
+  project = local.project
+}
+
+
+module "serverless_be_app__stage_1" {
+  source = "./modules/serverless_be_app"
+
+  environment = "stage_1"
+  url_prefix  = "stage-1"
+
+  region  = local.region
+  domain  = local.domain
+  project = local.project
 }
 

@@ -51,23 +51,6 @@ Environment details are described in the `/src/appConfig.ts`.
 
 Database docker container environments are setted in the `/docker-compose.yml`.
 
-## setup terraform:
-
-```sh
-cd init-terraform-backend
-
-terraform init
-terraform apply
-
-cd ..
-cd terraform
-
-terraform init
-
-terraform workspace new production
-terraform workspace new development
-```
-
 ## Installation
 
 All npm scripts are available also with the `docker:` prefix to call them directly in the running container
@@ -90,9 +73,54 @@ All npm scripts are available also with the `docker:` prefix to call them direct
 kill $(lsof -ti:2020)
 ```
 
-## Create database permissions
+### steps to create this boilerplate into new project
 
-[add pg user tutorial](https://medium.com/@mohammedhammoud/postgresql-create-user-create-database-grant-privileges-access-aabb2507c0aa)
+- Create SQL database and get Credentials
+- Create dynamo table
+- Setup .env(stage-1|production) file
+- change AWS S3 Terraform backend
+- Setup tfvars.(stage-1|production) files
+- deploy infrastructure
+
+## How to run & reconfigure this fullstack repository
+
+### Run local development
+
+```sh
+git clone .....
+
+
+```
+
+setup local env variables
+
+```sh
+# setup envs
+cp .example.env .env
+cp .example.env .env
+cp .example.env .env
+
+# install dependencies
+npm install
+```
+
+change database name + change db_name in `docker-compose.yml`
+
+```sh
+# run database:
+npm run docker:db:up
+
+# add init data
+npm run docker:db:hard-init
+```
+
+### deployment
+
+#### Postgre database
+
+In AWS console create new RDS and set it public with proper settings of security groups.
+
+Then connect into this created instance and add a new user. you can use scripts like this:
 
 ```sql
 CREATE DATABASE my_app_production
@@ -105,11 +133,62 @@ GRANT ALL PRIVILEGES ON DATABASE "my_app_production" to my_app_production_user;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 ```
 
-### steps to create this boilerplate into new project
+[add pg user tutorial](https://medium.com/@mohammedhammoud/postgresql-create-user-create-database-grant-privileges-access-aabb2507c0aa)
 
-- Create SQL database and get Credentials
-- Create dynamo table
-- Setup .env(development|production) file
-- change AWS S3 Terraform backend
-- Setup tfvars.(production|development) files
-- deploy infrastructure
+#### DynamoDB database
+
+Go to AWS console and create new dynamo table with PK named: `PK` and SK named: `SK`
+
+#### setup .env.(production|stage-1).env files which will be deployed with your code into the AWS lambda
+
+```sh
+cp .example.env .env
+cp .example.env .env.stage-1.env
+cp .example.env .env.production
+```
+
+now you should setup
+
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- POSTGRES_DB_NAME
+- POSTGRES_HOST
+- AWS_ACCESS_KEY_ID -> this should be removed in the near future
+- AWS_SECRET_ACCESS_KEY -> this should be removed in the near future
+- AWS_DYNAMO_LOG_TABLE_NAME=node-boilerplate-stage-1
+- ...
+
+#### terraform state
+
+go to `init-terraform-backend/setup-backend.tf` and change name of your dynamodb table + s3 bucket
+
+```sh
+cd init-terraform-backend
+
+terraform init
+terraform apply
+
+```
+
+then set your newly created resources into `/terraform/main` > `terraform` > `backend "s3"` > `bucket` + `dynamodb_table`
+
+#### Setup Terraform variables
+
+Don't forget you have to be logged into AWS CLI from PC which deploy your terraform infrastructure
+
+go to `/terraform` folder and change `globalLocals.tf` variables
+
+Now you should deploy both your environments with just simple scripts:
+
+```sh
+terraform init
+
+npm run deploy:infrastructure # or d:i
+npm run deploy:code:production # or d:c:p
+npm run deploy:code:stage-1 # or d:c:s
+
+```
+
+#### rename deploy scripts
+
+by name of your lambdas change `.sh` scripts in the `deploy-scripts` folder

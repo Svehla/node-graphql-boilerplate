@@ -1,5 +1,4 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
-import { User } from './EntityUser'
 
 @Entity('posts')
 export class Post {
@@ -7,7 +6,7 @@ export class Post {
   id: number
 
   @Column()
-  author: User
+  author: string
 
   @Column({ nullable: true })
   authorId: number

@@ -16,7 +16,7 @@ provider "aws" {
 
 # ----- state resources config starts -----
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "serverless-example-terraform-up-and-running-state"
+  bucket = "node-graphql-boilerplate-terraform-up-and-running-state"
   # Enable versioning so we can see the full revision history of our
   # state files
   versioning {
@@ -33,7 +33,7 @@ resource "aws_s3_bucket" "terraform_state" {
 }
 
 resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "terraform-up-and-running-locks"
+  name         = "node-graphql-boilerplate-terraform-up-and-running-locks"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
   attribute {

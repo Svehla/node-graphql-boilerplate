@@ -29,7 +29,7 @@ export const addDynamoItemMutation = () =>
     },
 
     authGqlMutationDecorator({ onlyLogged: true })(async (args, ctx) => {
-      const user = ctx.req.user
+      const user = ctx.req.user!
 
       const ddb = new AWS.DynamoDB({ apiVersion: appEnvs.aws.dynamoDB.API_VERSION })
 
@@ -47,7 +47,8 @@ export const addDynamoItemMutation = () =>
             id: { S: newItem.id },
             name: { S: newItem.name },
             authorId: { S: newItem.authorId },
-          },
+            // TODO: fix types
+          } as any,
         })
         .promise()
 
