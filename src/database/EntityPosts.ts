@@ -1,23 +1,13 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  // JoinColumn,
-  // OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm'
-// import { User } from './EntityUser'
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { User } from './EntityUser'
 
 @Entity('posts')
 export class Post {
   @PrimaryGeneratedColumn()
   id: number
 
-  // TODO: find error
-  // @OneToOne(() => User)
-  // @JoinColumn()
-  // author: User
+  @Column()
+  author: User
 
   @Column({ nullable: true })
   authorId: number

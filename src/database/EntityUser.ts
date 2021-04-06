@@ -1,12 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  // OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm'
-// import { Post } from './EntityPosts'
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 export enum UserRole {
   Admin = 'Admin',
@@ -54,7 +46,4 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date
-
-  // @OneToMany(() => Post, post => post.author)
-  // author: User
 }

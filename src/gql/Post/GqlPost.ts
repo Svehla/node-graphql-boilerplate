@@ -46,17 +46,7 @@ export const GqlPost = tgGraphQLObjectType(
   {
     id: p => `Post:${p.id}`,
     rawId: p => p.id,
-    author: async p => {
-      const repository = getRepository(entities.User)
-
-      const user = await repository.findOne({
-        where: {
-          id: p.authorId,
-        },
-      })
-
-      return user
-    },
+    author: (p, _a, c) => c.dataLoaders.user.load(p.authorId),
     comments: async (_p, args) => {
       const repository = getRepository(entities.Comment)
 

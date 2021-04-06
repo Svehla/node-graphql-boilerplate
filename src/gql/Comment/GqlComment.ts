@@ -1,5 +1,8 @@
+import { GqlUser } from '../User/GqlUser'
 import {
+  lazyCircularDependencyTsHack,
   tgGraphQLID,
+  tgGraphQLInt,
   tgGraphQLNonNull,
   tgGraphQLObjectType,
   tgGraphQLString,
@@ -20,6 +23,12 @@ export const GqlComment = tgGraphQLObjectType(
         type: tgGraphQLString,
       },
 
+      authorId: {
+        type: tgGraphQLInt,
+      },
+      author: {
+        type: lazyCircularDependencyTsHack(() => GqlUser),
+      },
       createdAt: {
         type: tgGraphQLString,
       },
@@ -31,5 +40,6 @@ export const GqlComment = tgGraphQLObjectType(
   {
     id: p => `Comment:${p.id}`,
     rawId: p => p.id,
+    author: (p, a, c) => c.dataLoaders.user.load(p.authorId),
   }
 )

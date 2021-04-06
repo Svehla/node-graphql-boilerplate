@@ -103,7 +103,6 @@ GRANT ALL PRIVILEGES ON DATABASE "my_app_production" to my_app_production_user;
 
 -- in scope of newly created db create uuid extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 ```
 
 ### steps to create this boilerplate into new project
