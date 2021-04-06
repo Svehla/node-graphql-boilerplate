@@ -38,7 +38,7 @@ module "serverless_be_app__stage_1" {
   source = "./modules/serverless_be_app"
 
   environment = "stage_1"
-  url_prefix  = "stage-1"
+  url_prefix  = "ngb-stage-1"
 
   region  = local.region
   domain  = local.domain

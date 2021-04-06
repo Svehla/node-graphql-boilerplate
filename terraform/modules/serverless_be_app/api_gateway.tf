@@ -1,6 +1,6 @@
 resource "aws_api_gateway_rest_api" "this" {
   name        = "${var.project}_${var.environment}"
-  description = "Terraform Serverless Application Example"
+  description = "Terraform Application"
 }
 
 resource "aws_api_gateway_domain_name" "this" {
