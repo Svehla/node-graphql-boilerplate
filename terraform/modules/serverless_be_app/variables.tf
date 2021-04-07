@@ -26,3 +26,7 @@ variable "region" {
 variable "domain" {
   description = "domain"
 }
+
+variable "allowDynamoTableName" {
+  description = "add role to access dynamo for proper instance"
+}

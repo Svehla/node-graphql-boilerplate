@@ -25,8 +25,9 @@ provider "aws" {
 module "serverless_be_app__production" {
   source = "./modules/serverless_be_app"
 
-  environment = "production"
-  url_prefix  = "ngb-production"
+  environment          = "production"
+  url_prefix           = "ngb-production"
+  allowDynamoTableName = "node-boilerplate-production"
 
   region  = local.region
   domain  = local.domain
@@ -37,8 +38,9 @@ module "serverless_be_app__production" {
 module "serverless_be_app__stage_1" {
   source = "./modules/serverless_be_app"
 
-  environment = "stage_1"
-  url_prefix  = "ngb-stage-1"
+  environment          = "stage_1"
+  url_prefix           = "ngb-stage-1"
+  allowDynamoTableName = "node-boilerplate-stage-1"
 
   region  = local.region
   domain  = local.domain

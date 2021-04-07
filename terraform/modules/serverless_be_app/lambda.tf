@@ -47,12 +47,41 @@ resource "aws_iam_role" "lambda_exec" {
   assume_role_policy = data.aws_iam_policy_document.AWSLambdaTrustPolicy.json
 }
 
+resource "aws_iam_role_policy" "main" {
+  name = "${var.project}_${var.environment}_dynamo_${var.allowDynamoTableName}_access"
+  role = aws_iam_role.lambda_exec.id
 
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:BatchGet*",
+          "dynamodb:DescribeStream",
+          "dynamodb:DescribeTable",
+          "dynamodb:Get*",
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:BatchWrite*",
+          "dynamodb:CreateTable",
+          "dynamodb:Delete*",
+          "dynamodb:Update*",
+          "dynamodb:PutItem"
+        ]
+        Resource = "arn:aws:dynamodb:${var.region}:*:table/${var.allowDynamoTableName}"
+      }
+    ]
+  })
+}
+
+
+
+# TODO: is this redundnat resource?
 resource "aws_iam_role_policy_attachment" "terraform_lambda_policy" {
   role       = aws_iam_role.lambda_exec.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
-
 
 
 resource "aws_api_gateway_resource" "proxy" {
