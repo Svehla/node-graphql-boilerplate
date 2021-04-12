@@ -1,6 +1,6 @@
 import { appEnvs } from '../../appConfig'
+import { performance } from 'perf_hooks'
 import {
-  graphqlSubQueryType,
   tgGraphQLBoolean,
   tgGraphQLDateTime,
   tgGraphQLFloat,
@@ -8,8 +8,8 @@ import {
   tgGraphQLList,
   tgGraphQLObjectType,
   tgGraphQLString,
+  tgGraphqlSubQueryType,
 } from '../../libs/typedGraphQL/index'
-import { performance } from 'perf_hooks'
 import AWS from 'aws-sdk'
 
 // https://stackoverflow.com/a/34890276
@@ -57,7 +57,7 @@ const GqlAccessDay = tgGraphQLObjectType({
 })
 
 export const getQueryDynamoItem = () =>
-  graphqlSubQueryType(
+  tgGraphqlSubQueryType(
     {
       viewerData: {
         type: tgGraphQLObjectType({

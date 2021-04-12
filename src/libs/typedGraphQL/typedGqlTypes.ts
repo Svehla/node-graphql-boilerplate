@@ -74,7 +74,7 @@ export const tgGraphQLInputObjectType = <Fields extends Record<string, { type: a
   // @ts-expect-error
   new GraphQLInputObjectType(gqlShape)
 
-export const graphqlSubQueryType = <Fields extends Record<string, { type: any; args?: any }>>(
+export const tgGraphqlSubQueryType = <Fields extends Record<string, { type: any; args?: any }>>(
   gqlFields: Fields,
   resolvers: {
     [FieldKey in keyof Fields]: (

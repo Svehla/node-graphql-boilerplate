@@ -14,7 +14,7 @@ export {
   tgGraphQLList,
   tgGraphQLScalarType,
   tgGraphQLInputObjectType,
-  graphqlSubQueryType,
+  tgGraphqlSubQueryType,
   tgGraphQLObjectType,
   graphQLSimpleEnum,
   graphQLEnumType,

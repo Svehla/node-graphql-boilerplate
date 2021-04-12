@@ -1,4 +1,11 @@
 
+locals {
+  region = "eu-central-1"
+  domain = "dailyfaily.com"
+  # abbrevation for node-graphql-boilerplate
+  project = "ngb"
+}
+
 # knowledge inspiration
 # > https://blog.gruntwork.io/how-to-manage-terraform-state-28f5697e68fa#.r6xdvtxqe
 

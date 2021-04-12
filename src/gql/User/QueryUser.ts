@@ -2,11 +2,11 @@ import { GqlUser } from './GqlUser'
 import { authGqlQueryDecorator } from '../gqlUtils/gqlAuth'
 import { entities } from '../../database/entities'
 import { getRepository } from 'typeorm'
-import { graphqlSubQueryType, tgGraphQLNonNull } from '../../libs/typedGraphQL/index'
 import { listPaginationArgs, wrapPaginationList } from '../gqlUtils/gqlPagination'
+import { tgGraphQLNonNull, tgGraphqlSubQueryType } from '../../libs/typedGraphQL/index'
 
 export const userQueryFields = () =>
-  graphqlSubQueryType(
+  tgGraphqlSubQueryType(
     {
       users: {
         args: {

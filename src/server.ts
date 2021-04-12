@@ -1,5 +1,6 @@
 import './dynamo/config'
 import './emails/index'
+import 'express-async-errors'
 // import { ApolloServer } from 'apollo-server-express'
 import { GqlContext } from './utils/GqlContextType'
 import { appEnvs } from './appConfig'
