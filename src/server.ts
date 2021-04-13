@@ -9,6 +9,7 @@ import { dbConnection } from './database/dbCore'
 import { getDataLoaders } from './utils/dataLoaderCache'
 import { graphqlHTTP } from 'express-graphql'
 import { initGoogleAuthStrategy, parseGoogleAuthCookieMiddleware } from './auth/googleAuth'
+import { removeTrailingSlash } from './utils/string'
 import { verifyEmailRestGqlProxy } from './gql/User/verifyEmailRestGqlProxy'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -44,7 +45,9 @@ const getApp = async () => {
     cors((req, callback) => {
       callback(null, {
         credentials: true,
-        origin: appEnvs.allowedOriginsUrls.includes(req.header('Origin') ?? ''),
+        origin: appEnvs.allowedOriginsUrls
+          .map(removeTrailingSlash)
+          .includes(req.header('Origin') ?? ''),
       })
     })
   )
