@@ -34,6 +34,7 @@
     "lint:fix": "eslint \"{src,fixtures,scripts,dbMigrationsScripts,tests}/**/*.{js,ts}\" --fix",
     "ts:check-types": "tsc",
     "ts:check-types:watch": "tsc --watch",
+    "test:watch": "jest --watch ",
     "test": "jest"
   },
   "dependencies": {

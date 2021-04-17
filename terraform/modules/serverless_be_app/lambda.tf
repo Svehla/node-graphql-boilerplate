@@ -69,7 +69,10 @@ resource "aws_iam_role_policy" "main" {
           "dynamodb:Update*",
           "dynamodb:PutItem"
         ]
-        Resource = "arn:aws:dynamodb:${var.region}:*:table/${var.allowDynamoTableName}"
+        Resource = [
+          "arn:aws:dynamodb:${var.region}:*:table/${var.allowDynamoTableName}",
+          "arn:aws:dynamodb:${var.region}:*:table/${var.allowDynamoTableName}/index/*"
+        ]
       }
     ]
   })
