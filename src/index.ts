@@ -16,8 +16,9 @@ const main = async () => {
   app.listen(port, () => {
     console.info(`
 --------- server is ready now ---------
-GQL URL: http://localhost:${port}/graphql
-Playground URL: http://localhost:${port}/playground
+GQL        URL: http://localhost:${port}/admin/graphql
+Playground URL: http://localhost:${port}/admin/playground
+Iterator   URL: http://localhost:${port}/iterator/add-1
 ---------------------------------------
   `)
   })

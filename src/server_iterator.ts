@@ -29,7 +29,7 @@ export const getServerIteratorRoute = async () => {
   )
 
   app.get('/add-1', async (_req, res) => {
-    await docClient
+    const updatedCounter = await docClient
       .update({
         TableName: appEnvs.aws.dynamoDB.tableName,
         Key: {
@@ -40,29 +40,25 @@ export const getServerIteratorRoute = async () => {
         ExpressionAttributeValues: {
           ':iterator': 1,
         },
-        ReturnValues: 'NONE',
-      })
-      .promise(),
-      res.send('+1')
-  })
-
-  app.get('/counter', async (_req, res) => {
-    const counter = await docClient
-      .query({
-        TableName: appEnvs.aws.dynamoDB.tableName,
-        KeyConditionExpression: '#PK = :PK and #SK = :SK',
-        ExpressionAttributeNames: {
-          '#PK': 'PK',
-          '#SK': 'SK',
-        },
-        ExpressionAttributeValues: {
-          ':PK': `SINGLETON_COUNTER`,
-          ':SK': `SINGLETON_COUNTER`,
-        },
+        ReturnValues: 'ALL_NEW',
       })
       .promise()
 
-    res.send(counter)
+    res.send(`
+        <div>
+          <div>
+            current count:
+          </div>
+
+          <pre>${JSON.stringify(updatedCounter.Attributes, null, 2)}</pre>
+          <!-- todo: remove stage-1 -->
+          <a href="/stage-1/iterator/add-1">
+            <button>
+              add 1
+            </button>
+          </a>
+        </div>
+    `)
   })
 
   app.get('*', (_req, res) => {

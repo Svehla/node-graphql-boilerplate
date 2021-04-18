@@ -16,7 +16,7 @@ data "archive_file" "lambda_iterator_service_zip" {
 
 
 resource "aws_lambda_function" "admin_service" {
-  filename         = "../serverless_admin_index_zip-output.zip"
+  filename         = "../serverless_admin_index-output.zip"
   source_code_hash = data.archive_file.lambda_admin_service_zip.output_base64sha256
 
   function_name = "${var.project}_${var.environment}_admin_service"
@@ -33,7 +33,7 @@ resource "aws_lambda_function" "admin_service" {
 }
 
 resource "aws_lambda_function" "iterator_service" {
-  filename         = "../serverless_iterator_index_lambda-output.zip"
+  filename         = "../serverless_iterator_index-output.zip"
   source_code_hash = data.archive_file.lambda_iterator_service_zip.output_base64sha256
 
   function_name = "${var.project}_${var.environment}_iterator_service"
