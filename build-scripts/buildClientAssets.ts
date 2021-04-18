@@ -7,6 +7,6 @@ webpack(webpackConfig, (err, stats) => {
     console.error(stats?.toJson().errors)
     console.error(err)
   } else {
-    console.log('Webpack build finished successfully')
+    console.info('Webpack build finished successfully')
   }
 })

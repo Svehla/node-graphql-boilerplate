@@ -28,8 +28,8 @@ process.on('unhandledRejection', err => {
   console.error(err)
 })
 
-const getApp = async () => {
-  const app = express()
+export const getServerAdminApp = async () => {
+  const app = express.Router()
 
   // wait till the app is connected into database
   await dbConnection
@@ -52,6 +52,7 @@ const getApp = async () => {
     })
   )
 
+  // @ts-expect-error decide if to use routers vs express instances with different ports...
   initGoogleAuthStrategy(app)
   // TODO: just POC for Rest-api GQL proxy - kinda shitty code
   app.get('/verify-reg-token/:token', verifyEmailRestGqlProxy)
@@ -95,10 +96,8 @@ const getApp = async () => {
   */
 
   app.get('*', (_req, res) => {
-    res.send(`<h1>404</h1>`)
+    res.send(`<h1>admin - 404</h1>`)
   })
 
   return app
 }
-
-export const app = getApp()

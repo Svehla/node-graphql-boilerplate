@@ -34,12 +34,13 @@ temp/*
 
 #Build generated
 dist/
-dist-minified/
+dist/
 build/
 
 # Serverless generated files
 .serverless/
-lambda-output.zip
+serverless_admin_index-output.zip
+serverless_iterator_index-output.zip
 
 # terraform stuffs
 /terraform/.terraform
