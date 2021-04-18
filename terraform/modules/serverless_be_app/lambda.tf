@@ -238,8 +238,8 @@ resource "aws_api_gateway_deployment" "this" {
   depends_on = [
     aws_api_gateway_integration.admin_lambda,
     aws_api_gateway_integration.admin_lambda_root,
-    # aws_api_gateway_integration.iterator_lambda,
-    # aws_api_gateway_integration.iterator_lambda_root,
+    aws_api_gateway_integration.iterator_lambda,
+    aws_api_gateway_integration.iterator_lambda_root,
   ]
 
   rest_api_id = aws_api_gateway_rest_api.this.id
