@@ -29,6 +29,7 @@ export const getServerIteratorRoute = async () => {
   )
 
   app.get('/add-1', async (_req, res) => {
+    // TODO: move code into dynamo service layer
     const updatedCounter = await docClient
       .update({
         TableName: appEnvs.aws.dynamoDB.tableName,
@@ -45,19 +46,19 @@ export const getServerIteratorRoute = async () => {
       .promise()
 
     res.send(`
+      <div>
         <div>
-          <div>
-            current count:
-          </div>
-
-          <pre>${JSON.stringify(updatedCounter.Attributes, null, 2)}</pre>
-          <!-- todo: remove stage-1 -->
-          <a href="/stage-1/iterator/add-1">
-            <button>
-              add 1
-            </button>
-          </a>
+          current count:
         </div>
+
+        <pre>${JSON.stringify(updatedCounter.Attributes, null, 2)}</pre>
+        <!-- todo: remove stage-1 -->
+        <a href="/stage-1/iterator/add-1">
+          <button>
+            add 1
+          </button>
+        </a>
+      </div>
     `)
   })
 
