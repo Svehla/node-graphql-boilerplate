@@ -6,14 +6,20 @@ import webpack from 'webpack'
 
 export default {
   entry: {
-    index: './src/serverless_index.ts',
+    serverless_admin_index: {
+      import: './src/serverless_admin_index.ts',
+      filename: '[name]/index.js',
+    },
+    serverless_iterator_index: {
+      import: './src/serverless_iterator_index.ts',
+      filename: '[name]/index.js',
+    },
   },
   output: {
-    // coz of lambda fn
+    // coz of lambda fn API
     libraryTarget: 'commonjs2',
-    path: path.join(__dirname, 'dist-minified'),
+    path: path.join(__dirname, 'dist'),
     publicPath: '/',
-    filename: '[name].js',
   },
   target: 'node',
   node: {

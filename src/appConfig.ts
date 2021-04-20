@@ -75,7 +75,7 @@ export const appEnvs = validateConfig({
 })
 
 const googleAuthLoginPath = '/auth/google' as const
-const googleAuthCallbackPath = '/auth/google/callback' as const
+const googleAuthCallbackPath = '/admin/auth/google/callback' as const
 
 export const appConfig = {
   adminServiceUrl: appEnvs.adminService.URL,

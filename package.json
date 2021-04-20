@@ -6,9 +6,9 @@
   "author": "Jakub Švehla",
   "main": "src/main.ts",
   "scripts": {
-    "build:ts-assets": "rm -rf dist-minified && ts-node build-scripts/buildClientAssets",
-    "prepare:assets:stage-1": "npm run build:ts-assets && cp .env.stage-1.env dist-minified/.env",
-    "prepare:assets:production": "npm run build:ts-assets && cp .env.production.env dist-minified/.env",
+    "build:ts-assets": "rm -rf dist && ts-node build-scripts/buildClientAssets",
+    "prepare:assets:stage-1": "npm run build:ts-assets && cp .env.stage-1.env dist/serverless_admin_index/.env && cp .env.stage-1.env dist/serverless_iterator_index/.env",
+    "prepare:assets:production": "npm run build:ts-assets && cp .env.production.env dist/serverless_admin_index/.env && cp .env.production.env dist/serverless_iterator_index/.env",
     "terraform:apply": "cd terraform && terraform apply",
     "deploy:infrastructure": "npm run prepare:assets:production && npm run terraform:apply",
     "deploy:code:production": "npm run prepare:assets:production && ./deploy-scripts/production-lambda-code.sh",
